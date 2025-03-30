@@ -1,9 +1,14 @@
-<script setup></script>
+<script setup>
+import { reqLogin } from "./api/user"
+import { onMounted } from "vue"
 
-<template><div>123</div></template>
+onMounted(() => {
+  reqLogin({username: "ddhkxxhxx@hotmail.com", password:"dd310447"})
+})
+</script>
+
+<template></template>
 
 <style scoped lang="scss">
-div {
-  color: $color;
-}
+
 </style>
