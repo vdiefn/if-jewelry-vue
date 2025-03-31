@@ -1,14 +1,10 @@
 <script setup>
-import { reqLogin } from "./api/user"
-import { onMounted } from "vue"
+import { RouterView } from "vue-router";
 
-onMounted(() => {
-  reqLogin({username: "ddhkxxhxx@hotmail.com", password:"dd310447"})
-})
 </script>
 
-<template></template>
+<template>
+  <RouterView></RouterView>
+</template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
