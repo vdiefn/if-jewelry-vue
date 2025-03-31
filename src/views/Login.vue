@@ -51,7 +51,12 @@ const login = async () => {
         ></ElInput>
       </ElFormItem>
       <ElFormItem>
-        <ElButton class="login-btn" type="primary" @click="login">
+        <ElButton
+          class="login-btn"
+          type="primary"
+          @click="login"
+          :loading="loading"
+        >
           登入
         </ElButton>
       </ElFormItem>
