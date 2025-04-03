@@ -4,10 +4,11 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store/modules/user";
 import { ElNotification } from "element-plus";
 import { useRouter } from "vue-router";
-import { getTime } from "@/utils/time"
+import { getTime } from "@/utils/time";
 
 const router = useRouter();
 const loading = ref(false);
+const ruleFormRef = ref();
 
 const loginForm = reactive({
   username: "ifjewelry@gmail.com",
@@ -15,36 +16,67 @@ const loginForm = reactive({
 });
 const userStore = useUserStore();
 
-const login = async () => {
-  loading.value = true;
-  try {
-    await userStore.userLogin(loginForm);
-    router.push("/");
-    ElNotification({
-      type: "success",
-      message: `${getTime()}，歡迎登入`,
-    });
-  
-  } catch (error) {
-    ElNotification({
-      type: "error",
-      message: error.message,
-    });
-  } finally {
-    loading.value = false;
-  }
+const login = async (formEl) => {
+  if (!formEl) return;
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      loading.value = true;
+      try {
+        await userStore.userLogin(loginForm);
+        router.push("/");
+        ElNotification({
+          type: "success",
+          message: `${getTime()}，歡迎登入`,
+        });
+      } catch (error) {
+        ElNotification({
+          type: "error",
+          message: error.message,
+        });
+      } finally {
+        loading.value = false;
+      }
+    } else {
+      console.error("Error Submit", fields);
+    }
+  });
+};
+
+const rules = {
+  username: [
+    { required: true, message: "使用者帳號不可為空", trigger: "blur" },
+    {
+      type: "email",
+      message: "請輸入有效的Email格式",
+      trigger: ["blur", "change"],
+    },
+  ],
+  password: [
+    {
+      required: true,
+      min: 6,
+      max: 20,
+      message: "密碼長度為6-20位英文/數字",
+      trigger: "change",
+    },
+  ],
 };
 </script>
 
 <template>
   <div class="login-container">
-    <ElForm class="login-form" :model="loginForm">
+    <ElForm
+      class="login-form"
+      :model="loginForm"
+      :rules="rules"
+      ref="ruleFormRef"
+    >
       <h1>HELLO</h1>
       <h2>歡迎使用後台管理系統</h2>
-      <ElFormItem>
+      <ElFormItem prop="username">
         <ElInput :prefix-icon="User" v-model="loginForm.username"></ElInput>
       </ElFormItem>
-      <ElFormItem>
+      <ElFormItem prop="password">
         <ElInput
           type="password"
           :prefix-icon="Lock"
@@ -56,7 +88,7 @@ const login = async () => {
         <ElButton
           class="login-btn"
           type="primary"
-          @click="login"
+          @click="login(ruleFormRef)"
           :loading="loading"
         >
           登入
