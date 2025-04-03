@@ -4,6 +4,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store/modules/user";
 import { ElNotification } from "element-plus";
 import { useRouter } from "vue-router";
+import { getTime } from "@/utils/time"
 
 const router = useRouter();
 const loading = ref(false);
@@ -21,8 +22,9 @@ const login = async () => {
     router.push("/");
     ElNotification({
       type: "success",
-      message: "登入成功",
+      message: `${getTime()}，歡迎登入`,
     });
+  
   } catch (error) {
     ElNotification({
       type: "error",
