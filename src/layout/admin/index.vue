@@ -1,30 +1,18 @@
 <script setup>
-import {
-  ElContainer,
-  ElAside,
-  ElHeader,
-  ElMain,
-  ElMenu,
-  ElMenuItem,
-  ElRadioGroup,
-  ElRadioButton,
-} from "element-plus";
-import {
-  Goods,
-  Discount,
-  Document,
-  Monitor,
-  Expand,
-  Fold,
-} from "@element-plus/icons-vue";
+import { ElContainer, ElAside, ElHeader, ElMain, ElMenu } from "element-plus";
+import { RouterView, useRoute } from "vue-router";
+import { ref, watch, nextTick } from "vue";
+import {} from "@element-plus/icons-vue";
 import setting from "@/setting";
-import { ref } from "vue";
-import { useUserStore } from "@/store/modules/user";
+import Header from "@/components/Header.vue";
 import MenuList from "./MenuList.vue";
-import { RouterView } from "vue-router";
+import { useUserStore } from "@/store/modules/user";
+import { useLayoutSettingStore } from "@/store/modules/setting";
 
-const isCollapse = ref(true);
+const route = useRoute();
 const userStore = useUserStore();
+const layoutSetting = useLayoutSettingStore();
+const refresh = ref(true);
 
 const handleOpen = (key, keyPath) => {
   console.log(key, keyPath);
@@ -32,21 +20,38 @@ const handleOpen = (key, keyPath) => {
 const handleClose = (key, keyPath) => {
   console.log(key, keyPath);
 };
+
+// watch(()=>layoutSetting.refresh, ()=> {
+// 	//點擊刷新按鈕：路由組件銷毀
+// 	flag.value = false
+// 	//nextTick()會在DOM已掛載、渲染完成後，執行nextTick()內的程式碼
+// 	nextTick(()=>{
+// 		flag.value = true
+// 	})
+// })
+watch(
+  () => layoutSetting.refresh,
+  () => {
+    refresh.value = false;
+    nextTick(() => {
+      refresh.value = true;
+    });
+  }
+);
 </script>
 
 <template>
   <div class="layout-container">
     <ElContainer>
-      <ElAside :width="isCollapse ? '64px' : '200px'">
+      <ElAside :width="layoutSetting.isCollapse ? '64px' : '200px'">
         <div class="aside-title">
-          <h2 v-if="!isCollapse">{{ setting.title }}</h2>
+          <h2 v-if="!layoutSetting.isCollapse">{{ setting.title }}</h2>
           <ElIcon v-else></ElIcon>
         </div>
-
         <ElMenu
-          default-active="2"
+          :default-active="route.path"
           class="el-menu-vertical"
-          :collapse="isCollapse"
+          :collapse="layoutSetting.isCollapse ? true : false"
           @open="handleOpen"
           @close="handleClose"
         >
@@ -56,30 +61,13 @@ const handleClose = (key, keyPath) => {
 
       <ElContainer>
         <ElHeader>
-          <ElRadioGroup
-            v-model="isCollapse"
-            class="button-group"
-            :width="isCollapse ? '64px' : '200px'"
-          >
-            <template v-if="isCollapse">
-              <ElRadioButton :value="false" class="collapse-btn">
-                <ElIcon>
-                  <Expand />
-                </ElIcon>
-              </ElRadioButton>
-            </template>
-            <template v-else>
-              <ElRadioButton :value="true" class="collapse-btn">
-                <ElIcon> <Fold /> </ElIcon>
-              </ElRadioButton>
-            </template>
-          </ElRadioGroup>
-          <div class="setting-area">Header</div>
+          <Header></Header>
         </ElHeader>
+
         <ElMain>
           <RouterView v-slot="{ Component }">
             <transition name="fade">
-              <component :is="Component" />
+              <component :is="Component" v-if="refresh" />
             </transition>
           </RouterView>
         </ElMain>
@@ -98,7 +86,7 @@ const handleClose = (key, keyPath) => {
   }
 
   .el-aside {
-    transition: width 0.3s;
+    transition: width 0.3s ease;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
@@ -113,42 +101,25 @@ const handleClose = (key, keyPath) => {
       height: $base-header-height;
       display: flex;
       align-items: center;
-      margin-left: 1.5rem;
+      margin-left: 2rem;
 
       > h2 {
         font-size: 1.2rem;
         color: rgb(34, 33, 33);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
       }
     }
   }
 
   .el-header {
     height: $base-header-height;
-    display: flex;
-    align-items: center;
     border-bottom: 1px solid #e4e0dc;
     position: relative;
-
-    .el-radio-group {
-      position: absolute;
-      left: 0;
-      z-index: 1;
-
-      :deep(.collapse-btn .el-radio-button__inner) {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        color: #333 !important;
-      }
-
-      :deep(.collapse-btn.is-active .el-radio-button__inner) {
-        background-color: transparent !important;
-      }
-    }
-
-    .setting-area {
-      margin-left: 1rem;
-    }
+    display: flex;
+    align-items: center;
+    padding: 0;
   }
 
   .el-main {
