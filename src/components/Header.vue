@@ -28,6 +28,15 @@ const changeCollapse = () => {
 const updateRefresh = () => {
   layoutSetting.refresh = !layoutSetting.refresh;
 };
+
+const fullScreen = () => {
+  const full = document.fullscreenElement;
+  if (!full) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+};
 </script>
 
 <template>
@@ -59,7 +68,12 @@ const updateRefresh = () => {
       circle
       @click="updateRefresh"
     ></ElButton>
-    <ElButton size="small" :icon="FullScreen" circle></ElButton>
+    <ElButton
+      size="small"
+      :icon="FullScreen"
+      circle
+      @click="fullScreen"
+    ></ElButton>
     <ElButton size="small" :icon="Setting" circle></ElButton>
     <ElDropdown>
       <span class="el-dropdown">
