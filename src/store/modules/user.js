@@ -1,11 +1,13 @@
 import { defineStore } from "pinia"
 import { reqLogin } from "@/api/user"
 import { ref } from "vue"
-import { SET_TOKEN, GET_TOKEN } from "@/utils/token" 
+import { SET_TOKEN, GET_TOKEN } from "@/utils/token"
+import { constantRouter } from "@/router/routes" 
 
 
 export const useUserStore = defineStore("User", () => {
   const token = ref("")
+  const menuRoutes = ref(constantRouter)
   const userLogin = async(data) => {
       const res = await reqLogin(data)
 
@@ -19,5 +21,5 @@ export const useUserStore = defineStore("User", () => {
       
   }
   
-  return { userLogin, token }
+  return { userLogin, token, menuRoutes }
 })
