@@ -38,16 +38,6 @@ export const constantRouter = [
           }
       },
       {
-        path: "/coupons",
-        component: () => import("@/views/admin/Coupons.vue"),
-        name: "AdminCoupons",
-        meta: {
-          title: "折價券列表",
-          hidden: false,
-          icon: markRaw(Discount),
-        },
-      },
-      {
         path: "/orders",
         component: () => import("@/views/admin/Orders.vue"),
         name: "AdminOrders",
@@ -55,6 +45,16 @@ export const constantRouter = [
           title: "訂單列表",
           hidden: false,
           icon: markRaw(Document),
+        },
+      },
+      {
+        path: "/coupons",
+        component: () => import("@/views/admin/Coupons.vue"),
+        name: "AdminCoupons",
+        meta: {
+          title: "折價券列表",
+          hidden: false,
+          icon: markRaw(Discount),
         },
       },
       {
