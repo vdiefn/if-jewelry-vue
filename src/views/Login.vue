@@ -11,8 +11,8 @@ const loading = ref(false);
 const ruleFormRef = ref();
 
 const loginForm = reactive({
-  username: "ifjewelry@gmail.com",
-  password: "test1234test",
+  username: "admin@if-jewelry.com",
+  password: "test1234",
 });
 const userStore = useUserStore();
 
@@ -23,7 +23,7 @@ const login = async (formEl) => {
       loading.value = true;
       try {
         await userStore.userLogin(loginForm);
-        router.push("/");
+        await router.push("/");
         ElNotification({
           type: "success",
           message: `${getTime()}，歡迎登入`,
@@ -31,7 +31,7 @@ const login = async (formEl) => {
       } catch (error) {
         ElNotification({
           type: "error",
-          message: error.message,
+          message: error.response.data.message,
         });
       } finally {
         loading.value = false;

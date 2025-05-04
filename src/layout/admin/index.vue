@@ -21,14 +21,6 @@ const handleClose = (key, keyPath) => {
   console.log(key, keyPath);
 };
 
-// watch(()=>layoutSetting.refresh, ()=> {
-// 	//點擊刷新按鈕：路由組件銷毀
-// 	flag.value = false
-// 	//nextTick()會在DOM已掛載、渲染完成後，執行nextTick()內的程式碼
-// 	nextTick(()=>{
-// 		flag.value = true
-// 	})
-// })
 watch(
   () => layoutSetting.refresh,
   () => {
