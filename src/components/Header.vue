@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import {
   ElHeader,
   ElButton,
@@ -17,8 +18,11 @@ import {
   ArrowDown,
 } from "@element-plus/icons-vue";
 import { useLayoutSettingStore } from "@/store/modules/setting.js";
-const layoutSetting = useLayoutSettingStore();
+import { useUserStore } from "@/store/modules/user";
 
+const layoutSetting = useLayoutSettingStore();
+const userStore = useUserStore();
+const router = useRouter();
 const isCollapse = ref(false);
 
 const changeCollapse = () => {
@@ -36,6 +40,11 @@ const fullScreen = () => {
   } else {
     document.exitFullscreen();
   }
+};
+
+const logout = () => {
+  userStore.userLogout();
+  router.push("/login");
 };
 </script>
 
@@ -83,7 +92,7 @@ const fullScreen = () => {
         </el-icon>
       </span>
       <template #dropdown>
-        <ElDropdownItem>登出</ElDropdownItem>
+        <ElDropdownItem @click="logout">登出</ElDropdownItem>
       </template>
     </ElDropdown>
   </div>
