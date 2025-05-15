@@ -14,12 +14,8 @@ const userStore = useUserStore();
 const layoutSetting = useLayoutSettingStore();
 const refresh = ref(true);
 
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath);
-};
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath);
-};
+const handleOpen = (key, keyPath) => {};
+const handleClose = (key, keyPath) => {};
 
 watch(
   () => layoutSetting.refresh,
@@ -57,10 +53,13 @@ watch(
         </ElHeader>
 
         <ElMain>
-          <RouterView v-slot="{ Component }">
+          <!-- <RouterView v-slot="{ Component }">
             <transition name="fade">
               <component :is="Component" v-if="refresh" />
             </transition>
+          </RouterView> -->
+          <RouterView v-slot="{ Component }">
+            <component :is="Component" v-if="refresh" />
           </RouterView>
         </ElMain>
       </ElContainer>
