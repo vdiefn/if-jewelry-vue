@@ -5,7 +5,6 @@ import {
   ElButton,
   ElTable,
   ElTableColumn,
-  ElInput,
   ElPagination,
   ElIcon,
   ElMessage,
@@ -154,7 +153,7 @@ onMounted(() => {
         <ElTableColumn label="分類" prop="category"></ElTableColumn>
         <ElTableColumn label="原價" prop="origin_price"></ElTableColumn>
         <ElTableColumn label="特價" prop="price"></ElTableColumn>
-        <ElTableColumn label="啟用" prop="is_enabled" align="center">
+        <ElTableColumn label="啟用" prop="is_enabled" :align="center">
           <template #default="{ row }">
             <ElIcon v-if="row.is_enabled" class="check-icon">
               <font-awesome-icon :icon="['fas', 'check']" />
