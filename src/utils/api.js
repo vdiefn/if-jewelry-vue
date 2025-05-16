@@ -3,7 +3,7 @@ import { useUserStore } from "@/store/modules/user"
 
 
 const api = axios.create({
-  baseURL: '/v2/api/if_jewelry', 
+  baseURL: '/v2/api/if_jewelry',
   timeout: 5000
 })
 
@@ -16,9 +16,9 @@ api.interceptors.request.use((config) => {
 })
 
 api.interceptors.response.use(
-  response => response.data, 
+  response => response.data,
   error => {
-    return Promise.reject(error) 
+    return Promise.reject(error)
   }
 )
 
