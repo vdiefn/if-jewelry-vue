@@ -11,7 +11,7 @@ import {
 } from "element-plus";
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { reqProducts, reqDeleteProduct } from "@/api/admin/product";
-import DialogAdminProduct from "@/components/DialogAdminProduct.vue";
+import DialogAdminProduct from "@/components/index.js";
 
 const loading = ref(false);
 const currentPage = ref(1);
@@ -50,7 +50,6 @@ const getAllProducts = async (page = 1, category = "") => {
   loading.value = true;
   try {
     const result = await reqProducts(currentPage.value, selectCategory.value);
-    console.log(result);
     if (result.success) {
       data.value = result.products;
       currentPage.value = result.pagination.current_page;
