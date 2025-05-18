@@ -1,13 +1,15 @@
 <script setup>
 import { ref, onMounted, useTemplateRef } from 'vue';
-import { reqCoupons } from "@/api/admin/coupon.js"
+import { reqCoupons, reqDeleteCoupon } from "@/api/admin/coupon.js"
 import { ElPagination, ElTable, ElTableColumn, ElButton } from "element-plus"
 import { DialogAdminCoupon } from "@/components/index.js"
+import { Edit, Delete } from "@element-plus/icons-vue";
 
 const loading = ref(false)
 const data = ref()
 const currentPage = ref(1)
 const dialogAdminCouponRef = useTemplateRef("dialogAdminCouponRef")
+const totalPages = ref(1)
 
 const getAllCoupons = async () => {
     loading.value = true
@@ -27,6 +29,45 @@ const getAllCoupons = async () => {
 
 const addNewCoupon = () => {
     dialogAdminCouponRef.value.open()
+}
+
+const editCoupon = () => {
+
+}
+
+const deleteCoupon = async(row) => {
+    await ElMessageBox.confirm(`請確認是否刪除折價券：${row.title}`, "Warning", {
+    confirmButtonText: "確認",
+    cancelButtonText: "取消",
+    type: "warning",
+    beforeClose: async (action, instance, done) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+         try {
+           const res = await reqDeleteCoupon(row.id)
+
+         if (res.success) {
+           ElMessage({
+             type: "success",
+             message: res.message,
+           });
+           await getAllCoupons();
+           done()
+         } else {
+           ElMessage({
+             type: "error",
+             message: res.message
+           });
+           instance.confirmButtonLoading = false;
+         }
+       } catch (error) {
+         console.error(error);
+       }
+     } else {
+        done();
+     }
+   },
+  });
 }
 
 onMounted(() => {
@@ -50,33 +91,32 @@ onMounted(() => {
             :data="data"
         >
             <ElTableColumn label="名稱" prop="title"></ElTableColumn>
-            <ElTableColumn label="分類" prop="category"></ElTableColumn>
-            <ElTableColumn label="售價" prop="origin_price"></ElTableColumn>
-            <ElTableColumn label="啟用狀態" prop="price"></ElTableColumn>
-            <ElTableColumn label="">
-            <template #default="{ row }">
-                <ElIcon v-if="row.is_enabled" class="check-icon">
-                <font-awesome-icon :icon="['fas', 'check']" />
-                </ElIcon>
-                <ElIcon v-else class="x-icon">
-                <font-awesome-icon :icon="['fas', 'xmark']" />
-                </ElIcon>
-            </template>
+            <ElTableColumn label="折扣(%)" prop="percent" align="center"></ElTableColumn>
+            <ElTableColumn label="到期日" prop="due_date"></ElTableColumn>
+            <ElTableColumn label="啟用狀態" prop="is_enabled" align="center">
+                <template #default="{ row }">
+                    <ElIcon v-if="row.is_enabled" class="check-icon">
+                    <font-awesome-icon :icon="['fas', 'check']" />
+                    </ElIcon>
+                    <ElIcon v-else class="x-icon">
+                    <font-awesome-icon :icon="['fas', 'xmark']" />
+                    </ElIcon>
+                </template>
             </ElTableColumn>
             <ElTableColumn>
-            <template #default="{ row }">
-                <ElButton
-                :icon="Edit"
-                size="small"
-                @click=""
-                ></ElButton>
-                <ElButton
-                :icon="Delete"
-                type="danger"
-                size="small"
-                @click=""
-                ></ElButton>
-            </template>
+                <template #default="{ row }">
+                    <ElButton
+                        :icon="Edit"
+                        size="small"
+                        @click="editCoupon"
+                    />
+                    <ElButton
+                        :icon="Delete"
+                        type="danger"
+                        size="small"
+                        @click="deleteCoupon(row)"
+                    />
+                </template>
             </ElTableColumn>
         </ElTable>
         </div>
@@ -89,7 +129,7 @@ onMounted(() => {
         />
         </div>
     </ElCard>
-    <DialogAdminCoupon ref="dialogAdminCouponRef" />
+    <DialogAdminCoupon ref="dialogAdminCouponRef" @coupon-added="getAllCoupons"/>
 </template>
 
 <style scoped lang="scss">
