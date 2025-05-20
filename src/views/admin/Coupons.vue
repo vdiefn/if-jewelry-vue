@@ -31,8 +31,8 @@ const addNewCoupon = () => {
     dialogAdminCouponRef.value.open()
 }
 
-const editCoupon = () => {
-
+const editCoupon = (row) => {
+    dialogAdminCouponRef.value.open(row)
 }
 
 const deleteCoupon = async(row) => {
@@ -70,6 +70,7 @@ const deleteCoupon = async(row) => {
   });
 }
 
+
 onMounted(() => {
     getAllCoupons()
 })
@@ -92,7 +93,11 @@ onMounted(() => {
         >
             <ElTableColumn label="名稱" prop="title"></ElTableColumn>
             <ElTableColumn label="折扣(%)" prop="percent" align="center"></ElTableColumn>
-            <ElTableColumn label="到期日" prop="due_date"></ElTableColumn>
+            <ElTableColumn label="到期日" prop="due_date">
+                <template #default="{row}">
+                    {{ new Date(row.due_date * 1000).toISOString().slice(0, 10) }}
+                </template>
+            </ElTableColumn>
             <ElTableColumn label="啟用狀態" prop="is_enabled" align="center">
                 <template #default="{ row }">
                     <ElIcon v-if="row.is_enabled" class="check-icon">
@@ -108,7 +113,7 @@ onMounted(() => {
                     <ElButton
                         :icon="Edit"
                         size="small"
-                        @click="editCoupon"
+                        @click="editCoupon(row)"
                     />
                     <ElButton
                         :icon="Delete"
