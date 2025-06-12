@@ -4,7 +4,7 @@ import { RouterView, useRoute } from "vue-router";
 import { ref, watch, nextTick } from "vue";
 import {} from "@element-plus/icons-vue";
 import setting from "@/setting";
-import Header from "@/components/Header.vue";
+import Header from "@/components/admin/Header.vue";
 import MenuList from "./MenuList.vue";
 import { useUserStore } from "@/store/modules/user";
 import { useLayoutSettingStore } from "@/store/modules/setting";
@@ -14,57 +14,54 @@ const userStore = useUserStore();
 const layoutSetting = useLayoutSettingStore();
 const refresh = ref(true);
 
-const handleOpen = (key, keyPath) => {};
-const handleClose = (key, keyPath) => {};
-
 watch(
-  () => layoutSetting.refresh,
-  () => {
-    refresh.value = false;
-    nextTick(() => {
-      refresh.value = true;
-    });
-  }
+    () => layoutSetting.refresh,
+    () => {
+        refresh.value = false;
+        nextTick(() => {
+        refresh.value = true;
+        });
+    }
 );
 </script>
 
 <template>
-  <div class="layout-container">
-    <ElContainer>
-      <ElAside :width="layoutSetting.isCollapse ? '64px' : '200px'">
-        <div class="aside-title">
-          <h2 v-if="!layoutSetting.isCollapse">{{ setting.title }}</h2>
-          <ElIcon v-else></ElIcon>
-        </div>
-        <ElMenu
-          :default-active="route.path"
-          class="el-menu-vertical"
-          :collapse="layoutSetting.isCollapse ? true : false"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <MenuList :menuList="userStore.menuRoutes"></MenuList>
-        </ElMenu>
-      </ElAside>
+    <div class="layout-container">
+        <ElContainer>
+        <ElAside :width="layoutSetting.isCollapse ? '64px' : '200px'">
+            <div class="aside-title">
+                <h2 v-if="!layoutSetting.isCollapse">{{ setting.title }}</h2>
+                <ElIcon v-else></ElIcon>
+            </div>
+            <ElMenu
+                :default-active="route.path"
+                class="el-menu-vertical"
+                :collapse="layoutSetting.isCollapse ? true : false"
+                @open="handleOpen"
+                @close="handleClose"
+            >
+                <MenuList :menuList="userStore.menuRoutes"></MenuList>
+            </ElMenu>
+        </ElAside>
 
-      <ElContainer>
-        <ElHeader>
-          <Header></Header>
-        </ElHeader>
+        <ElContainer>
+            <ElHeader>
+            <Header></Header>
+            </ElHeader>
 
-        <ElMain>
-          <!-- <RouterView v-slot="{ Component }">
-            <transition name="fade">
-              <component :is="Component" v-if="refresh" />
-            </transition>
-          </RouterView> -->
-          <RouterView v-slot="{ Component }">
-            <component :is="Component" v-if="refresh" />
-          </RouterView>
-        </ElMain>
-      </ElContainer>
-    </ElContainer>
-  </div>
+            <ElMain>
+            <!-- <RouterView v-slot="{ Component }">
+                <transition name="fade">
+                <component :is="Component" v-if="refresh" />
+                </transition>
+            </RouterView> -->
+            <RouterView v-slot="{ Component }">
+                <component :is="Component" v-if="refresh" />
+            </RouterView>
+            </ElMain>
+        </ElContainer>
+        </ElContainer>
+    </div>
 </template>
 <style scoped lang="scss">
 .layout-container {
