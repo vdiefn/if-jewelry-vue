@@ -2,7 +2,7 @@
 import { ref, onMounted, useTemplateRef } from 'vue';
 import { reqCoupons, reqDeleteCoupon } from "@/api/admin/coupon.js"
 import { ElPagination, ElTable, ElTableColumn, ElButton } from "element-plus"
-import { DialogAdminCoupon } from "@/components/index.js"
+import { DialogAdminCoupon } from "@/components/admin/index.js"
 import { Edit, Delete } from "@element-plus/icons-vue";
 
 const loading = ref(false)
