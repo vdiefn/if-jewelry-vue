@@ -14,10 +14,10 @@ export default defineConfig(({command, mode}) =>　{
     vue(),
     vueDevTools(),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({importStyle : "false"})],
     }),
     Components({
-      resolvers: [ElementPlusResolver({ importStyle: "sass" })],
+      resolvers: [ElementPlusResolver({ importStyle: "false" })],
     }),
   ],
     resolve: {
@@ -28,10 +28,7 @@ export default defineConfig(({command, mode}) =>　{
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `
-          @use "@/styles/variables" as *;
-          @use "@/styles/element/index.scss" as *;
-          `
+          additionalData: `@use "@/assets/style/variables.scss" as *;`
         },
       },
     },
