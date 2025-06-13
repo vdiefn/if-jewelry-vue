@@ -22,12 +22,16 @@ import { ref } from 'vue';
 </template>
 
 <style scoped>
-.el-header {
-    padding:0;
-
-    .header {
-        margin: 0 200px;
-        border: 1px solid red;
-    }
+.el-container {
+    height: 100vh;
+    max-width: 1300px;
+    margin: 0 auto;
 }
+    .el-header {
+        margin: 0 auto;
+        padding: 0;
+        width:100%;
+    }
+
+
 </style>
