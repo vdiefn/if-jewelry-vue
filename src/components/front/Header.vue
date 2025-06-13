@@ -12,7 +12,9 @@ import { ElMenu, ElMenuItem} from "element-plus"
         mode="horizontal"
         @select="handleSelect"
     >
-            <ElMenuItem index="1"><template #title>If Jewelry</template></ElMenuItem>
+            <ElMenuItem index="1">
+                <img src="/public/logo_1.png" alt="logo of if jewelry"/>
+            </ElMenuItem>
             <ElMenuItem index="3">Info</ElMenuItem>
             <ElMenuItem index="4">Orders</ElMenuItem>
     </ElMenu>
