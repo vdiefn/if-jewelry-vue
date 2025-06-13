@@ -1,15 +1,14 @@
 import router from "@/router"
-import pinia from "./store"
 import { useUserStore } from "./store/modules/user"
 import setting from "@/setting"
 
-const userStore = useUserStore(pinia)
+
 
 let isUserChecked = false
 
 router.beforeEach(async(to, from) => {
+    const userStore = useUserStore()
     const token = userStore.token
-
 
     const isBackendRoute = to.path.startsWith("/admin")
 
