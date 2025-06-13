@@ -1,3 +1,4 @@
 export default {
-	title: "後台系統",
+	backendTitle: "後台系統",
+	frontendTitle: "If Jewelry"
 }

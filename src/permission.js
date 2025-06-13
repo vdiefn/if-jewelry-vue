@@ -9,9 +9,15 @@ let isUserChecked = false
 
 router.beforeEach(async(to, from) => {
     const token = userStore.token
-    document.title = `${setting.title}`
+
 
     const isBackendRoute = to.path.startsWith("/admin")
+
+    if(isBackendRoute) {
+        document.title = `${setting.backendTitle}`
+    } else {
+        document.title = `${setting.frontendTitle}`
+    }
 
     if(isBackendRoute && !token && to.name !== "login") {
         return { name: "login"}
