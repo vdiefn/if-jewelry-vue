@@ -13,9 +13,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import {} from '@fortawesome/free-solid-svg-icons'
 import {} from "@fortawesome/free-regular-svg-icons";
-import {} from "@fortawesome/free-brands-svg-icons";
+import { faFacebook, faInstagram, faLine} from "@fortawesome/free-brands-svg-icons";
 
-library.add(faCheck, faXmark)
+library.add(faCheck, faXmark, faFacebook, faInstagram, faLine)
 
 import router from "./router"
 

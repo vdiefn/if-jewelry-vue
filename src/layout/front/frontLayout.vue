@@ -14,24 +14,40 @@ import { ref } from 'vue';
             <ElMain>
                 <RouterView />
             </ElMain>
-            <ElFooter>
+            <ElFooter height="auto">
                 <Footer></Footer>
             </ElFooter>
         </ElContainer>
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .el-container {
-    height: 100vh;
-    max-width: 1300px;
+    min-height: 100vh;
+    width: 100%;
     margin: 0 auto;
-}
+    display: flex;
+    flex-direction: column;
+
     .el-header {
         margin: 0 auto;
         padding: 0;
-        width:100%;
+        width: 100%;
     }
+
+    .el-main {
+        flex: 1;
+        border: 1px solid red;
+    }
+
+    .el-footer {
+        width:100%;
+        background-color: $base-info-color;
+        padding: 1rem 1rem;
+    }
+}
+
+
 
 
 </style>
