@@ -1,7 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import { ElMenu, ElMenuItem, ElSubMenu} from "element-plus"
-const activeIndex = ref("1")
 
 </script>
 

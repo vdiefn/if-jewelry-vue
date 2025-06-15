@@ -16,12 +16,33 @@ $font-family-base: #{$font-en}, #{$font-zh};
 
 
 // 顏色
-$base-background-color: #F8F5F2;
-$base-primary-color: #7A989A;
-$base-info-color: #C1AE8D;
-$base-success-color: #849271;
-$base-warning-color: #CF9546;
-$base-danger-color: #e04f1a;
+// $base-background-color: #F8F5F2;
+// $base-primary-color: #7A989A;
+// $base-info-color: #C1AE8D;
+// $base-success-color: #849271;
+// $base-warning-color: #CF9546;
+// $base-danger-color: #e04f1a;
+// 主區塊不要花色或圖片當背景，除非你是特別促銷活動頁。
 
+// 商品列表與內頁建議白底卡片，用陰影或邊框加區隔。
+
+// 可以適度用點綴色（如灰綠、淡金）做 hover、按鈕或小標題色。
+
+// Base
+$base-background-color: #f8f5f2;  //main
+$base-header-color: #e0cba6;
+
+// Theme Colors
+$base-primary-color: #7A989A;
+$base-success-color: #849271;
+$base-danger-color: #C45A5A;
+$base-warning-color: #CF9546;
+$base-info-color: #C1AE8D; //footer
+
+// text color
+$base-text-color: #3c3c3c; // 主文字
+$base-muted-text-color: #777; // 次要文字
+
+// size
 $base-aside-width: 200px;
 $base-header-height: 50px;

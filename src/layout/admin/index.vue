@@ -4,7 +4,7 @@ import { RouterView, useRoute } from "vue-router";
 import { ref, watch, nextTick } from "vue";
 import {} from "@element-plus/icons-vue";
 import setting from "@/setting";
-import Header from "@/components/admin/Header.vue";
+import Header from "@/components/admin/AdminHeader.vue";
 import MenuList from "./MenuList.vue";
 import { useUserStore } from "@/store/modules/user";
 import { useLayoutSettingStore } from "@/store/modules/setting";
@@ -46,15 +46,9 @@ watch(
 
         <ElContainer>
             <ElHeader>
-            <Header></Header>
+                <Header></Header>
             </ElHeader>
-
             <ElMain>
-            <!-- <RouterView v-slot="{ Component }">
-                <transition name="fade">
-                <component :is="Component" v-if="refresh" />
-                </transition>
-            </RouterView> -->
             <RouterView v-slot="{ Component }">
                 <component :is="Component" v-if="refresh" />
             </RouterView>

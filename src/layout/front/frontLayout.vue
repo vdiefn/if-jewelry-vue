@@ -34,11 +34,12 @@ import { ref } from 'vue';
         padding: 0;
         width: 100%;
         height: $base-header-height;
-        background-color: #e0cba6;
+        background-color: $base-header-color;
     }
 
     .el-main {
         flex: 1;
+        background-color: $base-background-color;
     }
 
     .el-footer {
