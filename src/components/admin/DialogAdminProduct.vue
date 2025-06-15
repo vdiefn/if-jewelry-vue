@@ -65,9 +65,9 @@ const open = (row) => {
         console.log(row);
         let editImagesUrl = row.imagesUrl.map((url, index) => {
         return {
-            name: `image${index + 1}`, // 給定 name，例如 image1, image2, ...
+            name: `image${index + 1}`,
             url: url,
-            status: "success", // 假設這裡依 index 判斷 status
+            status: "success",
         };
         });
         Object.assign(form, row);
@@ -125,15 +125,15 @@ const confirm = async (info) => {
             unit: info.unit,
             description: info.description,
             content: info.content,
-            is_enabled: info.is_enabled ? 0 : 1,
+            is_enabled: info.is_enabled ? 1 : 0,
             imageUrl: "",
             imagesUrl: info.imagesUrl,
             },
         });
         if (response.success) {
-            ElMessage({
-            type: "success",
-            message: "成功新增商品",
+                ElMessage({
+                type: "success",
+                message: "成功新增商品",
             });
             emit("product-added");
             dialogVisible.value = false;
@@ -168,24 +168,21 @@ const beforeAvatarUpload = (file) => {
 
 const customUploadRequest = async ({ file, onSuccess, onError }) => {
     try {
-        const res = await uploadImage(file); // 假設這會回傳 { imageUrl: "xxx" }
-        const uploadFile = {
-        name: file.name,
-        url: res.imageUrl,
-        status: res.success ? "success" : "false",
+        const res = await uploadImage(file);
+            const uploadFile = {
+            name: file.name,
+            url: res.imageUrl,
+            status: res.success ? "success" : "false",
         };
-        fileList.value.push(uploadFile); // 給 ElUpload 顯示用
-        console.log("uploadfile:", uploadFile.url);
-        form.imagesUrl.push(uploadFile.url); // 給後端送出用
-        console.log("圖片檢查:", form.imagesUrl);
-        onSuccess(); // 這個一定要呼叫，不然 UI 不會顯示成功
+        fileList.value.push(uploadFile);
+        form.imagesUrl.push(uploadFile.url);
+        onSuccess();
     } catch (err) {
         onError(err);
     }
 };
 
     const handleRemove = (file) => {
-    // 同步刪除 form.imagesUrl 裡的對應資料
     form.imagesUrl = form.imagesUrl.filter((item) => item.url !== file.url);
     fileList.value = fileList.value.filter((item) => item.url !== file.url);
 };
