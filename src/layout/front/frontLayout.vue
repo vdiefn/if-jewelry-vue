@@ -33,11 +33,12 @@ import { ref } from 'vue';
         margin: 0 auto;
         padding: 0;
         width: 100%;
+        height: $base-header-height;
+        background-color: #e0cba6;
     }
 
     .el-main {
         flex: 1;
-        border: 1px solid red;
     }
 
     .el-footer {
@@ -46,8 +47,4 @@ import { ref } from 'vue';
         padding: 1rem 1rem;
     }
 }
-
-
-
-
 </style>

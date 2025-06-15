@@ -1,32 +1,38 @@
 <script setup>
 import { ref } from 'vue';
-import { ElMenu, ElMenuItem} from "element-plus"
+import { ElMenu, ElMenuItem, ElSubMenu} from "element-plus"
+const activeIndex = ref("1")
 
 </script>
 
 <template>
 
-    <ElMenu
-        :default-active="activeIndex"
-        class="el-menu"
-        mode="horizontal"
-        @select="handleSelect"
-    >
-            <ElMenuItem index="1">
-                <img src="/public/logo_1.png" alt="logo of if jewelry"/>
-            </ElMenuItem>
-            <ElMenuItem index="3">Info</ElMenuItem>
-            <ElMenuItem index="4">Orders</ElMenuItem>
-    </ElMenu>
+<nav class="navbar">
+    <div class="products">
+        <router-link class="products nav-link" to="/">產品列表</router-link>
+    </div>
+    <div class="brand" >
+        <router-link class="brand nav-link" to="/">If Jewelry</router-link>
+    </div>
+    <div class="cart">
+        <router-link class="cart nav-link" to="/">
+            <i>
+                <font-awesome-icon :icon="['fas', 'cart-shopping']" />
+            </i>
+        </router-link>
+    </div>
+</nav>
 
 </template>
 
 <style scoped>
-.el-menu {
-    margin: 0
-}
-
-.el-menu--horizontal > .el-menu-item:nth-child(1) {
-    margin-right: auto;
+.navbar {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    height: 100%;
+    padding: 0 1rem;
 }
 </style>
