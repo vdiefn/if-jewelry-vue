@@ -24,15 +24,15 @@ import { ref } from 'vue';
         <div class="follow-us footer-item">
             <h4>Follow Us</h4>
             <div class="icon">
-                <icon>
+                <i>
                     <font-awesome-icon :icon="['fab', 'facebook']" />
-                </icon>
-                <icon>
+                </i>
+                <i>
                     <font-awesome-icon :icon="['fab', 'instagram']" />
-                </icon>
-                <icon>
+                </i>
+                <i>
                     <font-awesome-icon :icon="['fab', 'line']" />
-                </icon>
+                </i>
             </div>
         </div>
 

@@ -37,7 +37,9 @@ import { ref } from 'vue';
         background-color: $base-header-color;
     }
 
-    .el-main {
+    :deep(.el-main) {
+        --el-main-padding: 0;
+        width:100%;
         flex: 1;
         background-color: $base-background-color;
     }
