@@ -1,3 +1,21 @@
+:root {
+  --el-footer-height: auto; /* 或  unset */
+}
+
+// RWD大小設定
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;
+
+// 字型設定
+$font-en: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-zh: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+// 合併中英字型（預設字型）
+$font-family-base: #{$font-en}, #{$font-zh};
+
+
+// 顏色
 $base-background-color: #F8F5F2;
 $base-primary-color: #7A989A;
 $base-info-color: #C1AE8D;
@@ -6,4 +24,4 @@ $base-warning-color: #CF9546;
 $base-danger-color: #e04f1a;
 
 $base-aside-width: 200px;
-$base-header-height: 50px;
+$base-footer-height: 300px;
