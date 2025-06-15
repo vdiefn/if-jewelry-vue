@@ -61,7 +61,7 @@ import { ref } from 'vue';
 
 @media (min-width: $breakpoint-tablet) {
     .container {
-        max-width: 1200px;
+        max-width: 1280px;
         flex-direction: row;
         gap: 10px;
         justify-content: space-between;
