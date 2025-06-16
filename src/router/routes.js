@@ -127,12 +127,21 @@ export const constantRouter = [
                     hidden: false
                 }
             },
-                        {
+            {
                 path:"product/:id",
                 component: () => import("@/views/front/ProductDetail.vue"),
                 name: "ProductDetail",
                 meta: {
                     title: "產品詳情",
+                    hidden: false
+                }
+            },
+            {
+                path:"cart",
+                component: () => import("@/views/front/Cart.vue"),
+                name: "Cart",
+                meta: {
+                    title: "購物車",
                     hidden: false
                 }
             },
