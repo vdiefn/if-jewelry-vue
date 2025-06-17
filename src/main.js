@@ -10,11 +10,11 @@ import '@/assets/style/element/index.scss'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import { faCheck, faXmark, faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faXmark, faCartShopping, faBars } from '@fortawesome/free-solid-svg-icons'
 import {} from "@fortawesome/free-regular-svg-icons";
 import { faFacebook, faInstagram, faLine} from "@fortawesome/free-brands-svg-icons";
 
-library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping)
+library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping, faBars)
 
 import router from "./router"
 
