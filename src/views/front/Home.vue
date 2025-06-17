@@ -2,6 +2,7 @@
 import { ElCarousel, ElCarouselItem } from 'element-plus';
 import { ref, onMounted, computed } from 'vue';
 import { reqAllProducts } from '@/api/front/frontProducts';
+import { CardProduct } from "@/components/front/index.js";
 
 const data = ref({
     success: false,
@@ -12,8 +13,20 @@ const getAllProducts = async () => {
     data.value = await reqAllProducts()
 }
 
-const earringsProduct = computed(() => {
+const earringsProducts = computed(() => {
     return data.value.products.filter(product => product.category === '耳環') || []
+})
+
+const necklaceProducts = computed(() => {
+    return data.value.products.filter(product => product.category === "項鍊") || []
+})
+
+const ringProducts = computed(() => {
+    return data.value.products.filter(product => product.category === "戒指") || []
+})
+
+const braceletProducts = computed(() => {
+    return data.value.products.filter(product => product.category === "手鐲") || []
 })
 
 onMounted(() => {
@@ -27,23 +40,22 @@ onMounted(() => {
     <div class="carousel-container" v-if="data">
         <ElCarousel>
             <ElCarouselItem v-for="product in data.products" :key="product.id" class="carousel-item">
-                <img :src="product.imagesUrl[0].url" alt="carousel item" class="image"/>
+                <img :src="product.imagesUrl[0]" alt="carousel item" class="image"/>
             </ElCarouselItem>
         </ElCarousel>
     </div>
-    <div class="category-container" style="margin-top: 2rem;">
-        <div class="earrings-section" v-if="earringsProduct.length > 0">
-            <h4 class="sub-title">Earrings</h4>
-            <ul class="product-list-wrapper">
-                <li v-for="product in earringsProduct" :key="product.id">
-                    <RouterLink to="/">
-                        <img :src="product.imagesUrl[0].url" alt="product photo" class="product-image"/>
-                        <p class="name">{{ product.title }}</p>
-                        <p class="price-origin">${{ product.origin_price }}</p>
-                        <p class="price">${{ product.price }}</p>
-                    </RouterLink>
-                </li>
-            </ul>
+    <div class="category-container">
+        <div class="earrings-section" v-if="earringsProducts.length > 0">
+            <CardProduct title="Earrings" :data="earringsProducts"/>
+        </div>
+        <div class="necklace-section" v-if="necklaceProducts.length > 0">
+            <CardProduct title="Necklace" :data="necklaceProducts"/>
+        </div>
+        <div class="ring-section" v-if="ringProducts.length > 0">
+            <CardProduct title="Ring" :data="ringProducts"/>
+        </div>
+        <div class="bracelet-section" v-if="braceletProducts.length > 0">
+            <CardProduct title="Bracelet" :data="braceletProducts"/>
         </div>
     </div>
 </template>
@@ -65,42 +77,9 @@ onMounted(() => {
 }
 
 .category-container {
-    .earrings-section {
-        > h4 {
-            text-align: center;
-            letter-spacing: 0.3rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-weight: 400;
-        }
-
-        .product-list-wrapper {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 1rem;
-            margin-top: 1rem;
-
-            //li {
-            //
-            //    .product-image {
-            //        width: 100px;
-            //        height: 100px;
-            //    }
-            //}
-        }
-    }
+    margin-top: 2rem;
 }
 
-.price-origin {
-    text-decoration: line-through;
-    color: #999;
-    font-size: 14px;
-}
-.price {
-    color: $base-primary-color;
-    font-weight: bold;
-    font-size: 16px;
-}
 
 @media(min-width: $breakpoint-tablet) {
     :deep(.el-carousel__container) {
