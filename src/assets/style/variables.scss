@@ -31,6 +31,7 @@ $font-family-base: #{$font-en}, #{$font-zh};
 // Base
 $base-background-color: #f8f5f2;  //main
 $base-header-color: #e0cba6;
+$base-header-category-color: #f1e7d3;
 
 // Theme Colors
 $base-primary-color: #7A989A;
@@ -51,3 +52,4 @@ $base-section-color: #6D8688;      // 區塊小標（主色變種）
 // size
 $base-aside-width: 200px;
 $base-header-height: 50px;
+$base-header-height-tablet:75px;

@@ -50,4 +50,14 @@ import { ref } from 'vue';
         padding: 1rem 1rem;
     }
 }
+@media (min-width: $breakpoint-tablet){
+    :deep(.el-container .el-header[data-v-3f5a6310]) {
+        height:$base-header-height-tablet;
+        background-color: $base-header-color;
+    }
+
+    :deep(.el-header) {
+        margin-bottom: 0;
+    }
+}
 </style>

@@ -88,6 +88,7 @@ h4 {
 
                 .price {
                     color: $base-primary-color;
+                    font-size: 1.1 rem;
                     font-style: italic;
                 }
             }

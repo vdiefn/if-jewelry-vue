@@ -16,7 +16,7 @@ defineExpose({ open })
 </script>
 
 <template>
-    <ElDrawer v-model="drawer" title="I am the title" :with-header="false" size="60%">
+    <ElDrawer v-model="drawer" size="60%">
         <span>Hi there!</span>
         <router-link class="products nav-link" to="/Products" @click="close">
             <p>所有商品</p>
