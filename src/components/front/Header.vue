@@ -1,19 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { DrawerProductCategory } from "@/components/front"
+import { useRoute } from "vue-router"
 
+const route = useRoute()
 const drawerProductCategory = ref(null)
+
+const path = computed(() => route.path)
 
 const openDrawer = () => {
     drawerProductCategory.value.open()
 }
+
+console.log(window.location.pathname)
 </script>
 
 <template>
     <nav class="navbar">
         <div class="top">
-            <div class="bars" @click="openDrawer">
+            <div class="bars" @click="openDrawer" v-if="path === '/Products'">
                 <font-awesome-icon :icon="['fas', 'bars']" />
+            </div>
+            <div class="products all" v-if="path !== '/Products'">
+                <router-link class="products nav-link" to="/Products"><h6>全部產品</h6></router-link>
             </div>
             <div class="brand">
                 <router-link class="brand nav-link" to="/">
@@ -28,21 +37,21 @@ const openDrawer = () => {
                 </router-link>
             </div>
         </div>
-        <div class="category">
+        <div class="category" v-if="path === '/Products'">
             <div class="products all">
-                <router-link class="products nav-link" to="/Products"><p>產品列表</p></router-link>
+                <router-link class="products nav-link" to="/Products" ><h6>全部產品</h6></router-link>
             </div>
             <div class="products earrings">
-                <router-link class="products nav-link" to="/Products"><p>耳環</p></router-link>
+                <router-link class="products nav-link" to="/Products"><h6>耳環</h6></router-link>
             </div>
             <div class="products ring">
-                <router-link class="products nav-link" to="/Products"><p>戒指</p></router-link>
+                <router-link class="products nav-link" to="/Products"><h6>戒指</h6></router-link>
             </div>
             <div class="products necklace">
-                <router-link class="products nav-link" to="/Products"><p>項鍊</p></router-link>
+                <router-link class="products nav-link" to="/Products"><h6>項鍊</h6></router-link>
             </div>
             <div class="products bracelet">
-                <router-link class="products nav-link" to="/Products"><p>手鐲</p></router-link>
+                <router-link class="products nav-link" to="/Products"><h6>手鐲</h6></router-link>
             </div>
         </div>
     </nav>
@@ -53,6 +62,12 @@ const openDrawer = () => {
 .navbar {
     display: flex;
     flex-direction: column;
+    position: fixed;
+    width:100%;
+    top:0;
+    z-index: 99;
+    background-color: $base-header-color;
+    box-shadow: 0 1px 4px rgba(42, 42, 42, 0.8);
 
     .top {
         margin: 0 auto;
@@ -74,6 +89,10 @@ const openDrawer = () => {
             text-align: center;
             letter-spacing: 1px;
         }
+
+        .products {
+            display: none;
+        }
     }
 
     .category {
@@ -89,7 +108,13 @@ const openDrawer = () => {
             .bars {
                 display: none;
             }
+
+            .products {
+                display: flex;
+                align-items: center;
+            }
         }
+
 
         .category {
             display: flex;
@@ -98,9 +123,11 @@ const openDrawer = () => {
             justify-content: center;
             gap: 1rem;
             background-color: $base-header-category-color;
-            margin-top: 5px;
-            padding: 5px 0;
+            // margin-top: 5px;
+            // padding: 5px 0;
         }
     }
 }
+
+
 </style>

@@ -64,6 +64,7 @@ onMounted(() => {
 :deep(.el-carousel__container) {
     height: 250px;
     width: 100%;
+    margin-top:45px;
 
     .carousel-item {
         height: 100%;

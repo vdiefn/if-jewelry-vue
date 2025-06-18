@@ -33,7 +33,7 @@ import { ref } from 'vue';
         margin: 0 auto;
         padding: 0;
         width: 100%;
-        height: $base-header-height;
+        height: auto;
         background-color: $base-header-color;
     }
 
@@ -52,12 +52,9 @@ import { ref } from 'vue';
 }
 @media (min-width: $breakpoint-tablet){
     :deep(.el-container .el-header[data-v-3f5a6310]) {
-        height:$base-header-height-tablet;
+        height:auto;
+        padding: 0;
         background-color: $base-header-color;
-    }
-
-    :deep(.el-header) {
-        margin-bottom: 0;
     }
 }
 </style>
