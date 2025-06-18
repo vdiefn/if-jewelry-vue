@@ -62,7 +62,6 @@ const open = (row) => {
     });
     if (row) {
         isEdit.value = true;
-        console.log(row);
         let editImagesUrl = row.imagesUrl.map((url, index) => {
         return {
             name: `image${index + 1}`,
@@ -73,10 +72,8 @@ const open = (row) => {
         Object.assign(form, row);
         form.imagesUrl = editImagesUrl;
         fileList.value = editImagesUrl;
-        console.log("開啟:", form);
         dialogVisible.value = true;
     } else {
-        console.log("新增");
         isEdit.value = false;
         dialogVisible.value = true;
     }
@@ -95,24 +92,28 @@ const confirm = async (info) => {
         unit: info.unit,
         description: info.description,
         content: info.content,
-        is_enabled: info.is_enabled ? 0 : 1,
+        is_enabled: info.is_enabled ? 1 : 0,
         imageUrl: "",
         imagesUrl: info.imagesUrl,
         },
     };
-    try {
-        const res = await reqEditProduct(payload);
-        if (res.success) {
-            console.log(res);
-            ElMessage({
-            type: "success",
-            message: res.message,
-            });
-            emit("product-added");
-            dialogVisible.value = false;
-        }
+        try {
+            const res = await reqEditProduct(payload);
+            if (res.success) {
+                ElMessage({
+                    type: "success",
+                    message: res.message,
+                });
+                emit("product-added");
+                dialogVisible.value = false;
+            } else {
+                ElMessage({
+                    type: "success",
+                    message: res.message,
+                });
+            }
         } catch (err) {
-        console.error(err);
+            console.error(err);
         }
     } else {
         try {
@@ -130,21 +131,27 @@ const confirm = async (info) => {
             imagesUrl: info.imagesUrl,
             },
         });
-        if (response.success) {
+            if (response.success) {
+                    ElMessage({
+                    type: "success",
+                    message: "成功新增商品",
+                });
+                emit("product-added");
+                dialogVisible.value = false;
+            } else {
+                instance.confirmButtonLoading = false;
                 ElMessage({
-                type: "success",
-                message: "成功新增商品",
-            });
-            emit("product-added");
-            dialogVisible.value = false;
-        }
+                    type: "error",
+                    message: response.message,
+                })
+            }
         } catch (error) {
-        console.log(error);
-        const msg = error?.response?.data?.message.join(",") || "商品新增錯誤";
-        ElMessage({
-            type: "error",
-            message: msg,
-        });
+            console.error(error);
+            const msg = error?.response?.data?.message.join(",") || "商品新增錯誤";
+            ElMessage({
+                type: "error",
+                message: msg,
+            });
         }
     }
 };
