@@ -46,5 +46,11 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     background-color: $base-background-color;
+    margin-bottom: 0.5rem;
+
+    .el-pagination {
+        --el-pagination-bg-color: $base-background-color;
+        --el-pagination-button-disabled-bg-color:$base-background-color;
+    }
 }
 </style>
