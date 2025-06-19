@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
     <div class="carousel-container" v-if="data">
         <ElCarousel>
-            <ElCarouselItem v-for="product in data.products" :key="product.id" class="carousel-item">
+            <ElCarouselItem v-for="product in data.products.slice(0, 5)" :key="product.id" class="carousel-item">
                 <img :src="product.imagesUrl[0]" alt="carousel item" class="image"/>
             </ElCarouselItem>
         </ElCarousel>
@@ -82,8 +82,13 @@ onMounted(() => {
 }
 
 .category-container {
+    border: 1px solid red;
+
     .category-item {
-        margin: 2rem 100px;
+        border: 1px solid blue;
+        margin: 2rem 0;
+        padding: 0 5px;
+
 
         h4 {
             text-align: center;

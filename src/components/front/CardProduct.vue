@@ -32,19 +32,20 @@ const props = defineProps({
 .card-wrapper {
     display: grid;
     grid-template-columns: repeat(2, minmax(150px, 1fr));
-    grid-gap: 5px;
+    grid-gap: 1rem;
     margin: 1rem auto;
     width: 100%;
-    justify-items: start;
+    justify-items: center;
 
     .card {
         width: 100%;
         overflow: hidden;
-        padding: 0 1rem;
 
         .product-image {
             width: 100%;
-            height: 80px;
+            height: 100%;
+            min-height: 80px;
+            max-height: 120px;
             display: block;
             object-fit: cover;
         }
