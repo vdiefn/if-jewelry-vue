@@ -68,7 +68,7 @@ onMounted(() => {
 :deep(.el-carousel__container) {
     height: 250px;
     width: 100%;
-    margin-top:45px;
+    margin-top:$base-header-height;
 
     .carousel-item {
         height: 100%;
@@ -85,7 +85,7 @@ onMounted(() => {
 
     .category-item {
         margin: 2rem 0;
-        padding: 0 5px;
+        padding: 0 1rem;
 
         h4 {
             text-align: center;
@@ -102,19 +102,11 @@ onMounted(() => {
     :deep(.el-carousel__container) {
         height: 350px;
     }
-
-    .category-item {
-        margin: 2rem 400px;
-    }
 }
 
 @media(min-width: $breakpoint-desktop) {
     :deep(.el-carousel__container) {
         height: 450px;
-    }
-
-    .category-item {
-        margin: 2rem 500px;
     }
 }
 
