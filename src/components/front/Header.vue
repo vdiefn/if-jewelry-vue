@@ -1,28 +1,24 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { DrawerProductCategory } from "@/components/front"
 import { useRoute } from "vue-router"
 
 const route = useRoute()
 const drawerProductCategory = ref(null)
 
-const path = computed(() => route.path)
-
 const openDrawer = () => {
     drawerProductCategory.value.open()
 }
-
-console.log(window.location.pathname)
 </script>
 
 <template>
     <nav class="navbar">
         <div class="top">
-            <div class="bars" @click="openDrawer" v-if="path === '/Products' || path === '/home'">
+            <div class="bars" @click="openDrawer" v-if="route.path === '/products' || route.path === '/home'">
                 <font-awesome-icon :icon="['fas', 'bars']" />
             </div>
-            <div class="products all" v-if="path !== '/Products'">
-                <router-link class="products nav-link" to="/Products"><h6>全部產品</h6></router-link>
+            <div class="products all" v-if="route.path !== '/products'">
+                <router-link class="products nav-link" to="/products"><h6>全部產品</h6></router-link>
             </div>
             <div class="brand">
                 <router-link class="brand nav-link" to="/">
@@ -30,28 +26,28 @@ console.log(window.location.pathname)
                 </router-link>
             </div>
             <div class="cart">
-                <router-link class="cart nav-link" to="/Cart">
+                <router-link class="cart nav-link" to="/cart">
                     <i>
                         <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                     </i>
                 </router-link>
             </div>
         </div>
-        <div class="category" v-if="path === '/Products'">
+        <div class="category" v-if="route.path === '/products'">
             <div class="products all">
-                <router-link class="products nav-link" to="/Products" ><h6>全部產品</h6></router-link>
+                <router-link class="products nav-link" to="/products"><h6>全部產品</h6></router-link>
             </div>
             <div class="products earrings">
-                <router-link class="products nav-link" to="/Products"><h6>耳環</h6></router-link>
+                <router-link class="products nav-link" :to="{ path: '/products', query: { category: '耳環' } }"><h6>耳環</h6></router-link>
             </div>
             <div class="products ring">
-                <router-link class="products nav-link" to="/Products"><h6>戒指</h6></router-link>
+                <router-link class="products nav-link" :to="{ path: '/products', query: {category: '戒指'}}"><h6>戒指</h6></router-link>
             </div>
             <div class="products necklace">
-                <router-link class="products nav-link" to="/Products"><h6>項鍊</h6></router-link>
+                <router-link class="products nav-link" :to="{path: '/products', query: {category: '項鍊'}}"><h6>項鍊</h6></router-link>
             </div>
             <div class="products bracelet">
-                <router-link class="products nav-link" to="/Products"><h6>手鐲</h6></router-link>
+                <router-link class="products nav-link" :to="{path: '/products', query: {category: '手鐲'}}"><h6>手鐲</h6></router-link>
             </div>
         </div>
     </nav>
@@ -123,8 +119,6 @@ console.log(window.location.pathname)
             justify-content: center;
             gap: 1rem;
             background-color: $base-header-category-color;
-            // margin-top: 5px;
-            // padding: 5px 0;
         }
     }
 }
