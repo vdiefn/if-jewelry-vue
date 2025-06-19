@@ -15,6 +15,7 @@ const getProductDetail = async(id) => {
         console.error(error);
     }
 }
+
 onMounted(() => {
     getProductDetail(route.params.id)
 })
@@ -22,12 +23,14 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container">
-        <img src="" alt="product image" />
-        <h5>{{data.product.title}}</h5>
-        <p>$NTD {{ data.product.price }}</p>
-        <ElInputNumber v-model="selectNumber" :min="1" :max="10"/>
-        <ElButton>加入購物車</ElButton>
+    <div class="container" v-if="data.product">
+        <img :src="data.product.imagesUrl[0]" alt="product image" />
+        <div class="product-info">
+            <h5>{{data.product.title}}</h5>
+            <p>$NTD {{ data.product.price }}</p>
+            <ElInputNumber v-model="selectNumber" :min="1" :max="10"/>
+            <ElButton>加入購物車</ElButton>
+        </div>
     </div>
 
 </template>
@@ -37,6 +40,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     margin-top: $base-header-height;
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+    }
 }
 
 </style>
