@@ -14,7 +14,7 @@ const openDrawer = () => {
 <template>
     <nav class="navbar">
         <div class="top">
-            <div class="bars" @click="openDrawer" v-if="route.path === '/products' || route.path === '/home'">
+            <div class="bars" @click="openDrawer">
                 <font-awesome-icon :icon="['fas', 'bars']" />
             </div>
             <div class="products all" v-if="route.path !== '/products'">

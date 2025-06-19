@@ -7,3 +7,7 @@ export const reqAllProducts = () => {
 export const reqProducts = (page = 1, category= "") => {
     return api.get(`products?page=${page}&category=${category}`)
 }
+
+export const reqProductDetail = (id) => {
+    return api.get(`product/${id}`)
+}

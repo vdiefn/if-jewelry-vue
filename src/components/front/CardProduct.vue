@@ -12,18 +12,20 @@ const props = defineProps({
 <template>
     <div class="card-wrapper">
         <div class="card" v-for="product in props.data" :key="product.id">
-            <img
-                :src="product.imagesUrl[0]"
-                alt="product photo"
-                class="product-image"
-            />
-            <div class="card-text">
-                <h5 class="card-title">{{ product.title }}</h5>
-                <div class="price-wrapper">
-                    <span class="price-origin">${{ product.origin_price }}</span>
-                    <p class="price">${{ product.price }}</p>
+            <RouterLink :to="{ path: `/product/${product.id}` }">
+                <img
+                    :src="product.imagesUrl[0]"
+                    alt="product photo"
+                    class="product-image"
+                />
+                <div class="card-text">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <div class="price-wrapper">
+                        <span class="price-origin">${{ product.origin_price }}</span>
+                        <p class="price">${{ product.price }}</p>
+                    </div>
                 </div>
-            </div>
+            </RouterLink>
         </div>
     </div>
 </template>
