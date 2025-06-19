@@ -97,7 +97,7 @@ const props = defineProps({
 @media (min-width: $breakpoint-desktop) {
     .card-wrapper {
         display: grid;
-        grid-template-columns: repeat(4, minmax(300px, 1fr));
+        grid-template-columns: repeat(4, minmax(200px, 1fr));
 
         .card {
             .product-image {

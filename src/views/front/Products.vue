@@ -8,14 +8,20 @@ import { useRoute } from "vue-router"
 const data = ref({})
 const route = useRoute()
 const totalPage= ref(1)
+const currentPage = ref(1)
 
 const getProducts = async (page, category) => {
     try {
         data.value = await reqProducts(page, category);
         totalPage.value = data.value.pagination.total_pages
+        currentPage.value = page
     } catch(error) {
         console.error(error);
     }
+}
+
+const changeCurrentPage = (page) => {
+    getProducts(page, route.query.category)
 }
 
 watch(route, (value) => {
@@ -33,7 +39,7 @@ onMounted(() => {
         <CardProduct :data = data.products />
     </div>
     <div class="pagination-block">
-        <ElPagination layout="prev, pager, next" :page-count="totalPage" />
+        <ElPagination layout="prev, pager, next" :page-count="totalPage" @current-change="changeCurrentPage"/>
     </div>
 </template>
 
