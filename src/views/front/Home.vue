@@ -45,17 +45,21 @@ onMounted(() => {
         </ElCarousel>
     </div>
     <div class="category-container">
-        <div class="earrings-section" v-if="earringsProducts.length > 0">
-            <CardProduct title="Earrings" :data="earringsProducts"/>
+        <div class="earrings category-item" v-if="earringsProducts.length > 0">
+            <h4 class="sub-title">Earrings</h4>
+            <CardProduct :data="earringsProducts"/>
         </div>
-        <div class="necklace-section" v-if="necklaceProducts.length > 0">
-            <CardProduct title="Necklace" :data="necklaceProducts"/>
+        <div class="necklace category-item" v-if="necklaceProducts.length > 0">
+            <h4 class="sub-title">Necklace</h4>
+            <CardProduct :data="necklaceProducts"/>
         </div>
-        <div class="ring-section" v-if="ringProducts.length > 0">
-            <CardProduct title="Ring" :data="ringProducts"/>
+        <div class="ring category-item" v-if="ringProducts.length > 0">
+            <h4 class="sub-title">Ring</h4>
+            <CardProduct :data="ringProducts"/>
         </div>
-        <div class="bracelet-section" v-if="braceletProducts.length > 0">
-            <CardProduct title="Bracelet" :data="braceletProducts"/>
+        <div class="bracelet category-item" v-if="braceletProducts.length > 0">
+            <h4 class="sub-title">Bracelet</h4>
+            <CardProduct :data="braceletProducts"/>
         </div>
     </div>
 </template>
@@ -78,13 +82,27 @@ onMounted(() => {
 }
 
 .category-container {
-    margin-top: 2rem;
+    .category-item {
+        margin: 2rem 100px;
+
+        h4 {
+            text-align: center;
+            letter-spacing: 0.3rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+        }
+    }
 }
 
 
 @media(min-width: $breakpoint-tablet) {
     :deep(.el-carousel__container) {
         height: 350px;
+    }
+
+    .category-item {
+        margin: 2rem 400px;
     }
 }
 
@@ -93,6 +111,9 @@ onMounted(() => {
         height: 450px;
     }
 
+    .category-item {
+        margin: 2rem 500px;
+    }
 }
 
 </style>

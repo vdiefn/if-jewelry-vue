@@ -10,8 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <h4 class="sub-title">{{ props.title }}</h4>
-    <div class="card-wrapper earrings" >
+    <div class="card-wrapper">
         <div class="card" v-for="product in props.data" :key="product.id">
             <img
                 :src="product.imagesUrl[0]"
@@ -30,18 +29,10 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
-h4 {
-    text-align: center;
-    letter-spacing: 0.3rem;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 400;
-}
-
 .card-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-gap: 0.5rem;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-gap: 5px;
     margin: 1rem auto;
     width: 100%;
     justify-items: start;
@@ -53,21 +44,9 @@ h4 {
 
         .product-image {
             width: 100%;
-            height: 100px;
+            height: 80px;
             display: block;
             object-fit: cover;
-        }
-
-        @media (min-width: $breakpoint-tablet) {
-            .product-image {
-                height: 200px;
-            }
-        }
-
-        @media (min-width: $breakpoint-desktop) {
-            .product-image {
-                height: 300px;
-            }
         }
 
         .card-text {
@@ -91,6 +70,38 @@ h4 {
                     font-size: 1.1 rem;
                     font-style: italic;
                 }
+            }
+        }
+    }
+}
+
+@media (min-width: $breakpoint-tablet) {
+    .card-wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
+
+        .card {
+            .product-image {
+                width: 100%;
+                height: 100%;
+                min-height: 100px;
+                max-height: 150px;
+            }
+        }
+    }
+}
+
+@media (min-width: $breakpoint-desktop) {
+    .card-wrapper {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(300px, 1fr));
+
+        .card {
+            .product-image {
+                width: 100%;
+                height: 100%;
+                min-height: 150px;
+                max-height: 200px;
             }
         }
     }
