@@ -115,7 +115,7 @@ export const constantRouter = [
                 name: "Home",
                 meta: {
                     title: "首頁",
-                    hidden: false
+                    hidden: true
                 }
             },
             {
@@ -124,7 +124,7 @@ export const constantRouter = [
                 name: "FrontProducts",
                 meta: {
                     title: "產品列表",
-                    hidden: false
+                    hidden: true
                 }
             },
             {
@@ -133,7 +133,7 @@ export const constantRouter = [
                 name: "ProductDetail",
                 meta: {
                     title: "產品詳情",
-                    hidden: false
+                    hidden: true
                 }
             },
             {
@@ -142,7 +142,7 @@ export const constantRouter = [
                 name: "Cart",
                 meta: {
                     title: "購物車",
-                    hidden: false
+                    hidden: true
                 }
             },
         ]
