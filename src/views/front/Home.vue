@@ -82,13 +82,10 @@ onMounted(() => {
 }
 
 .category-container {
-    border: 1px solid red;
 
     .category-item {
-        border: 1px solid blue;
         margin: 2rem 0;
         padding: 0 5px;
-
 
         h4 {
             text-align: center;
