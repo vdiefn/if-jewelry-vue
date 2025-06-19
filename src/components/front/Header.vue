@@ -18,7 +18,7 @@ console.log(window.location.pathname)
 <template>
     <nav class="navbar">
         <div class="top">
-            <div class="bars" @click="openDrawer" v-if="path === '/Products'">
+            <div class="bars" @click="openDrawer" v-if="path === '/Products' || path === '/home'">
                 <font-awesome-icon :icon="['fas', 'bars']" />
             </div>
             <div class="products all" v-if="path !== '/Products'">
