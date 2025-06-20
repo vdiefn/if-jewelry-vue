@@ -48,28 +48,28 @@ onMounted(() => {
         <template v-if="earringsProducts.length > 0">
             <h4 class="sub-title" >Earrings</h4>
             <div class="earrings card-wrapper">
-                <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
+                <CardProduct :data="product" v-for="product in earringsProducts" :key="product.id"/>
             </div>
         </template>
 
         <template v-if="necklaceProducts.length > 0">
             <h4 class="sub-title">Necklace</h4>
             <div class="necklace card-wrapper">
-                <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
+                <CardProduct :data="product" v-for="product in necklaceProducts" :key="product.id"/>
             </div>
         </template>
 
         <template v-if="ringProducts.length > 0">
             <h4 class="sub-title">Ring</h4>
             <div class="ring card-wrapper">
-                <CardProduct :data="ringProducts"/>
+                <CardProduct :data="product" v-for="product in ringProducts" :key="product.id" />
             </div>
         </template>
 
         <template v-if="braceletProducts.length > 0">
             <h4 class="sub-title">Bracelet</h4>
             <div class="bracelet card-wrapper">
-                <CardProduct :data="braceletProducts"/>
+                <CardProduct :data="product" v-for="product in braceletProducts" :key="product.id" />
             </div>
         </template>
     </div>

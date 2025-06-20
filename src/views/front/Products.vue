@@ -35,8 +35,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container">
-        <CardProduct :data = data.products />
+    <div class="card-wrapper">
+        <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
     </div>
     <div class="pagination-block">
         <ElPagination layout="prev, pager, next" :page-count="totalPage" @current-change="changeCurrentPage"/>
@@ -44,10 +44,16 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.container {
+.card-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-gap: 1rem;
     margin-top: $base-header-height-tablet;
     padding: 1rem 1rem;
+    width: 100%;
+    justify-items: center;
 }
+
 .pagination-block {
     display: flex;
     justify-content: center;
@@ -57,6 +63,20 @@ onMounted(() => {
     .el-pagination {
         --el-pagination-bg-color: $base-background-color;
         --el-pagination-button-disabled-bg-color:$base-background-color;
+    }
+}
+
+@media(min-width: $breakpoint-tablet) {
+    .card-wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
+    }
+}
+
+@media(min-width: $breakpoint-desktop) {
+    .card-wrapper {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(200px, 1fr));
     }
 }
 </style>

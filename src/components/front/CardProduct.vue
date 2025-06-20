@@ -26,15 +26,6 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
-//.card-wrapper {
-//    display: grid;
-//    grid-template-columns: repeat(2, minmax(150px, 1fr));
-//    grid-gap: 1rem;
-//    margin: 1rem auto;
-//    width: 100%;
-//    justify-items: center;
-//}
-
 .card {
     width: 100%;
     overflow: hidden;
@@ -75,11 +66,6 @@ const props = defineProps({
 
 
 @media (min-width: $breakpoint-tablet) {
-    //.card-wrapper {
-    //    display: grid;
-    //    grid-template-columns: repeat(3, minmax(200px, 1fr));
-    //}
-
     .card {
         .product-image {
             width: 100%;
@@ -91,11 +77,6 @@ const props = defineProps({
 }
 
 @media (min-width: $breakpoint-desktop) {
-    //.card-wrapper {
-    //    display: grid;
-    //    grid-template-columns: repeat(4, minmax(200px, 1fr));
-    //}
-
     .card {
         .product-image {
             width: 100%;
