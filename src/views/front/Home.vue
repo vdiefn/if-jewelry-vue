@@ -45,22 +45,33 @@ onMounted(() => {
         </ElCarousel>
     </div>
     <div class="category-container">
-        <div class="earrings category-item" v-if="earringsProducts.length > 0">
-            <h4 class="sub-title">Earrings</h4>
-            <CardProduct :data="earringsProducts"/>
-        </div>
-        <div class="necklace category-item" v-if="necklaceProducts.length > 0">
+        <template v-if="earringsProducts.length > 0">
+            <h4 class="sub-title" >Earrings</h4>
+            <div class="earrings card-wrapper">
+                <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
+            </div>
+        </template>
+
+        <template v-if="necklaceProducts.length > 0">
             <h4 class="sub-title">Necklace</h4>
-            <CardProduct :data="necklaceProducts"/>
-        </div>
-        <div class="ring category-item" v-if="ringProducts.length > 0">
+            <div class="necklace card-wrapper">
+                <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
+            </div>
+        </template>
+
+        <template v-if="ringProducts.length > 0">
             <h4 class="sub-title">Ring</h4>
-            <CardProduct :data="ringProducts"/>
-        </div>
-        <div class="bracelet category-item" v-if="braceletProducts.length > 0">
+            <div class="ring card-wrapper">
+                <CardProduct :data="ringProducts"/>
+            </div>
+        </template>
+
+        <template v-if="braceletProducts.length > 0">
             <h4 class="sub-title">Bracelet</h4>
-            <CardProduct :data="braceletProducts"/>
-        </div>
+            <div class="bracelet card-wrapper">
+                <CardProduct :data="braceletProducts"/>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -82,18 +93,22 @@ onMounted(() => {
 }
 
 .category-container {
+    h4 {
+        text-align: center;
+        letter-spacing: 0.3rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 400;
+    }
 
-    .category-item {
-        margin: 2rem 0;
+    .card-wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
+        grid-gap: 1rem;
+        margin: 2rem auto;
         padding: 0 1rem;
-
-        h4 {
-            text-align: center;
-            letter-spacing: 0.3rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-weight: 400;
-        }
+        width: 100%;
+        justify-items: center;
     }
 }
 
@@ -102,11 +117,26 @@ onMounted(() => {
     :deep(.el-carousel__container) {
         height: 350px;
     }
+
+    .category-container {
+        .card-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(200px, 1fr));
+        }
+    }
+
 }
 
 @media(min-width: $breakpoint-desktop) {
     :deep(.el-carousel__container) {
         height: 450px;
+    }
+
+    .category-container {
+        .card-wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(200px, 1fr));
+        }
     }
 }
 
