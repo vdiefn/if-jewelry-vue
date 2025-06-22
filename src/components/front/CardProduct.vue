@@ -34,7 +34,7 @@ const props = defineProps({
         width: 100%;
         height: 100%;
         min-height: 80px;
-        max-height: 120px;
+        max-height: 110px;
         display: block;
         object-fit: cover;
     }
