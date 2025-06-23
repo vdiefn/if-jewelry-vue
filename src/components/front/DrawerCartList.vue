@@ -5,10 +5,14 @@ import { useCartStore } from "@/store/modules/cart"
 
 const drawer = ref(false)
 const cartStore = useCartStore()
+const isMobile = ref(true)
 
 const open = () => {
-    drawer.value = true
-    console.log(cartStore.cartList)
+    if(isMobile.value) {
+        drawer.value = true
+    } else {
+        drawer.value = false
+    }
 }
 
 const handleDeleteProduct = (id) =>{
@@ -24,7 +28,10 @@ defineExpose({ open })
         size="65%"
         :with-header="false"
     >
-        <div class="container">
+        <template v-if="cartStore.cartList.length === 0">
+                <p>你的購物車是空的喔!</p>
+            </template>
+        <div class="container" v-else>
             <div v-for="item in cartStore.cartList" :key="item.id" class="product-wrapper">
                 <div class="image-wrapper">
                     <img :src="item.image" alt="product picture" />
@@ -43,7 +50,6 @@ defineExpose({ open })
         <template #footer>
             <ElButton type="primary" class="check-btn">購物車結帳</ElButton>
         </template>
-
     </ElDrawer>
 </template>
 

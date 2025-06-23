@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { reqProductDetail, reqProducts, reqAddCart } from "@/api/front/frontProducts.js";
 import { CardProduct, DrawerCartList } from "@/components/front/index.js";
 import { useCartStore } from "@/store/modules/cart.js";
+import { useIsMobile } from "@/composables/useIsMobile";
 
 const route = useRoute();
 const count = ref(1)
@@ -18,6 +19,7 @@ const imageList = ref([])
 const loading = ref(false)
 const cartStore = useCartStore()
 const drawerCartListRef = ref()
+const { isMobile } = useIsMobile()
 
 const getProductDetail = async(id) => {
     loading.value = true
@@ -59,29 +61,9 @@ const addToCart = () => {
         image: imageList.value[0],
         qty: count.value
     })
-    // loading.value = true
-    // try {
-    //     const res = await reqAddCart({
-    //         product_id: currentId.value,
-    //         qty: count.value
-    //     })
-    //     if(res.success) {
-    //         ElMessage({
-    //             message: "已新增至購物車",
-    //             type:"success"
-    //         })
-    //     } else {
-    //         ElMessage({
-    //             message: res.message,
-    //             type: "error"
-    //         })
-    //     }
-    // } catch(error) {
-    //     console.error(error);
-    // } finally {
-    //     loading.value = false
-    // }
-    drawerCartListRef.value.open()
+    if(isMobile.value) {
+        drawerCartListRef.value.open()
+    }
 }
 
 watch(() => route.params.id, (value) => {

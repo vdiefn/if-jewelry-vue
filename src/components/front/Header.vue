@@ -1,21 +1,25 @@
 <script setup>
 import { ref } from 'vue';
-import { ElBadge } from "element-plus"
+import { ElBadge, ElPopover } from "element-plus"
 import { DrawerProductCategory, DrawerCartList } from "@/components/front"
 import { useRoute } from "vue-router"
 import { useCartStore } from '@/store/modules/cart.js'
+import { useIsMobile } from '@/composables/useIsMobile';
 
 const route = useRoute()
 const drawerProductCategory = ref(null)
 const drawerCartListRef = ref(null)
 const cartStore = useCartStore()
+const { isMobile } = useIsMobile()
 
 const openDrawer = () => {
     drawerProductCategory.value.open()
 }
 
 const getCartItems = async () => {
-    drawerCartListRef.value.open()
+    if(isMobile.value) {
+        drawerCartListRef.value.open()
+    }
 }
 </script>
 
@@ -34,13 +38,29 @@ const getCartItems = async () => {
                 </router-link>
             </div>
             <div class="cart" @click="getCartItems">
-<!--                <router-link class="cart nav-link" to="/cart">-->
+                <template v-if="isMobile">
                     <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
                         <i>
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                         </i>
                     </ElBadge>
-<!--                </router-link>-->
+                </template>
+                <template v-else>
+                    <ElPopover
+                        class="box-item"
+                        title="Title"
+                        content="Bottom Center prompts info"
+                        placement="bottom"
+                    >
+                        <template #reference>
+                            <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
+                                <i>
+                                    <font-awesome-icon :icon="['fas', 'cart-shopping']" />
+                                </i>
+                            </ElBadge>
+                        </template>
+                    </ElPopover>
+                </template>
             </div>
         </div>
         <div class="category" v-if="route.path === '/products'">
@@ -48,16 +68,24 @@ const getCartItems = async () => {
                 <router-link class="products nav-link" to="/products"><h6>全部產品</h6></router-link>
             </div>
             <div class="products earrings">
-                <router-link class="products nav-link" :to="{ path: '/products', query: { category: '耳環' } }"><h6>耳環</h6></router-link>
+                <router-link class="products nav-link" :to="{ path: '/products', query: { category: '耳環' } }">
+                    <h6>耳環</h6>
+                </router-link>
             </div>
             <div class="products ring">
-                <router-link class="products nav-link" :to="{ path: '/products', query: {category: '戒指'}}"><h6>戒指</h6></router-link>
+                <router-link class="products nav-link" :to="{ path: '/products', query: {category: '戒指'}}">
+                    <h6>戒指</h6>
+                </router-link>
             </div>
             <div class="products necklace">
-                <router-link class="products nav-link" :to="{path: '/products', query: {category: '項鍊'}}"><h6>項鍊</h6></router-link>
+                <router-link class="products nav-link" :to="{path: '/products', query: {category: '項鍊'}}">
+                    <h6>項鍊</h6>
+                </router-link>
             </div>
             <div class="products bracelet">
-                <router-link class="products nav-link" :to="{path: '/products', query: {category: '手鐲'}}"><h6>手鐲</h6></router-link>
+                <router-link class="products nav-link" :to="{path: '/products', query: {category: '手鐲'}}">
+                    <h6>手鐲</h6>
+                </router-link>
             </div>
         </div>
     </nav>
