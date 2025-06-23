@@ -4,16 +4,19 @@ import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router'
 import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
 import { CardProduct } from "@/components/front/index.js";
+import { useCartStore } from "@/store/modules/cart.js";
 
 const route = useRoute();
-const selectNumber = ref(0)
+const count = ref(1)
 const data = ref({})
 const activeName = ref("first")
 const currentCategory = ref("")
+const currentId = ref("")
 const similarProducts = ref([])
 const activeImage = ref(0)
 const imageList = ref([])
 const loading = ref(false)
+const cartStore = useCartStore()
 
 const getProductDetail = async(id) => {
     loading.value = true
@@ -21,6 +24,8 @@ const getProductDetail = async(id) => {
     try {
         data.value = await reqProductDetail(id);
         currentCategory.value = data.value.product.category
+        currentId.value = data.value.product.id
+        await getSimilarProducts()
         imageList.value = data.value.product.imagesUrl
         window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch(error) {
@@ -34,7 +39,7 @@ const getSimilarProducts = async() => {
     if(currentCategory.value.length > 0) {
         try {
             const res = await reqProducts(1, currentCategory.value);
-            similarProducts.value = res.products.filter(product => product.id !== route.params.id);
+            similarProducts.value = res.products.filter(product => product.id !== currentId.value);
         } catch(error) {
             console.error(error);
         }
@@ -45,12 +50,18 @@ const handleClickImage = (index) => {
     activeImage.value = index
 }
 
-watch(currentCategory,() => {
-    getSimilarProducts()
-})
+const addToCart = () => {
+    cartStore.addToCart({
+        id: currentId.value,
+        qty: count.value
+    })
+    console.log({
+        id: currentId.value,
+        qty: count.value
+    })
+}
 
 watch(() => route.params.id, (value) => {
-    console.log(value)
     getProductDetail(value)
 })
 
@@ -101,9 +112,9 @@ onMounted(() => {
                 <h5>
                     {{ data.product.content }}
                 </h5>
-                <ElInputNumber v-model="selectNumber" :min="1" :max="10"/>
+                <ElInputNumber v-model="count" :min="1" :max="10"/>
                 <div class="button-wrapper">
-                    <ElButton type="primary">加入購物車</ElButton>
+                    <ElButton type="primary" @click="addToCart">加入購物車</ElButton>
                     <ElButton type="warning">立即購買</ElButton>
                 </div>
 
