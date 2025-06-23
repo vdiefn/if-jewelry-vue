@@ -10,7 +10,7 @@ const selectNumber = ref(0)
 const data = ref({})
 const activeName = ref("first")
 const currentCategory = ref("")
-const similarProducts = ref({})
+const similarProducts = ref([])
 const activeImage = ref(0)
 const imageList = ref([])
 const loading = ref(false)
@@ -33,7 +33,8 @@ const getProductDetail = async(id) => {
 const getSimilarProducts = async() => {
     if(currentCategory.value.length > 0) {
         try {
-            similarProducts.value = await reqProducts(1, currentCategory.value);
+            const res = await reqProducts(1, currentCategory.value);
+            similarProducts.value = res.products.filter(product => product.id !== route.params.id);
         } catch(error) {
             console.error(error);
         }
@@ -102,8 +103,8 @@ onMounted(() => {
                 </h5>
                 <ElInputNumber v-model="selectNumber" :min="1" :max="10"/>
                 <div class="button-wrapper">
-                    <ElButton>加入購物車</ElButton>
-                    <ElButton>立即購買</ElButton>
+                    <ElButton type="primary">加入購物車</ElButton>
+                    <ElButton type="warning">立即購買</ElButton>
                 </div>
 
             </div>
@@ -127,10 +128,10 @@ onMounted(() => {
             <ElTabPane label="保養方式" name="third">{{ data.product.content }}</ElTabPane>
         </ElTabs>
 
-        <div class="other-products" v-if="similarProducts.products">
-            <ElDivider content-position="center"><p>你可能也會喜歡</p></ElDivider>
+        <div class="other-products" v-if="similarProducts.length > 0">
+            <ElDivider content-position="center"><h5>你可能也會喜歡</h5></ElDivider>
             <div class="card-wrapper">
-                <CardProduct :data="product" v-for="product in similarProducts.products.slice(0,4)" :key="product.id"/>
+                <CardProduct :data="product" v-for="product in similarProducts.slice(0,4)" :key="product.id"/>
             </div>
         </div>
     </div>
@@ -182,10 +183,15 @@ onMounted(() => {
                 width: 100%;
             }
 
-            .el-button {
+            .button-wrapper {
+                display: flex;
                 width: 100%;
-                background-color: $base-primary-color;
-                color: #fff;
+                gap: 0.5rem;
+
+                .el-button {
+                    width: 100%;
+                    margin: 0;
+                }
             }
         }
     }
@@ -322,10 +328,6 @@ onMounted(() => {
                 .button-wrapper {
                     display: flex;
                     justify-content: center;
-
-                     > button:nth-child(2) {
-                        background-color: $base-warning-color;
-                    }
                 }
 
             }
