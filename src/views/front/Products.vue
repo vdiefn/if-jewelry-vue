@@ -85,11 +85,19 @@ onMounted(() => {
 }
 
     @media(min-width: $breakpoint-tablet) {
+        h5 {
+            width: 90%;
+            margin: 0 auto;
+        }
+
         .card-wrapper {
+            margin: 0 auto;
+            width: 90%;
             display: grid;
             grid-template-columns: repeat(3, minmax(200px, 1fr));
         }
     }
+
 
     @media(min-width: $breakpoint-desktop) {
         .card-wrapper {
