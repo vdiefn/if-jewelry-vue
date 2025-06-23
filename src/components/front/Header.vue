@@ -1,10 +1,13 @@
 <script setup>
 import { ref } from 'vue';
+import { ElBadge } from "element-plus"
 import { DrawerProductCategory } from "@/components/front"
 import { useRoute } from "vue-router"
+import { useCartStore } from '@/store/modules/cart.js'
 
 const route = useRoute()
 const drawerProductCategory = ref(null)
+const cartStore = useCartStore()
 
 const openDrawer = () => {
     drawerProductCategory.value.open()
@@ -27,9 +30,11 @@ const openDrawer = () => {
             </div>
             <div class="cart">
                 <router-link class="cart nav-link" to="/cart">
-                    <i>
-                        <font-awesome-icon :icon="['fas', 'cart-shopping']" />
-                    </i>
+                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
+                        <i>
+                            <font-awesome-icon :icon="['fas', 'cart-shopping']" />
+                        </i>
+                    </ElBadge>
                 </router-link>
             </div>
         </div>
@@ -72,8 +77,7 @@ const openDrawer = () => {
         align-items: center;
         gap: 5px;
         height: 100%;
-        width: 100%;
-        padding: 0 1rem;
+        width: 90%;
 
         .bars {
             cursor: pointer;
@@ -88,6 +92,13 @@ const openDrawer = () => {
 
         .products {
             display: none;
+        }
+
+        .cart {
+            .item {
+                margin-top: 10px;
+                margin-right: 45px;
+            }
         }
     }
 

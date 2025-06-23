@@ -14,6 +14,4 @@ export const useCartStore = defineStore("cart", () => {
     }
 
     return { cartList, addToCart}
-}, {
-    persist: true
 })
