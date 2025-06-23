@@ -1,9 +1,9 @@
 <script setup>
-import { ElInputNumber, ElButton, ElCarousel, ElCarouselItem, ElTabs, ElTabPane, ElDivider, ElBreadcrumb, ElBreadcrumbItem } from "element-plus"
+import { ElInputNumber, ElButton, ElCarousel, ElCarouselItem, ElTabs, ElTabPane, ElDivider, ElBreadcrumb, ElBreadcrumbItem, ElMessage } from "element-plus"
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router'
-import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
-import { CardProduct } from "@/components/front/index.js";
+import { reqProductDetail, reqProducts, reqAddCart } from "@/api/front/frontProducts.js";
+import { CardProduct, DrawerCartList } from "@/components/front/index.js";
 import { useCartStore } from "@/store/modules/cart.js";
 
 const route = useRoute();
@@ -17,6 +17,7 @@ const activeImage = ref(0)
 const imageList = ref([])
 const loading = ref(false)
 const cartStore = useCartStore()
+const drawerCartListRef = ref()
 
 const getProductDetail = async(id) => {
     loading.value = true
@@ -53,12 +54,34 @@ const handleClickImage = (index) => {
 const addToCart = () => {
     cartStore.addToCart({
         id: currentId.value,
+        title: data.value.product.title,
+        price: data.value.product.price,
+        image: imageList.value[0],
         qty: count.value
     })
-    console.log({
-        id: currentId.value,
-        qty: count.value
-    })
+    // loading.value = true
+    // try {
+    //     const res = await reqAddCart({
+    //         product_id: currentId.value,
+    //         qty: count.value
+    //     })
+    //     if(res.success) {
+    //         ElMessage({
+    //             message: "已新增至購物車",
+    //             type:"success"
+    //         })
+    //     } else {
+    //         ElMessage({
+    //             message: res.message,
+    //             type: "error"
+    //         })
+    //     }
+    // } catch(error) {
+    //     console.error(error);
+    // } finally {
+    //     loading.value = false
+    // }
+    drawerCartListRef.value.open()
 }
 
 watch(() => route.params.id, (value) => {
@@ -147,6 +170,7 @@ onMounted(() => {
         </div>
     </div>
 
+    <DrawerCartList ref="drawerCartListRef" />
 </template>
 
 <style scoped lang="scss">

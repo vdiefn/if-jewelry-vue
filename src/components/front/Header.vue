@@ -1,16 +1,21 @@
 <script setup>
 import { ref } from 'vue';
 import { ElBadge } from "element-plus"
-import { DrawerProductCategory } from "@/components/front"
+import { DrawerProductCategory, DrawerCartList } from "@/components/front"
 import { useRoute } from "vue-router"
 import { useCartStore } from '@/store/modules/cart.js'
 
 const route = useRoute()
 const drawerProductCategory = ref(null)
+const drawerCartListRef = ref(null)
 const cartStore = useCartStore()
 
 const openDrawer = () => {
     drawerProductCategory.value.open()
+}
+
+const getCartItems = async () => {
+    drawerCartListRef.value.open()
 }
 </script>
 
@@ -28,14 +33,14 @@ const openDrawer = () => {
                     <h2>If Jewelry</h2>
                 </router-link>
             </div>
-            <div class="cart">
-                <router-link class="cart nav-link" to="/cart">
+            <div class="cart" @click="getCartItems">
+<!--                <router-link class="cart nav-link" to="/cart">-->
                     <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
                         <i>
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                         </i>
                     </ElBadge>
-                </router-link>
+<!--                </router-link>-->
             </div>
         </div>
         <div class="category" v-if="route.path === '/products'">
@@ -57,6 +62,7 @@ const openDrawer = () => {
         </div>
     </nav>
     <DrawerProductCategory ref="drawerProductCategory" />
+    <DrawerCartList ref="drawerCartListRef" />
 </template>
 
 <style scoped lang="scss">

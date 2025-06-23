@@ -13,5 +13,10 @@ export const useCartStore = defineStore("cart", () => {
         }
     }
 
-    return { cartList, addToCart}
+    const deleteProduct = (id) => {
+        const index = cartList.value.findIndex(i => i.id === id)
+        cartList.value.splice(index, 1)
+    }
+
+    return { cartList, addToCart, deleteProduct }
 })
