@@ -11,6 +11,7 @@ const drawerProductCategory = ref(null)
 const drawerCartListRef = ref(null)
 const cartStore = useCartStore()
 const { isMobile } = useIsMobile()
+const loading = ref(false)
 
 const openDrawer = () => {
     drawerProductCategory.value.open()
@@ -19,6 +20,15 @@ const openDrawer = () => {
 const getCartItems = async () => {
     if(isMobile.value) {
         drawerCartListRef.value.open()
+    }
+}
+
+const handleDeleteProduct = async(id) =>{
+    loading.value = true
+    try {
+        await cartStore.deleteCartProduct(id)
+    } finally {
+        loading.value = false
     }
 }
 </script>
@@ -37,9 +47,9 @@ const getCartItems = async () => {
                     <h2>If Jewelry</h2>
                 </router-link>
             </div>
-            <div class="cart" @click="getCartItems">
+            <div class="cart">
                 <template v-if="isMobile">
-                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
+                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item" @click="getCartItems">
                         <i>
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                         </i>
@@ -47,10 +57,9 @@ const getCartItems = async () => {
                 </template>
                 <template v-else>
                     <ElPopover
-                        class="box-item"
-                        title="Title"
-                        content="Bottom Center prompts info"
+                        popper-class="cart-popover"
                         placement="bottom"
+                        width="300"
                     >
                         <template #reference>
                             <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
@@ -59,6 +68,29 @@ const getCartItems = async () => {
                                 </i>
                             </ElBadge>
                         </template>
+                        <template v-if="cartStore.cartList.length === 0">
+                            <h6 style="text-align: center">你的購物車是空的喔!</h6>
+                        </template>
+                       <template v-else>
+                            <div v-for="item in cartStore.cartList" :key="item.id" class="product-wrapper">
+                                <div class="image-wrapper">
+                                    <img :src="item.product.imagesUrl[0]" alt="product picture" />
+                                </div>
+                                <div class="info-wrapper">
+                                    <h5>{{ item.product.title }}</h5>
+                                    <div class="text-wrapper">
+                                        <p>NTD{{ item.product.price }} x {{item.qty}}</p>
+                                        <i @click="handleDeleteProduct(item.id)">
+                                            <font-awesome-icon :icon="['far', 'trash-can']" />
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                       </template>
+                        <template v-if="cartStore.cartList.length !== 0">
+                            <ElButton type=primary>購物車結帳</ElButton>
+                        </template>
+
                     </ElPopover>
                 </template>
             </div>
@@ -93,7 +125,7 @@ const getCartItems = async () => {
     <DrawerCartList ref="drawerCartListRef" />
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .navbar {
     display: flex;
     flex-direction: column;
@@ -129,9 +161,14 @@ const getCartItems = async () => {
         }
 
         .cart {
+
             .item {
                 margin-top: 10px;
                 margin-right: 45px;
+            }
+            .check-btn {
+                width: 100%;
+                flex:1;
             }
         }
     }
@@ -141,7 +178,7 @@ const getCartItems = async () => {
     }
 }
 
-@media (min-width: $breakpoint-tablet){
+@media (min-width: 768px){
     .navbar {
         padding: 0;
         margin: 0;
@@ -155,8 +192,6 @@ const getCartItems = async () => {
                 align-items: center;
             }
         }
-
-
         .category {
             display: flex;
             flex-direction: row;
@@ -165,6 +200,50 @@ const getCartItems = async () => {
             gap: 1rem;
             background-color: $base-header-category-color;
         }
+    }
+
+    .product-wrapper {
+        display: flex;
+        gap: 5px;
+        border-bottom: 1px solid whitesmoke;
+
+        .image-wrapper {
+            flex: 0 0 25%;
+
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                aspect-ratio: 1 / 1;
+            }
+        }
+
+        .info-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-left: 5px;
+
+            .text-wrapper {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                p {
+                    flex: 1;
+                    display: block;
+                }
+
+                i {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .el-button {
+        width: 100%;
+        margin-top: 10px;
     }
 }
 

@@ -2,7 +2,7 @@
 import { ElInputNumber, ElButton, ElCarousel, ElCarouselItem, ElTabs, ElTabPane, ElDivider, ElBreadcrumb, ElBreadcrumbItem, ElMessage } from "element-plus"
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router'
-import { reqProductDetail, reqProducts, reqAddCart } from "@/api/front/frontProducts.js";
+import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
 import { CardProduct, DrawerCartList } from "@/components/front/index.js";
 import { useCartStore } from "@/store/modules/cart.js";
 import { useIsMobile } from "@/composables/useIsMobile";
@@ -53,18 +53,17 @@ const handleClickImage = (index) => {
     activeImage.value = index
 }
 
-const addToCart = () => {
-    cartStore.addToCart({
-        id: currentId.value,
-        title: data.value.product.title,
-        price: data.value.product.price,
-        image: imageList.value[0],
-        qty: count.value
+const addToCart = async(id, count) => {
+    await cartStore.addToCart({
+        product_id: id,
+        qty: count
     })
+
     if(isMobile.value) {
-        drawerCartListRef.value.open()
+        await drawerCartListRef.value.open()
     }
 }
+
 
 watch(() => route.params.id, (value) => {
     getProductDetail(value)
@@ -87,9 +86,9 @@ onMounted(() => {
             </ElBreadcrumbItem>
         </ElBreadcrumb>
         <div class="top">
-            <ElCarousel :autoplay="false" height="200" >
+            <ElCarousel :autoplay="false" height="200">
                 <ElCarouselItem v-for="(image, index) in data.product.imagesUrl" :key="index">
-                    <img :src="image" alt="product image" />
+                    <img :src="image" alt="product image"/>
                 </ElCarouselItem>
             </ElCarousel>
             <div class="image-section">
@@ -119,7 +118,7 @@ onMounted(() => {
                 </h5>
                 <ElInputNumber v-model="count" :min="1" :max="10"/>
                 <div class="button-wrapper">
-                    <ElButton type="primary" @click="addToCart">加入購物車</ElButton>
+                    <ElButton type="primary" @click="addToCart(data.product.id, count)">加入購物車</ElButton>
                     <ElButton type="warning">立即購買</ElButton>
                 </div>
 
@@ -171,6 +170,20 @@ onMounted(() => {
     .top {
         display: flex;
         flex-direction: column;
+
+        .el-carousel {
+            min-height: 200px;
+            max-height: 300px;
+            height: 100%;
+
+            .el-carousel-item {
+                img {
+                    width:100%;
+                    height:100%;
+                    object-fit: cover
+                }
+            }
+        }
 
         .image-section {
             display: none;

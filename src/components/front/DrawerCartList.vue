@@ -1,22 +1,31 @@
 <script setup>
-import { ElDrawer, ElDivider } from "element-plus"
+import { ElDrawer } from "element-plus"
 import { ref } from "vue"
 import { useCartStore } from "@/store/modules/cart"
 
 const drawer = ref(false)
 const cartStore = useCartStore()
 const isMobile = ref(true)
+const loading = ref(false)
 
-const open = () => {
-    if(isMobile.value) {
-        drawer.value = true
-    } else {
-        drawer.value = false
+const open = async () => {
+    loading.value = true
+    try {
+        await cartStore.getCartProducts()
+    } finally {
+        loading.value = false
+        drawer.value = !!isMobile.value;
     }
 }
 
-const handleDeleteProduct = (id) =>{
-    cartStore.deleteProduct(id)
+const handleDeleteProduct = async(id) =>{
+    loading.value = true
+    try {
+        await cartStore.deleteCartProduct(id)
+    } finally {
+        loading.value = false
+        drawer.value = !!isMobile.value;
+    }
 }
 
 defineExpose({ open })
@@ -27,19 +36,20 @@ defineExpose({ open })
         v-model="drawer"
         size="65%"
         :with-header="false"
+        v-loading="loading"
     >
         <template v-if="cartStore.cartList.length === 0">
-                <p>你的購物車是空的喔!</p>
-            </template>
+            <p>你的購物車是空的喔!</p>
+        </template>
         <div class="container" v-else>
             <div v-for="item in cartStore.cartList" :key="item.id" class="product-wrapper">
                 <div class="image-wrapper">
-                    <img :src="item.image" alt="product picture" />
+                    <img :src="item.product.imagesUrl[0]" alt="product picture" />
                 </div>
                 <div class="info-wrapper">
-                    <h5>{{ item.title }}</h5>
+                    <h5>{{ item.product.title }}</h5>
                     <div class="text-wrapper">
-                        <p>NTD{{ item.price }} x {{item.qty}}</p>
+                        <p>NTD{{ item.product.price }} x {{item.qty}}</p>
                         <i @click="handleDeleteProduct(item.id)">
                             <font-awesome-icon :icon="['far', 'trash-can']" />
                         </i>
