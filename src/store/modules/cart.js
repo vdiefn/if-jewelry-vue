@@ -1,22 +1,64 @@
 import { defineStore } from "pinia"
+import { reqAddCart, reqDeleteCart, reqGetCart } from "@/api/front/cart.js";
 import { ref } from "vue"
+import { ElMessage } from "element-plus"
 
 export const useCartStore = defineStore("cart", () => {
     const cartList = ref([])
+    const loading = ref(false)
 
-    const addToCart = (product) => {
-        const item = cartList.value.find(i => i.id === product.id)
-        if(item) {
-            item.qty+=product.qty
-        } else {
-            cartList.value.push(product)
+    const addToCart = async (id, qty) => {
+        loading.value = true
+
+        try {
+            const res = await reqAddCart(id, qty)
+
+            if(res.success) {
+                await getCartProducts()
+            } else {
+                ElMessage({
+                    type: "error",
+                    message : res.message
+                })
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            loading.value = false
         }
     }
 
-    const deleteProduct = (id) => {
-        const index = cartList.value.findIndex(i => i.id === id)
-        cartList.value.splice(index, 1)
+    const getCartProducts = async () => {
+        loading.value = true
+
+        try {
+            const res = await reqGetCart()
+            cartList.value = res.data.carts
+        } catch(error) {
+            console.log(error)
+        } finally {
+            loading.value = false
+        }
     }
 
-    return { cartList, addToCart, deleteProduct }
+    const deleteCartProduct = async(id) => {
+        loading.value = true
+        try {
+            const res = await reqDeleteCart(id)
+            if(res.success) {
+                await getCartProducts()
+            } else {
+                ElMessage({
+                    type: "error",
+                    message : res.message
+                })
+            }
+        } catch(error) {
+            console.error(error)
+        } finally {
+            loading.value = false
+        }
+    }
+
+    return { cartList, addToCart, deleteCartProduct, getCartProducts }
 })
