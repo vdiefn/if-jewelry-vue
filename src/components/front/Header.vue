@@ -2,11 +2,12 @@
 import { ref } from 'vue';
 import { ElBadge, ElPopover } from "element-plus"
 import { DrawerProductCategory, DrawerCartList } from "@/components/front"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useCartStore } from '@/store/modules/cart.js'
 import { useIsMobile } from '@/composables/useIsMobile';
 
 const route = useRoute()
+const router = useRouter()
 const drawerProductCategory = ref(null)
 const drawerCartListRef = ref(null)
 const cartStore = useCartStore()
@@ -88,9 +89,8 @@ const handleDeleteProduct = async(id) =>{
                             </div>
                        </template>
                         <template v-if="cartStore.cartList.length !== 0">
-                            <ElButton type=primary>購物車結帳</ElButton>
+                            <ElButton type="primary" @click="router.push('/cart')">購物車結帳</ElButton>
                         </template>
-
                     </ElPopover>
                 </template>
             </div>

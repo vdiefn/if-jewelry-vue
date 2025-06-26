@@ -2,7 +2,9 @@
 import { ElDrawer } from "element-plus"
 import { ref } from "vue"
 import { useCartStore } from "@/store/modules/cart"
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const drawer = ref(false)
 const cartStore = useCartStore()
 const isMobile = ref(true)
@@ -26,6 +28,11 @@ const handleDeleteProduct = async(id) =>{
         loading.value = false
         drawer.value = !!isMobile.value;
     }
+}
+
+const goToCart = () => {
+    drawer.value = false
+    router.push("/cart")
 }
 
 defineExpose({ open })
@@ -58,7 +65,7 @@ defineExpose({ open })
             </div>
         </div>
         <template #footer>
-            <ElButton type="primary" class="check-btn">購物車結帳</ElButton>
+            <ElButton type="primary" class="check-btn" @click="goToCart">購物車結帳</ElButton>
         </template>
     </ElDrawer>
 </template>
