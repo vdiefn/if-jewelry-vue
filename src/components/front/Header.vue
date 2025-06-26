@@ -49,7 +49,7 @@ const handleDeleteProduct = async(id) =>{
                 </router-link>
             </div>
             <div class="cart">
-                <template v-if="isMobile">
+                <template v-if="isMobile && route.path === '/products'">
                     <ElBadge :value="cartStore.cartList.length" :max="99" class="item" @click="getCartItems">
                         <i>
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { reqAddCart, reqDeleteCart, reqGetCart } from "@/api/front/cart.js";
+import { reqAddCart, reqDeleteCart, reqGetCart, reqEditCart } from "@/api/front/cart.js";
 import { ref } from "vue"
 import { ElMessage } from "element-plus"
 
@@ -60,5 +60,24 @@ export const useCartStore = defineStore("cart", () => {
         }
     }
 
-    return { cartList, addToCart, deleteCartProduct, getCartProducts }
+    const editCartProduct = async(id, qty) => {
+        loading.value = true
+        try {
+            const res = await reqEditCart(id, qty)
+            if(res.success) {
+                await getCartProducts()
+            } else {
+                ElMessage({
+                    type: "error",
+                    message : res.message
+                })
+            }
+        } catch(error) {
+            console.error(error)
+        } finally {
+            loading.value = false
+        }
+    }
+
+    return { cartList, addToCart, deleteCartProduct, getCartProducts, editCartProduct }
 })
