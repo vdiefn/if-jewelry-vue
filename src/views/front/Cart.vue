@@ -19,14 +19,16 @@ onMounted(() => {
 
 <template>
     <div class="container">
-        <h4>購物車</h4>
+        <div class="cart-title">
+            <h4>購物車</h4>
+        </div>
         <template v-if="cartStore.cartList.length === 0">
             <div class="empty-cart-text">
                 <p>你的購物車是空的喔!</p>
             </div>
         </template>
         <template v-else>
-            <div class="cart-container-mobile" v-if="isMobile">
+            <div class="cart-container-mobile">
                 <ElCard
                     class="cart-card"
                     v-for="item in cartStore.cartList"
@@ -58,14 +60,14 @@ onMounted(() => {
                     </div>
                 </ElCard>
             </div>
-            <template v-else>
-                <ElTable :data="cartStore.cartList" style="width: 100%">
+            <div class="table-container">
+                <ElTable :data="cartStore.cartList">
                     <ElTableColumn label="圖片" width="100">
                         <template #default="{ row }">
                             <img
                                 :src="row.product.imagesUrl[0]"
                                 alt="product image"
-                                style="width: 50px; height: 50px; object-fit: cover"
+                                class="product-img"
                             />
                         </template>
                     </ElTableColumn>
@@ -91,8 +93,7 @@ onMounted(() => {
                     </ElTableColumn>
                     <ElTableColumn prop="total" label="小計" />
                 </ElTable>
-            </template>
-
+            </div>
         </template>
     </div>
 
@@ -110,75 +111,135 @@ onMounted(() => {
         border: 1px solid $base-info-color;
     }
 
-    .cart-card {
-        border-radius: 5px;
-        max-width: 500px;
-        width: 100%;
-        margin: 0.5rem auto;
+    .cart-container-mobile {
+        .cart-card {
+            border-radius: 5px;
+            max-width: 500px;
+            width: 100%;
+            margin: 0.5rem auto;
 
-        .card-content {
-            display: flex;
-            gap: 12px;
-
-            .image {
-                flex: 0 0 90px;
-
-                img {
-                    width: 100%;
-                    height: auto;
-                    object-fit: cover;
-                    border-radius: 5px;
-                }
-            }
-
-            .info {
-                flex: 1;
+            .card-content {
                 display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+                gap: 12px;
 
-                .title {
-                    font-size: 16px;
-                    font-weight: bold;
-                    color: $base-brand-color;
-                }
+                .image {
+                    flex: 0 0 90px;
 
-                .content {
-                    font-size: 13px;
-                    color: $base-muted-text-color;
-                    margin: 4px 0;
-                }
-
-                .price {
-                    font-size: 14px;
-                    .price-now {
-                        color: $base-primary-color;
-                        font-weight: bold;
-                    }
-
-                    .price-old {
-                        margin-left: 0.5rem;
-                        color: $base-muted-text-color;
-                        text-decoration: line-through;
-                        font-size: 12px;
+                    img {
+                        width: 100%;
+                        height: auto;
+                        object-fit: cover;
+                        aspect-ratio: 1/1;
                     }
                 }
 
-                .bottom-row {
-                    margin-top: 8px;
+                .info {
+                    flex: 1;
                     display: flex;
+                    flex-direction: column;
                     justify-content: space-between;
-                    align-items: center;
 
-                    .subtotal {
+                    .title {
+                        font-size: 16px;
                         font-weight: bold;
-                        color: $base-section-color;
+                        color: $base-brand-color;
+                    }
+
+                    .content {
+                        font-size: 13px;
+                        color: $base-muted-text-color;
+                        margin: 4px 0;
+                    }
+
+                    .price {
                         font-size: 14px;
+
+                        .price-now {
+                            color: $base-primary-color;
+                            font-weight: bold;
+                        }
+
+                        .price-old {
+                            margin-left: 0.5rem;
+                            color: $base-muted-text-color;
+                            text-decoration: line-through;
+                            font-size: 12px;
+                        }
+                    }
+
+                    .bottom-row {
+                        margin-top: 8px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        .subtotal {
+                            font-weight: bold;
+                            color: $base-section-color;
+                            font-size: 14px;
+                        }
                     }
                 }
             }
         }
     }
 
+    .table-container {
+        display: none;
+    }
+
+    @media(min-width: $breakpoint-tablet) {
+        .cart-title {
+            max-width: 80%;
+            width: 100%;
+            margin: 0.5rem auto;
+        }
+        .cart-container-mobile {
+            display: none;
+        }
+        .table-container {
+            display: block;
+            max-width: 80%;
+            width: 100%;
+            margin: 0 auto;
+
+            .el-table {
+                width: 100%;
+
+                .product-img {
+                    width: 80px;
+                    height: auto;
+                    object-fit: cover;
+                    aspect-ratio: 1/1;
+                }
+            }
+        }
+    }
+
+    @media(min-width: $breakpoint-desktop) {
+        .cart-title {
+            max-width: 70%;
+            width: 100%;
+        }
+
+        .table-container {
+            display: block;
+            max-width: 70%;
+            width: 100%;
+
+            .el-table {
+                width: 100%;
+
+                .product-img {
+                    width: 120px;
+                    height: auto;
+                    object-fit: cover;
+                    aspect-ratio: 1/1;
+                }
+            }
+        }
+    }
 }
+
+
 </style>
