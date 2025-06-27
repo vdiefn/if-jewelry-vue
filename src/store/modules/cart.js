@@ -60,10 +60,15 @@ export const useCartStore = defineStore("cart", () => {
         }
     }
 
-    const editCartProduct = async(id, qty) => {
+    const editCartProduct = async(data) => {
         loading.value = true
         try {
-            const res = await reqEditCart(id, qty)
+            const res = await reqEditCart(data.id, {
+                data: {
+                    product_id: data.product_id,
+                    qty: data.qty,
+                }
+            })
             if(res.success) {
                 await getCartProducts()
             } else {

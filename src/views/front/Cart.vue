@@ -5,10 +5,9 @@ import { ref, onMounted } from "vue"
 import {useIsMobile} from "@/composables/useIsMobile.js";
 
 const cartStore = useCartStore()
-const { isMobile } = useIsMobile()
 
 const handleQtyChange = async(row) => {
-    await cartStore.editCartProduct(row.id, row.qty)
+    await cartStore.editCartProduct(row)
 }
 
 onMounted(() => {
@@ -45,7 +44,7 @@ onMounted(() => {
                                 <span class="price-now">NTD {{ item.product.price }}</span>
                                 <span class="price-old">NTD {{ item.product.origin_price }}</span>
                             </div>
-                            <div class="bottom-row">
+                            <div class="operation">
                                 <ElInputNumber
                                     v-model="item.qty"
                                     :min="1"
@@ -59,6 +58,7 @@ onMounted(() => {
                         </div>
                     </div>
                 </ElCard>
+
             </div>
             <div class="table-container">
                 <ElTable :data="cartStore.cartList">
@@ -113,14 +113,14 @@ onMounted(() => {
 
     .cart-container-mobile {
         .cart-card {
-            border-radius: 5px;
+            border-radius: 3px;
             max-width: 500px;
             width: 100%;
             margin: 0.5rem auto;
 
             .card-content {
                 display: flex;
-                gap: 12px;
+                gap: 10px;
 
                 .image {
                     flex: 0 0 90px;
@@ -167,17 +167,15 @@ onMounted(() => {
                         }
                     }
 
-                    .bottom-row {
+                    .operation {
                         margin-top: 8px;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+                    }
 
-                        .subtotal {
-                            font-weight: bold;
-                            color: $base-section-color;
-                            font-size: 14px;
-                        }
+                    .subtotal {
+                        margin-top: 1rem;
                     }
                 }
             }
@@ -193,24 +191,26 @@ onMounted(() => {
             max-width: 80%;
             width: 100%;
             margin: 0.5rem auto;
-        }
-        .cart-container-mobile {
-            display: none;
-        }
-        .table-container {
-            display: block;
-            max-width: 80%;
-            width: 100%;
-            margin: 0 auto;
 
-            .el-table {
+            .cart-container-mobile {
+                display: none;
+            }
+
+            .table-container {
+                display: block;
+                max-width: 80%;
                 width: 100%;
+                margin: 0 auto;
 
-                .product-img {
-                    width: 80px;
-                    height: auto;
-                    object-fit: cover;
-                    aspect-ratio: 1/1;
+                .el-table {
+                    width: 100%;
+
+                    .product-img {
+                        width: 80px;
+                        height: auto;
+                        object-fit: cover;
+                        aspect-ratio: 1/1;
+                    }
                 }
             }
         }

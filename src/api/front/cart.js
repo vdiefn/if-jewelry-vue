@@ -8,8 +8,8 @@ export const reqGetCart = () => {
     return api.get("/cart")
 }
 
-export const reqEditCart = (data) => {
-    return api.put(`/cart/${id}`, {data})
+export const reqEditCart = (id, payload) => {
+    return api.put(`/cart/${id}`, payload)
 }
 
 export const reqDeleteCart = (id) => {
