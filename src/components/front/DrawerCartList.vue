@@ -66,6 +66,7 @@ defineExpose({ open })
         </div>
         <template #footer>
             <ElButton type="primary" class="check-btn" @click="goToCart">購物車結帳</ElButton>
+            <ElButton class="check-btn continue-shopping" @click="drawer=false">繼續購物</ElButton>
         </template>
     </ElDrawer>
 </template>
@@ -117,5 +118,8 @@ defineExpose({ open })
     .check-btn {
         width: 100%;
         flex:1;
+    }
+    .continue-shopping {
+        margin: 15px 0;
     }
 </style>
