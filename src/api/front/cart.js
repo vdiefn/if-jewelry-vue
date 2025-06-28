@@ -15,3 +15,7 @@ export const reqEditCart = (id, payload) => {
 export const reqDeleteCart = (id) => {
     return api.delete(`/cart/${id}`)
 }
+
+export const reqCoupon = (payload) => {
+    return api.post("/coupon", payload)
+}

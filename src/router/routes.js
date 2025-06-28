@@ -145,6 +145,15 @@ export const constantRouter = [
                     hidden: true
                 }
             },
+            {
+                path:"check",
+                component: () => import("@/views/front/Check.vue"),
+                name: "Check",
+                meta: {
+                    title: "結帳",
+                    hidden: true
+                }
+            },
         ]
     }
 ]

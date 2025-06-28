@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { ElBadge, ElPopover } from "element-plus"
 import { DrawerProductCategory, DrawerCartList } from "@/components/front"
 import { useRoute, useRouter } from "vue-router"
@@ -23,6 +23,10 @@ const getCartItems = async () => {
         drawerCartListRef.value.open()
     }
 }
+
+const isProductPage = computed(() => {
+    return route.path === "/products" || route.path.startsWith("/product") || route.path === "/home"
+})
 
 const handleDeleteProduct = async(id) =>{
     loading.value = true
@@ -49,14 +53,14 @@ const handleDeleteProduct = async(id) =>{
                 </router-link>
             </div>
             <div class="cart">
-                <template v-if="isMobile && route.path === '/products'">
-                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item" @click="getCartItems">
+                <template v-if="isMobile && isProductPage">
+                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item" @click="getCartItems" style="cursor: pointer;">
                         <i>
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                         </i>
                     </ElBadge>
                 </template>
-                <template v-else-if="!isMobile && route.path === '/products'">
+                <template v-else-if="!isMobile && isProductPage">
                     <ElPopover
                         popper-class="cart-popover"
                         placement="bottom"
@@ -72,7 +76,7 @@ const handleDeleteProduct = async(id) =>{
                         <template v-if="cartStore.cartList.length === 0">
                             <h6 style="text-align: center">你的購物車是空的喔!</h6>
                         </template>
-                       <template v-else>
+                        <template v-else>
                             <div v-for="item in cartStore.cartList" :key="item.id" class="product-wrapper">
                                 <div class="image-wrapper">
                                     <img :src="item.product.imagesUrl[0]" alt="product picture" />
@@ -87,7 +91,7 @@ const handleDeleteProduct = async(id) =>{
                                     </div>
                                 </div>
                             </div>
-                       </template>
+                        </template>
                         <template v-if="cartStore.cartList.length !== 0">
                             <ElButton type="primary" @click="router.push('/cart')">購物車結帳</ElButton>
                         </template>
@@ -161,7 +165,6 @@ const handleDeleteProduct = async(id) =>{
         }
 
         .cart {
-
             .item {
                 margin-top: 10px;
                 margin-right: 45px;

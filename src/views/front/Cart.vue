@@ -1,13 +1,15 @@
 <script setup>
 import { useCartStore } from "@/store/modules/cart.js"
-import { ElInputNumber, ElCard, ElInput, ElButton } from "element-plus";
+import { ElInputNumber, ElCard, ElInput, ElButton, ElMessage, ElIcon } from "element-plus";
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
+import { reqCoupon } from "@/api/front/cart"
+import { Search } from "@element-plus/icons-vue";
 
 const cartStore = useCartStore()
 const loading = ref(false)
-const perCoupon = ref("")
 const router = useRouter()
+const perInput = ref("")
 
 const handleQtyChange = async(row) => {
     await cartStore.editCartProduct(row)
@@ -19,6 +21,29 @@ const handleDeleteProduct = async(id) =>{
         await cartStore.deleteCartProduct(id)
     } finally {
         loading.value = false
+    }
+}
+
+const handleGetCoupon = async(perInput) => {
+    try {
+        const res = await reqCoupon({
+            data: {
+                code: perInput
+            }
+        })
+        if(res.success) {
+            ElMessage({
+                type:success,
+                message: "已成功使用折價券"
+            })
+        } else {
+            ElMessage({
+                type: error,
+                message: res.message
+            })
+        }
+    } catch(error) {
+        console.error(error)
     }
 }
 
@@ -34,12 +59,12 @@ onMounted(() => {
             <h4>購物車</h4>
         </div>
         <template v-if="cartStore.cartList.length === 0">
-            <div class="empty-cart-text">
+            <ElCard class="empty-cart-text">
                 <h5>你的購物車是空的喔!</h5>
                 <ElButton type="primary" @click="router.push('/products')">
                     前往購物
                 </ElButton>
-            </div>
+            </ElCard>
         </template>
         <template v-else>
             <div class="cart-container-mobile">
@@ -79,14 +104,12 @@ onMounted(() => {
                 <ElCard class="cart-coupon">
                     <h5>您是否有優惠碼？</h5>
                     <ElInput
-                        v-model="perCoupon"
+                        v-model="perInput"
                         placeholder="請輸入優惠碼"
                         class="input-with-search"
                     >
                         <template #append>
-                            <ElButton>
-                                <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
-                            </ElButton>
+                            <ElButton @click="handleGetCoupon(perInput)" type="text" :icon="Search" class="icon-button"/>
                         </template>
                     </ElInput>
                 </ElCard>
@@ -102,8 +125,8 @@ onMounted(() => {
                     </div>
                 </ElCard>
                 <div class="operation-btn">
-                    <ElButton type="primary">繼續結帳</ElButton>
-                    <ElButton>繼續購物</ElButton>
+                    <ElButton type="primary" @click="router.push('/check')">前往結帳</ElButton>
+                    <ElButton @click="router.back()">繼續購物</ElButton>
                 </div>
             </div>
             <div class="table-container">
@@ -146,16 +169,14 @@ onMounted(() => {
                 </ElTable>
                 <div class="card-wrapper">
                     <ElCard class="cart-coupon">
-                    <h5>您是否有優惠碼？</h5>
+                        <h5>您是否有優惠碼？</h5>
                         <ElInput
-                            v-model="perCoupon"
+                            v-model="perInput"
                             placeholder="請輸入優惠碼"
                             class="input-with-search"
                         >
                             <template #append>
-                                <ElButton>
-                                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
-                                </ElButton>
+                                <ElButton @click="handleGetCoupon(perInput)" type="text" :icon="Search" class="icon-button"/>
                             </template>
                         </ElInput>
                     </ElCard>
@@ -171,8 +192,8 @@ onMounted(() => {
                         </div>
                     </ElCard>
                     <div class="operation-btn">
-                        <ElButton type="primary">繼續結帳</ElButton>
-                        <ElButton>繼續購物</ElButton>
+                        <ElButton type="primary" @click="router.push('/check')">前往結帳</ElButton>
+                        <ElButton @click="router.back()">繼續購物</ElButton>
                     </div>
                 </div>
 
@@ -285,6 +306,15 @@ onMounted(() => {
         .cart-coupon {
             .input-with-search {
                 margin-top: 0.5rem;
+
+                .icon-button {
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0;
+                }
             }
         }
 
