@@ -6,6 +6,7 @@ import { ElMessage } from "element-plus"
 export const useCartStore = defineStore("cart", () => {
     const cartList = ref([])
     const loading = ref(false)
+    const cartData = ref({})
 
     const addToCart = async (id, qty) => {
         loading.value = true
@@ -34,6 +35,7 @@ export const useCartStore = defineStore("cart", () => {
         try {
             const res = await reqGetCart()
             cartList.value = res.data.carts
+            cartData.value = res.data
         } catch(error) {
             console.log(error)
         } finally {
@@ -84,5 +86,5 @@ export const useCartStore = defineStore("cart", () => {
         }
     }
 
-    return { cartList, addToCart, deleteCartProduct, getCartProducts, editCartProduct }
+    return { cartList, cartData, addToCart, deleteCartProduct, getCartProducts, editCartProduct }
 })

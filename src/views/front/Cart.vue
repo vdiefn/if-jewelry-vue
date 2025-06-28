@@ -1,13 +1,25 @@
 <script setup>
 import { useCartStore } from "@/store/modules/cart.js"
-import { ElInputNumber} from "element-plus";
+import { ElInputNumber, ElCard, ElInput, ElButton } from "element-plus";
 import { ref, onMounted } from "vue"
-import {useIsMobile} from "@/composables/useIsMobile.js";
+import { useRouter } from "vue-router"
 
 const cartStore = useCartStore()
+const loading = ref(false)
+const perCoupon = ref("")
+const router = useRouter()
 
 const handleQtyChange = async(row) => {
     await cartStore.editCartProduct(row)
+}
+
+const handleDeleteProduct = async(id) =>{
+    loading.value = true
+    try {
+        await cartStore.deleteCartProduct(id)
+    } finally {
+        loading.value = false
+    }
 }
 
 onMounted(() => {
@@ -23,7 +35,10 @@ onMounted(() => {
         </div>
         <template v-if="cartStore.cartList.length === 0">
             <div class="empty-cart-text">
-                <p>你的購物車是空的喔!</p>
+                <h5>你的購物車是空的喔!</h5>
+                <ElButton type="primary" @click="router.push('/products')">
+                    前往購物
+                </ElButton>
             </div>
         </template>
         <template v-else>
@@ -41,8 +56,8 @@ onMounted(() => {
                             <h3 class="title">{{ item.product.title }}</h3>
                             <p class="content">{{ item.product.content }}</p>
                             <div class="price">
-                                <span class="price-now">NTD {{ item.product.price }}</span>
                                 <span class="price-old">NTD {{ item.product.origin_price }}</span>
+                                <span class="price-now">NTD {{ item.product.price }}</span>
                             </div>
                             <div class="operation">
                                 <ElInputNumber
@@ -51,17 +66,48 @@ onMounted(() => {
                                     size="small"
                                     @change="handleQtyChange(item)"
                                 />
+                                <i @click="handleDeleteProduct(item.id)">
+                                    <font-awesome-icon :icon="['far', 'trash-can']" />
+                                </i>
                             </div>
                             <div class="subtotal">
-                                <p>小計：NTD {{ item.total }}</p>
+                                <p>小計: NTD {{ item.total }}</p>
                             </div>
                         </div>
                     </div>
                 </ElCard>
-
+                <ElCard class="cart-coupon">
+                    <h5>您是否有優惠碼？</h5>
+                    <ElInput
+                        v-model="perCoupon"
+                        placeholder="請輸入優惠碼"
+                        class="input-with-search"
+                    >
+                        <template #append>
+                            <ElButton>
+                                <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                            </ElButton>
+                        </template>
+                    </ElInput>
+                </ElCard>
+                <ElCard class="cart-price-card">
+                    <h5>購物車清單</h5>
+                    <div class="final-total">
+                        <p>小計</p>
+                        <p>NTD {{ cartStore.cartData.total > 0? cartStore.cartData.total : 0 }}</p>
+                    </div>
+                    <div class="final-total-discount">
+                        <p>總計</p>
+                        <p>NTD {{ cartStore.cartData.final_total > 0? cartStore.cartData.final_total : 0 }}</p>
+                    </div>
+                </ElCard>
+                <div class="operation-btn">
+                    <ElButton type="primary">繼續結帳</ElButton>
+                    <ElButton>繼續購物</ElButton>
+                </div>
             </div>
             <div class="table-container">
-                <ElTable :data="cartStore.cartList">
+                <ElTable :data="cartStore.cartList" table-layout="auto" stripe>
                     <ElTableColumn label="圖片" width="100">
                         <template #default="{ row }">
                             <img
@@ -72,16 +118,14 @@ onMounted(() => {
                         </template>
                     </ElTableColumn>
                     <ElTableColumn prop="product.title" label="商品名稱" />
-                    <ElTableColumn label="價格">
+                    <ElTableColumn label="價格" width="1" align="center">
                         <template #default="{ row }">
-                            <div>
-                                <span style="color: red; font-weight: bold;">NTD {{ row.product.price }}</span>
-                                <br />
-                                <small style="text-decoration: line-through;">NTD {{ row.product.origin_price }}</small>
-                            </div>
+                            <span class="new-price">NTD {{ row.product.price }}</span>
+                            <br />
+                            <small class="old-price">NTD {{ row.product.origin_price }}</small>
                         </template>
                     </ElTableColumn>
-                    <ElTableColumn label="數量">
+                    <ElTableColumn label="數量" width="1" align="center">
                         <template #default="{ row }">
                             <ElInputNumber
                                 v-model="row.qty"
@@ -91,8 +135,47 @@ onMounted(() => {
                             />
                         </template>
                     </ElTableColumn>
-                    <ElTableColumn prop="total" label="小計" />
+                    <ElTableColumn prop="total" label="小計" align="center" width="1"/>
+                    <ElTableColumn prop="" width="50" align="center">
+                        <template #default="{ row }">
+                            <i @click="handleDeleteProduct(row.id)" class="delete-icon">
+                                <font-awesome-icon :icon="['far', 'trash-can']" />
+                            </i>
+                        </template>
+                    </ElTableColumn>
                 </ElTable>
+                <div class="card-wrapper">
+                    <ElCard class="cart-coupon">
+                    <h5>您是否有優惠碼？</h5>
+                        <ElInput
+                            v-model="perCoupon"
+                            placeholder="請輸入優惠碼"
+                            class="input-with-search"
+                        >
+                            <template #append>
+                                <ElButton>
+                                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                                </ElButton>
+                            </template>
+                        </ElInput>
+                    </ElCard>
+                    <ElCard class="cart-price-card">
+                        <h5>購物車清單</h5>
+                        <div class="final-total">
+                            <p>小計</p>
+                            <p>NTD {{ cartStore.cartData.total > 0? cartStore.cartData.total : 0 }}</p>
+                        </div>
+                        <div class="final-total-discount">
+                            <p>總計</p>
+                            <p>NTD {{ cartStore.cartData.final_total > 0? cartStore.cartData.final_total : 0 }}</p>
+                        </div>
+                    </ElCard>
+                    <div class="operation-btn">
+                        <ElButton type="primary">繼續結帳</ElButton>
+                        <ElButton>繼續購物</ElButton>
+                    </div>
+                </div>
+
             </div>
         </template>
     </div>
@@ -106,18 +189,31 @@ onMounted(() => {
     margin: $base-header-height auto;
     padding: 10px 10px;
 
+    .cart-title, .empty-cart-text {
+        max-width: 500px;
+        width: 100%;
+        margin: 1rem auto;
+    }
+
     .empty-cart-text {
-        margin: 1rem 0;
-        border: 1px solid $base-info-color;
+        .el-button {
+            width:50%;
+            margin-top:1rem;
+        }
     }
 
     .cart-container-mobile {
-        .cart-card {
+        display: grid;
+        grid-gap: 10px;
+
+        .cart-card, .cart-price-card, .cart-coupon, .operation-btn {
             border-radius: 3px;
             max-width: 500px;
             width: 100%;
-            margin: 0.5rem auto;
+            margin: 0 auto;
+        }
 
+        .cart-card {
             .card-content {
                 display: flex;
                 gap: 10px;
@@ -152,18 +248,19 @@ onMounted(() => {
                     }
 
                     .price {
-                        font-size: 14px;
-
-                        .price-now {
-                            color: $base-primary-color;
-                            font-weight: bold;
-                        }
+                        display: flex;
+                        gap:5px;
 
                         .price-old {
                             margin-left: 0.5rem;
                             color: $base-muted-text-color;
                             text-decoration: line-through;
                             font-size: 12px;
+                        }
+
+                        .price-now {
+                            color: $base-primary-color;
+                            font-weight: bold;
                         }
                     }
 
@@ -172,6 +269,10 @@ onMounted(() => {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+
+                        i {
+                            cursor: pointer;
+                        }
                     }
 
                     .subtotal {
@@ -180,66 +281,136 @@ onMounted(() => {
                 }
             }
         }
+
+        .cart-coupon {
+            .input-with-search {
+                margin-top: 0.5rem;
+            }
+        }
+
+        .cart-price-card {
+            h5 {
+                margin-bottom: 0.5rem;
+            }
+
+            .final-total, .final-total-discount {
+                display: flex;
+
+                :first-child {
+                    flex:1;
+                }
+            }
+
+            .final-total-discount {
+                font-weight: 700;
+                font-size: 1.1rem;
+            }
+        }
+
+        .operation-btn {
+            display: flex;
+            flex-direction: column;
+            gap:5px;
+
+            .el-button {
+                margin: 0;
+                width: 100%;
+            }
+        }
     }
 
     .table-container {
         display: none;
     }
 
-    @media(min-width: $breakpoint-tablet) {
-        .cart-title {
-            max-width: 80%;
-            width: 100%;
-            margin: 0.5rem auto;
-
-            .cart-container-mobile {
-                display: none;
-            }
-
-            .table-container {
-                display: block;
-                max-width: 80%;
-                width: 100%;
-                margin: 0 auto;
-
-                .el-table {
-                    width: 100%;
-
-                    .product-img {
-                        width: 80px;
-                        height: auto;
-                        object-fit: cover;
-                        aspect-ratio: 1/1;
-                    }
-                }
-            }
-        }
-    }
-
     @media(min-width: $breakpoint-desktop) {
-        .cart-title {
-            max-width: 70%;
-            width: 100%;
+        .cart-title, .empty-cart-text {
+            margin-left: 5%;
+        }
+
+        .cart-container-mobile {
+            display: none;
         }
 
         .table-container {
-            display: block;
-            max-width: 70%;
+            display: grid;
+            grid-template-columns: 70% 30%;
+            max-width: 90%;
             width: 100%;
+            margin: 0 auto;
 
             .el-table {
                 width: 100%;
 
+                :deep(.cell) {
+                    white-space: nowrap;
+                }
+
+                :deep(.new-price) {
+                    color: $base-primary-color;
+                    font-weight: bold;
+                    margin-left: 10px;
+                }
+                :deep(.old-price) {
+                    text-decoration: line-through;
+                }
+
                 .product-img {
-                    width: 120px;
+                    width: 80px;
                     height: auto;
                     object-fit: cover;
                     aspect-ratio: 1/1;
                 }
             }
+
+            .card-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                align-items: center;
+
+                .cart-title, .cart-price-card, .cart-coupon, .operation-btn {
+                    max-width: 80%;
+                    width: 100%;
+                }
+
+                .cart-price-card {
+                    h5 {
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .final-total, .final-total-discount {
+                        display: flex;
+
+                        :first-child {
+                            flex:1;
+                        }
+                    }
+
+                    .final-total-discount {
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                    }
+                }
+
+                .operation-btn {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    margin-top: 1rem;
+
+                    .el-button {
+                        margin: 0;
+                    }
+                }
+            }
         }
     }
 }
+
+
+
+
 
 
 </style>
