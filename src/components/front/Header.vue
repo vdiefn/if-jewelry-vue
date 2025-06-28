@@ -56,7 +56,7 @@ const handleDeleteProduct = async(id) =>{
                         </i>
                     </ElBadge>
                 </template>
-                <template v-else>
+                <template v-else-if="!isMobile && route.path === '/products'">
                     <ElPopover
                         popper-class="cart-popover"
                         placement="bottom"
