@@ -146,9 +146,9 @@ export const constantRouter = [
                 }
             },
             {
-                path:"check",
-                component: () => import("@/views/front/Check.vue"),
-                name: "Check",
+                path:"checkout",
+                component: () => import("@/views/front/Checkout.vue"),
+                name: "Checkout",
                 meta: {
                     title: "結帳",
                     hidden: true

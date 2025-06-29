@@ -135,7 +135,7 @@ onMounted(() => {
                     </div>
                 </ElCard>
                 <div class="operation-btn">
-                    <ElButton type="primary" @click="router.push('/check')">前往結帳</ElButton>
+                    <ElButton type="primary" @click="router.push('/checkout')">前往結帳</ElButton>
                     <ElButton @click="router.back()">繼續購物</ElButton>
                 </div>
             </div>
@@ -206,7 +206,7 @@ onMounted(() => {
                         </div>
                     </ElCard>
                     <div class="operation-btn">
-                        <ElButton type="primary" @click="router.push('/check')">前往結帳</ElButton>
+                        <ElButton type="primary" @click="router.push('/checkout')">前往結帳</ElButton>
                         <ElButton @click="router.back()">繼續購物</ElButton>
                     </div>
                 </div>
@@ -231,7 +231,7 @@ onMounted(() => {
 
     .empty-cart-text {
         .el-button {
-            width:50%;
+            width:30%;
             margin-top:1rem;
         }
     }
