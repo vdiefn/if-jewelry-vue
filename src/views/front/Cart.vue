@@ -1,7 +1,7 @@
 <script setup>
 import { useCartStore } from "@/store/modules/cart.js"
 import { ElInputNumber, ElCard, ElInput, ElButton, ElMessage, ElIcon } from "element-plus";
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { reqCoupon } from "@/api/front/cart"
 import { Search } from "@element-plus/icons-vue";
@@ -9,7 +9,10 @@ import { Search } from "@element-plus/icons-vue";
 const cartStore = useCartStore()
 const loading = ref(false)
 const router = useRouter()
-const perInput = ref("")
+const perCouponName = computed(() => {
+    return cartStore.cartList[0].coupon.code.length !== 0 ? cartStore.cartList[0].coupon.code : "-"
+})
+const perCoupon = ref(perCouponName? perCouponName : perCoupon)
 
 const handleQtyChange = async(row) => {
     await cartStore.editCartProduct(row)
@@ -32,13 +35,14 @@ const handleGetCoupon = async(perInput) => {
             }
         })
         if(res.success) {
+            perCouponName.value = perInput
             ElMessage({
-                type:success,
+                type:"success",
                 message: "已成功使用折價券"
             })
         } else {
             ElMessage({
-                type: error,
+                type: "error",
                 message: res.message
             })
         }
@@ -46,6 +50,8 @@ const handleGetCoupon = async(perInput) => {
         console.error(error)
     }
 }
+
+
 
 onMounted(() => {
     cartStore.getCartProducts()
@@ -104,24 +110,28 @@ onMounted(() => {
                 <ElCard class="cart-coupon">
                     <h5>您是否有優惠碼？</h5>
                     <ElInput
-                        v-model="perInput"
+                        v-model="perCoupon"
                         placeholder="請輸入優惠碼"
                         class="input-with-search"
                     >
                         <template #append>
-                            <ElButton @click="handleGetCoupon(perInput)" type="text" :icon="Search" class="icon-button"/>
+                            <ElButton @click="handleGetCoupon(perCoupon)" type="text" :icon="Search" class="icon-button"/>
                         </template>
                     </ElInput>
                 </ElCard>
                 <ElCard class="cart-price-card">
                     <h5>購物車清單</h5>
+                    <div class="discount" v-if="perCouponName">
+                        <p>優惠碼</p>
+                        <p>{{ perCouponName }}</p>
+                    </div>
                     <div class="final-total">
                         <p>小計</p>
                         <p>NTD {{ cartStore.cartData.total > 0? cartStore.cartData.total : 0 }}</p>
                     </div>
                     <div class="final-total-discount">
                         <p>總計</p>
-                        <p>NTD {{ cartStore.cartData.final_total > 0? cartStore.cartData.final_total : 0 }}</p>
+                        <p>NTD {{ cartStore.cartData.final_total > 0? Math.round(cartStore.cartData.final_total) : 0 }}</p>
                     </div>
                 </ElCard>
                 <div class="operation-btn">
@@ -171,24 +181,28 @@ onMounted(() => {
                     <ElCard class="cart-coupon">
                         <h5>您是否有優惠碼？</h5>
                         <ElInput
-                            v-model="perInput"
+                            v-model="perCoupon"
                             placeholder="請輸入優惠碼"
                             class="input-with-search"
                         >
                             <template #append>
-                                <ElButton @click="handleGetCoupon(perInput)" type="text" :icon="Search" class="icon-button"/>
+                                <ElButton @click="handleGetCoupon(perCoupon)" type="text" :icon="Search" class="icon-button"/>
                             </template>
                         </ElInput>
                     </ElCard>
                     <ElCard class="cart-price-card">
                         <h5>購物車清單</h5>
+                        <div class="discount" v-if="perCouponName">
+                            <p>優惠碼</p>
+                            <p>{{ perCouponName }}</p>
+                        </div>
                         <div class="final-total">
                             <p>小計</p>
                             <p>NTD {{ cartStore.cartData.total > 0? cartStore.cartData.total : 0 }}</p>
                         </div>
                         <div class="final-total-discount">
                             <p>總計</p>
-                            <p>NTD {{ cartStore.cartData.final_total > 0? cartStore.cartData.final_total : 0 }}</p>
+                            <p>NTD {{ cartStore.cartData?.final_total > 0? Math.round(cartStore.cartData.final_total) : 0 }}</p>
                         </div>
                     </ElCard>
                     <div class="operation-btn">
@@ -196,7 +210,6 @@ onMounted(() => {
                         <ElButton @click="router.back()">繼續購物</ElButton>
                     </div>
                 </div>
-
             </div>
         </template>
     </div>
@@ -323,8 +336,9 @@ onMounted(() => {
                 margin-bottom: 0.5rem;
             }
 
-            .final-total, .final-total-discount {
+            .final-total, .final-total-discount, .discount {
                 display: flex;
+                margin-bottom: 5px;
 
                 :first-child {
                     flex:1;
@@ -404,13 +418,23 @@ onMounted(() => {
                     width: 100%;
                 }
 
+                .cart-coupon {
+                    h5 {
+                        margin-bottom: 10px;
+                    }
+                    .el-input-group__append .el-button {
+                        margin: 0;
+                    }
+                }
+
                 .cart-price-card {
                     h5 {
                         margin-bottom: 0.5rem;
                     }
 
-                    .final-total, .final-total-discount {
+                    .final-total, .final-total-discount, .discount {
                         display: flex;
+                        margin-bottom: 5px;
 
                         :first-child {
                             flex:1;
@@ -437,10 +461,4 @@ onMounted(() => {
         }
     }
 }
-
-
-
-
-
-
 </style>
