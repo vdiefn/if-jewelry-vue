@@ -16,7 +16,7 @@ const loading = ref(false)
 const perCouponName = computed(() => {
     return cartStore.cartList[0].coupon.code.length !== 0 ? cartStore.cartList[0].coupon.code : "-"
 })
-const perCoupon = ref(perCouponName? perCouponName : perCoupon)
+const perCoupon = ref(perCouponName? perCouponName : "")
 
 const handleQtyChange = async(row) => {
     await cartStore.editCartProduct(row)

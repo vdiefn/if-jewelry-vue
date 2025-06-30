@@ -1,19 +1,13 @@
 <script setup>
 import { useCartStore } from "@/store/modules/cart.js"
-import { ElInputNumber, ElCard, ElInput, ElButton, ElMessage } from "element-plus";
-import { ref, onMounted, computed } from "vue"
+import { ElCard, ElButton } from "element-plus";
+import { onMounted } from "vue"
 import { useRouter } from "vue-router"
-import { reqCoupon } from "@/api/front/cart"
-
 import { MobileCartCard, DesktopCartTable } from "@/components/front/index.js";
 
 const cartStore = useCartStore()
-
 const router = useRouter()
-const perCouponName = computed(() => {
-    return cartStore.cartList[0].coupon.code.length !== 0 ? cartStore.cartList[0].coupon.code : "-"
-})
-const perCoupon = ref(perCouponName? perCouponName : perCoupon)
+
 
 onMounted(() => {
     cartStore.getCartProducts()
