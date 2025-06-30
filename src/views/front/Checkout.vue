@@ -5,15 +5,42 @@ import { useRouter } from "vue-router"
 
 const router = useRouter()
 const activeStep = ref(0)
+const pickupStore = ref("")
+const ruleFormRef = ref()
 const form = reactive({
     name: "",
     address:"",
     phone:"",
     email:"",
     message:"",
-    delivery:""
-
+    delivery:"store pickup",
+    payment:"credit card"
 })
+
+const validatePhone = (rule, value, callback) => {
+    if(!value) {
+        return callback(new Error("請提供手機號碼!"))
+    }
+
+    const regex = /^09\d{8}$/
+
+    if(!regex.test(value)) {
+        return callback(new Error("手機號碼格式錯誤!"))
+    }
+
+    callback();
+}
+
+const rules = reactive({
+    name: [{ required: true, message:"請提供收件人姓名", trigger:"blur" }],
+    address: [{ required: true, message:"請提供收件地址", trigger:"blur"}],
+    phone:[{ validator: validatePhone, trigger: 'blur' }],
+    email:[
+        { required: true, message:"請提供Email", trigger:"blur"},
+        { type: 'email', message: 'Email 格式錯誤', trigger: 'blur' }
+    ],
+})
+
 const creditCardForm = reactive({
     cardHolderName: "",
     cardNumber1: "",
@@ -25,12 +52,34 @@ const creditCardForm = reactive({
     expireYear: "",
 })
 
-const nextStep = () => {
-    if(activeStep.value < 2){
-        activeStep.value ++
-    } else {
-        submitOrder()
+const nextStep = ( formEl ) => {
+    if (!formEl) return;
+
+    let fieldsToValidate = [];
+
+    if (activeStep.value === 0) {
+        fieldsToValidate = ['name', 'address', 'phone', 'email'];
+    } else if (activeStep.value === 1) {
+        fieldsToValidate = ['delivery'];
+    } else if (activeStep.value === 2) {
+        fieldsToValidate = ['payment'];
     }
+
+    formEl.validateField(fieldsToValidate, (valid) => {
+        if (valid) {
+            if (activeStep.value < 2) {
+                activeStep.value++;
+            } else {
+                submitOrder();
+            }
+        } else {
+            ElMessage({
+                type:"error",
+                message:"驗證失敗"
+            })
+            return false;
+        }
+    });
 }
 
 const prevStep = () => {
@@ -49,8 +98,7 @@ const submitOrder = () => {
 
 <template>
     <div class="container">
-
-        <ElSteps style="max-width: 600px" :active="activeStep" align-center>
+        <ElSteps style="" :active="activeStep" align-center>
             <ElStep title="Step 1" description="收件資訊" />
             <ElStep title="Step 2" description="配送方式" />
             <ElStep title="Step 3" description="付款資訊" />
@@ -60,21 +108,21 @@ const submitOrder = () => {
             <template v-if="activeStep === 0">
                 <ElCard>
                     <h3>收件資訊</h3>
-                    <ElForm :model="form" label-width="auto" >
-                        <ElFormItem label="收件人姓名">
+                    <ElForm :model="form" label-width="auto" :rules="rules" ref="ruleFormRef">
+                        <ElFormItem label="收件人姓名" prop="name">
                             <ElInput v-model="form.name" placeholder="收件人姓名" />
                         </ElFormItem>
-                        <ElFormItem label="收件地址">
+                        <ElFormItem label="收件地址" prop="address">
                             <ElInput v-model="form.address" placeholder="地址" />
                         </ElFormItem>
-                        <ElFormItem label="連絡電話">
-                            <ElInput v-model="phone" placeholder="連絡電話"  />
+                        <ElFormItem label="連絡電話" prop="phone">
+                            <ElInput v-model="form.phone" placeholder="0912345678"  />
                         </ElFormItem>
-                        <ElFormItem label="Email">
-                            <ElInput v-model="email" placeholder="電子郵件"  />
+                        <ElFormItem label="Email" prop="email">
+                            <ElInput v-model="form.email" placeholder="電子郵件"  />
                         </ElFormItem>
                         <ElFormItem label="想說的話">
-                            <ElInput v-model="message" type="textarea"/>
+                            <ElInput v-model="form.message" type="textarea"/>
                         </ElFormItem>
                     </ElForm>
                 </ElCard>
@@ -82,22 +130,27 @@ const submitOrder = () => {
 
             <template v-else-if="activeStep === 1">
                 <ElCard>
-                    <ElForm :model="form" label-width="auto">
-                        <ElFormItem label="寄送方式">
+                    <ElForm :model="form" label-width="auto" :rules="rules">
+                        <ElFormItem label="寄送方式" prop="delivery">
                             <ElRadioGroup v-model="form.delivery">
-                                <ElRadio label="宅配" border>宅配</ElRadio>
-                                <ElRadio label="超商取貨不付款" border>超商取貨不付款</ElRadio>
+                                <ElRadio label="宅配" value="home delivery" border>宅配</ElRadio>
+                                <ElRadio label="超商取貨不付款" value="store pickup" border>全家取貨不付款</ElRadio>
                             </ElRadioGroup>
                         </ElFormItem>
                     </ElForm>
+                    <template v-if="form.delivery === 'store pickup'">
+                        <div v-if="form.delivery === 'store pickup'">
+                            <h6>超商店名:</h6>
+                            <ElInput v-model="pickupStore" style="width:100px"/>
+                        </div>
+                    </template>
                 </ElCard>
-
             </template>
 
             <template v-else-if="activeStep === 2">
                 <ElCard>
-                    <ElForm label-width="100px">
-                        <ElFormItem label="付款方式">
+                    <ElForm label-width="100px" :model="form" :rules="rules">
+                        <ElFormItem label="付款方式" prop="payment">
                             <ElRadioGroup v-model="form.payment">
                                 <ElRadio label="信用卡" value="credit card" border>信用卡</ElRadio>
                                 <ElRadio label="ATM轉帳" value="atm transfer" border>ATM轉帳</ElRadio>
@@ -106,7 +159,7 @@ const submitOrder = () => {
                         <template v-if="form.payment === 'credit card'">
                             <ElForm :model="creditCardForm" label-width="100px">
                                 <ElFormItem label="持卡人姓名">
-                                    <ElInput v-model="creditCardForm.cardHolderName" placeholder="請輸入持卡人姓名" style="width: 30%;"/>
+                                    <ElInput v-model="creditCardForm.cardHolderName" placeholder="持卡人姓名" style="width: 30%;"/>
                                 </ElFormItem>
                                 <ElFormItem label="信用卡卡號">
                                     <ElRow :gutter="10">
@@ -126,25 +179,22 @@ const submitOrder = () => {
                                 </ElFormItem>
                                 <ElFormItem label="到期年月">
                                     <div style="display: flex; gap: 10px; width: 30%;">
-                                        <ElSelect
+                                        <ElInput
                                             v-model="creditCardForm.expireMonth"
-                                            placeholder="月 (MM)"
+                                            placeholder="MM"
+                                            maxlength="2"
                                             style="flex: 1"
-                                        >
-                                            <ElOption v-for="month in months" :key="month" :label="month" :value="month" />
-                                        </ElSelect>
-
-                                        <ElSelect
+                                        />
+                                        <ElInput
                                             v-model="creditCardForm.expireYear"
-                                            placeholder="年 (YYYY)"
+                                            placeholder="YY"
+                                            maxlength="2"
                                             style="flex: 1"
-                                        >
-                                            <ElOption v-for="year in years" :key="year" :label="year" :value="year" />
-                                        </ElSelect>
+                                        />
                                     </div>
                                 </ElFormItem>
                                 <ElFormItem label="後三碼">
-                                    <ElInput v-model="creditCardForm.cvvNumber" placeholder="請輸入後三碼" maxlength="3" show-password style="width: 30%;"/>
+                                    <ElInput v-model="creditCardForm.cvvNumber" placeholder="後三碼" maxlength="3" show-password style="width: 30%;"/>
                                 </ElFormItem>
                             </ElForm>
                         </template>
@@ -165,7 +215,7 @@ const submitOrder = () => {
             <ElButton @click="prevStep">
                 {{ activeStep> 0 ? "上一步" : "返回購物車" }}
             </ElButton>
-            <ElButton type="primary" @click="nextStep">
+            <ElButton type="primary" @click="nextStep(ruleFormRef)">
                 {{ activeStep === 2 ? "送出訂單" : "下一步" }}
             </ElButton>
         </div>
@@ -190,6 +240,9 @@ const submitOrder = () => {
 
     .el-steps {
         margin: 2rem auto;
+        max-width: 600px;
+        min-width: 375px;
+        width: 100%;
     }
 
     .step-content {
@@ -224,6 +277,12 @@ const submitOrder = () => {
     .container {
         max-width: 750px;
         width: 100%;
+
+        .el-steps {
+            max-width: 750px;
+            min-width: $breakpoint-tablet;
+            width: 100%;
+        }
     }
 }
 
@@ -231,6 +290,12 @@ const submitOrder = () => {
     .container {
         max-width: 1000px;
         width: 100%;
+
+        .el-steps {
+            max-width: 1000px;
+            min-width: $breakpoint-desktop;
+            width: 100%;
+        }
     }
 }
 </style>
