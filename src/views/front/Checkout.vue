@@ -1,19 +1,23 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { ElSteps, ElStep } from "element-plus"
+import {ElSteps, ElStep, ElMessage} from "element-plus"
 import { useRouter } from "vue-router"
+import { reqAddOrder } from "@/api/front/order.js";
+import { reqAddPayment } from "@/api/front/pay.js";
 
 const router = useRouter()
+const orderId = ref("")
 const activeStep = ref(0)
-const pickupStore = ref("")
-const ruleFormRef = ref()
+const formRef = ref(null)
+const creditCardFormRef = ref(null)
 const form = reactive({
     name: "",
     address:"",
     phone:"",
     email:"",
     message:"",
-    delivery:"store pickup",
+    delivery:"home delivery",
+    pickupStore:"",
     payment:"credit card"
 })
 
@@ -21,14 +25,20 @@ const validatePhone = (rule, value, callback) => {
     if(!value) {
         return callback(new Error("請提供手機號碼!"))
     }
-
     const regex = /^09\d{8}$/
-
     if(!regex.test(value)) {
         return callback(new Error("手機號碼格式錯誤!"))
     }
 
     callback();
+}
+
+const validatePickupStore = (rule, value, callback) => {
+    if(form.delivery === 'store pickup' && !value) {
+        callback(new Error("請填寫超商店名"))
+    } else {
+        callback()
+    }
 }
 
 const rules = reactive({
@@ -37,8 +47,10 @@ const rules = reactive({
     phone:[{ validator: validatePhone, trigger: 'blur' }],
     email:[
         { required: true, message:"請提供Email", trigger:"blur"},
-        { type: 'email', message: 'Email 格式錯誤', trigger: 'blur' }
+        { type: 'email', message: 'Email 格式錯誤', trigger: "blur" }
     ],
+    delivery: [{ required: true, message: '請選擇寄送方式', trigger: 'change' }],
+    pickupStore:[{ validator: validatePickupStore, trigger: "blur"}]
 })
 
 const creditCardForm = reactive({
@@ -47,39 +59,129 @@ const creditCardForm = reactive({
     cardNumber2: "",
     cardNumber3: "",
     cardNumber4: "",
-    cvvNumber: "",
     expireMonth:"",
     expireYear: "",
+    cvvNumber: "",
 })
 
-const nextStep = ( formEl ) => {
+const validateCardNumber = (rule, value, callback) => {
+    if(!value) {
+        callback(new Error("請填寫卡號"))
+    }
+    const regex = /^\d{4}$/
+    if(!regex.test(value)) {
+        callback(new Error("卡號須為4個數字!"))
+    } else {
+        callback()
+    }
+}
+
+
+const validateCvvNumber = (rule, value, callback) => {
+    if(!value) {
+        callback(new Error("請輸入卡片後三碼"))
+    }
+    const regex = /^\d{3}$/
+    if(!regex.test(value)) {
+        callback(new Error("後三碼須為3個數字"))
+    } else {
+        callback()
+    }
+}
+
+const creditCardRules = {
+    cardHolderName: [{ required: true, message: '請填寫持卡人姓名', trigger: 'blur' }],
+    cardNumber1: [{ validator: validateCardNumber, trigger: 'blur' }],
+    cardNumber2: [{ validator: validateCardNumber, trigger: 'blur' }],
+    cardNumber3: [{ validator: validateCardNumber, trigger: 'blur' }],
+    cardNumber4: [{ validator: validateCardNumber, trigger: 'blur' }],
+    expireMonth: [
+        { required: true, message: '請填寫月份', trigger: 'blur' },
+        { pattern: /^(0[1-9]|1[0-2])$/, message: '月份需為 01-12', trigger: 'blur' }
+    ],
+    expireYear: [
+        { required: true, message: '請填寫年份', trigger: 'blur' },
+        { pattern: /^\d{2}$/, message:"年份須為兩位數", trigger:"blur" }
+    ],
+    cvvNumber: [{ validator: validateCvvNumber, trigger: 'blur' }]
+};
+
+const nextStep = async( formEl ) => {
     if (!formEl) return;
 
-    let fieldsToValidate = [];
+    try {
+        if (activeStep.value === 0) {
+            await formEl.validateField(['name', 'address', 'phone', 'email']);
+        }
 
-    if (activeStep.value === 0) {
-        fieldsToValidate = ['name', 'address', 'phone', 'email'];
-    } else if (activeStep.value === 1) {
-        fieldsToValidate = ['delivery'];
-    } else if (activeStep.value === 2) {
-        fieldsToValidate = ['payment'];
-    }
-
-    formEl.validateField(fieldsToValidate, (valid) => {
-        if (valid) {
-            if (activeStep.value < 2) {
-                activeStep.value++;
-            } else {
-                submitOrder();
+        if (activeStep.value === 1) {
+            const fieldsToValidate = ['delivery'];
+            if (form.delivery === 'store pickup') {
+                fieldsToValidate.push('pickupStore');
             }
+            await formEl.validateField(fieldsToValidate);
+        }
+
+        if (activeStep.value === 2 && form.payment === "credit card") {
+            await creditCardFormRef.value.validate();
+        }
+        return true
+
+    } catch (err) {
+        console.error("驗證失敗", err);
+        return false;
+    }
+}
+
+const createOrder = async() => {
+    try {
+        const res = await reqAddOrder({
+            data: {
+                user: {
+                    name: form.name,
+                    email: form.email,
+                    tel: form.phone,
+                    address: form.address,
+                },
+                message: form.message,
+            }
+        })
+        if(res.success){
+            orderId.value = res.orderId
+            ElMessage({
+                type:"success",
+                message: res.message
+            })
+
         } else {
             ElMessage({
                 type:"error",
-                message:"驗證失敗"
+                message:res.message
             })
-            return false;
         }
-    });
+    } catch(error) {
+        console.error(error)
+    }
+}
+
+const handleStepAction = async() => {
+    if(activeStep.value === 0) {
+        const valid = await nextStep(formRef.value)
+        if(valid) {
+            await createOrder()
+            activeStep.value++;
+        }
+    } else if (activeStep.value === 1) {
+        const valid = await nextStep(formRef.value)
+        if(valid) {
+            activeStep.value++;
+        }
+    } else if (activeStep.value === 2) {
+        const valid = await nextStep(creditCardFormRef.value)
+        if(valid) {
+            await submitPayment();
+        }
+    }
 }
 
 const prevStep = () => {
@@ -90,8 +192,24 @@ const prevStep = () => {
     }
 }
 
-const submitOrder = () => {
-
+const submitPayment = async() => {
+    try {
+        const res = await reqAddPayment(orderId.value)
+        if(res.success){
+            ElMessage({
+                type:"success",
+                message: res.message
+            })
+            await router.push("/success")
+        } else {
+            ElMessage({
+                type:"error",
+                message: res.message
+            })
+        }
+    } catch(error) {
+        console.error(error);
+    }
 }
 
 </script>
@@ -108,7 +226,7 @@ const submitOrder = () => {
             <template v-if="activeStep === 0">
                 <ElCard>
                     <h3>收件資訊</h3>
-                    <ElForm :model="form" label-width="auto" :rules="rules" ref="ruleFormRef">
+                    <ElForm :model="form" label-width="auto" :rules="rules" ref="formRef">
                         <ElFormItem label="收件人姓名" prop="name">
                             <ElInput v-model="form.name" placeholder="收件人姓名" />
                         </ElFormItem>
@@ -130,20 +248,17 @@ const submitOrder = () => {
 
             <template v-else-if="activeStep === 1">
                 <ElCard>
-                    <ElForm :model="form" label-width="auto" :rules="rules">
+                    <ElForm :model="form" label-width="auto" :rules="rules" ref="formRef">
                         <ElFormItem label="寄送方式" prop="delivery">
                             <ElRadioGroup v-model="form.delivery">
-                                <ElRadio label="宅配" value="home delivery" border>宅配</ElRadio>
-                                <ElRadio label="超商取貨不付款" value="store pickup" border>全家取貨不付款</ElRadio>
+                                <ElRadio label="宅配" value="home delivery">宅配</ElRadio>
+                                <ElRadio label="超商取貨不付款" value="store pickup">全家取貨不付款</ElRadio>
                             </ElRadioGroup>
                         </ElFormItem>
+                        <ElFormItem label="超商店名" prop="pickupStore" v-if="form.delivery === 'store pickup'">
+                            <ElInput v-model="form.pickupStore" style="width:200px;"/>
+                        </ElFormItem>
                     </ElForm>
-                    <template v-if="form.delivery === 'store pickup'">
-                        <div v-if="form.delivery === 'store pickup'">
-                            <h6>超商店名:</h6>
-                            <ElInput v-model="pickupStore" style="width:100px"/>
-                        </div>
-                    </template>
                 </ElCard>
             </template>
 
@@ -152,49 +267,58 @@ const submitOrder = () => {
                     <ElForm label-width="100px" :model="form" :rules="rules">
                         <ElFormItem label="付款方式" prop="payment">
                             <ElRadioGroup v-model="form.payment">
-                                <ElRadio label="信用卡" value="credit card" border>信用卡</ElRadio>
-                                <ElRadio label="ATM轉帳" value="atm transfer" border>ATM轉帳</ElRadio>
+                                <ElRadio label="信用卡" value="credit card">信用卡</ElRadio>
+                                <ElRadio label="ATM轉帳" value="atm transfer">ATM轉帳</ElRadio>
                             </ElRadioGroup>
                         </ElFormItem>
                         <template v-if="form.payment === 'credit card'">
-                            <ElForm :model="creditCardForm" label-width="100px">
-                                <ElFormItem label="持卡人姓名">
-                                    <ElInput v-model="creditCardForm.cardHolderName" placeholder="持卡人姓名" style="width: 30%;"/>
+                            <ElForm :model="creditCardForm" label-width="100px" class="credit-card-info-wrapper" ref="creditCardFormRef" :rules="creditCardRules">
+                                <ElFormItem label="持卡人姓名" class="card-holder-wrapper" prop="cardHolderName">
+                                    <ElInput v-model="creditCardForm.cardHolderName" placeholder="持卡人姓名"/>
                                 </ElFormItem>
                                 <ElFormItem label="信用卡卡號">
-                                    <ElRow :gutter="10">
-                                        <ElCol :span="6">
-                                            <ElInput v-model="creditCardForm.cardNumber1" placeholder="1234" maxlength="4" />
+                                    <ElRow :gutter="5">
+                                        <ElCol :span="6" :xs="12">
+                                            <ElFormItem prop="cardNumber1">
+                                                <ElInput v-model="creditCardForm.cardNumber1" placeholder="1234" maxlength="4" />
+                                            </ElFormItem>
                                         </ElCol>
-                                        <ElCol :span="6">
-                                            <ElInput v-model="creditCardForm.cardNumber2" placeholder="5678" maxlength="4" />
+                                        <ElCol :span="6" :xs="12">
+                                            <ElFormItem prop="cardNumber2">
+                                                <ElInput v-model="creditCardForm.cardNumber2" placeholder="5678" maxlength="4" />
+                                            </ElFormItem>
                                         </ElCol>
-                                        <ElCol :span="6">
-                                            <ElInput v-model="creditCardForm.cardNumber3" placeholder="9012" maxlength="4" />
+                                        <ElCol :span="6" :xs="12">
+                                            <ElFormItem prop="cardNumber3">
+                                                <ElInput v-model="creditCardForm.cardNumber3" placeholder="9012" maxlength="4" />
+                                            </ElFormItem>
                                         </ElCol>
-                                        <ElCol :span="6">
-                                            <ElInput v-model="creditCardForm.cardNumber4" placeholder="3456" maxlength="4" />
+                                        <ElCol :span="6" :xs="12">
+                                            <ElFormItem prop="cardNumber4">
+                                                <ElInput v-model="creditCardForm.cardNumber4" placeholder="3456" maxlength="4" />
+                                            </ElFormItem>
                                         </ElCol>
                                     </ElRow>
                                 </ElFormItem>
-                                <ElFormItem label="到期年月">
-                                    <div style="display: flex; gap: 10px; width: 30%;">
+                                <div class="expire-date-wrapper">
+                                    <ElFormItem label="到期月份" prop="expireMonth">
                                         <ElInput
                                             v-model="creditCardForm.expireMonth"
                                             placeholder="MM"
                                             maxlength="2"
-                                            style="flex: 1"
                                         />
+                                    </ElFormItem>
+                                    <ElFormItem label="到期年份" prop="expireYear">
                                         <ElInput
                                             v-model="creditCardForm.expireYear"
                                             placeholder="YY"
                                             maxlength="2"
-                                            style="flex: 1"
                                         />
-                                    </div>
-                                </ElFormItem>
-                                <ElFormItem label="後三碼">
-                                    <ElInput v-model="creditCardForm.cvvNumber" placeholder="後三碼" maxlength="3" show-password style="width: 30%;"/>
+                                    </ElFormItem>
+                                </div>
+
+                                <ElFormItem label="後三碼" class="cvv-wrapper" prop="cvvNumber">
+                                    <ElInput v-model="creditCardForm.cvvNumber" placeholder="後三碼" maxlength="3" show-password/>
                                 </ElFormItem>
                             </ElForm>
                         </template>
@@ -215,9 +339,16 @@ const submitOrder = () => {
             <ElButton @click="prevStep">
                 {{ activeStep> 0 ? "上一步" : "返回購物車" }}
             </ElButton>
-            <ElButton type="primary" @click="nextStep(ruleFormRef)">
-                {{ activeStep === 2 ? "送出訂單" : "下一步" }}
-            </ElButton>
+            <template v-if="activeStep === 0">
+                <ElButton type="primary" @click="handleStepAction">
+                    建立訂單
+                </ElButton>
+            </template>
+            <template v-else>
+                <ElButton type="primary" @click="handleStepAction">
+                    {{ activeStep === 2 ? "送出訂單" : "下一步" }}
+                </ElButton>
+            </template>
         </div>
 
         <ElCard>
@@ -235,13 +366,11 @@ const submitOrder = () => {
 .container {
     display: block;
     margin: $base-header-height auto;
-    padding-top: 10px;
-    width: 90%;
+    padding: 10px 20px;
+    width: 100%;
 
     .el-steps {
         margin: 2rem auto;
-        max-width: 600px;
-        min-width: 375px;
         width: 100%;
     }
 
@@ -249,6 +378,27 @@ const submitOrder = () => {
 
         .el-form {
             margin-top: 10px;
+
+            .credit-card-info-wrapper {
+                .card-holder-wrapper, .cvv-wrapper {
+                    .el-input {
+                        width: 150px;
+                    }
+                }
+
+                .expire-date-wrapper {
+                    display: flex;
+                    width: 100%;
+
+                    :deep(.el-form-item__content) {
+                        gap: 5px;
+                    }
+                    :deep(.el-input) {
+                        width: 150px;
+                        gap: 5px;
+                    }
+                }
+            }
         }
     }
 
@@ -276,12 +426,9 @@ const submitOrder = () => {
 @media (min-width: $breakpoint-tablet) {
     .container {
         max-width: 750px;
-        width: 100%;
 
         .el-steps {
             max-width: 750px;
-            min-width: $breakpoint-tablet;
-            width: 100%;
         }
     }
 }
@@ -289,12 +436,9 @@ const submitOrder = () => {
 @media (min-width: $breakpoint-desktop) {
     .container {
         max-width: 1000px;
-        width: 100%;
 
         .el-steps {
             max-width: 1000px;
-            min-width: $breakpoint-desktop;
-            width: 100%;
         }
     }
 }
