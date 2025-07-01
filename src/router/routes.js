@@ -154,6 +154,15 @@ export const constantRouter = [
                     hidden: true
                 }
             },
+            {
+                path:"success",
+                component: () => import("@/views/front/Success.vue"),
+                name: "Success",
+                meta: {
+                    title: "購物完成",
+                    hidden: true
+                }
+            },
         ]
     }
 ]
