@@ -268,6 +268,8 @@ onMounted(() => {
     }
 
     .other-products {
+        width: 100%;
+
         :deep(.el-divider) {
             .el-divider__text {
                 background-color: $base-background-color;
@@ -376,9 +378,12 @@ onMounted(() => {
         }
 
         .other-products {
+            width: 95%;
+            margin: 0 auto;
+
             .card-wrapper {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(200px, 1fr));
+                grid-template-columns: repeat(4, minmax(150px, 1fr));
             }
         }
     }
@@ -387,9 +392,12 @@ onMounted(() => {
 @media (min-width: $breakpoint-desktop) {
     .container {
         .other-products {
+            width: 80%;
+            margin: 0 auto;
+
             .card-wrapper {
                 display: grid;
-                grid-template-columns: repeat(4, minmax(200px, 1fr));
+                grid-template-columns: repeat(4, minmax(150px, 1fr));
             }
         }
     }
