@@ -30,10 +30,10 @@ onMounted(() => {
         </template>
         <template v-else>
             <div class="cart-container-mobile">
-                <MobileCartCard :data="cartStore.cartList"/>
+                <MobileCartCard :data="cartStore.cartList" @update-cart="cartStore.getCartProducts"/>
             </div>
             <div class="table-container">
-                <DesktopCartTable :data="cartStore.cartList" />
+                <DesktopCartTable :data="cartStore.cartList" @update-cart="cartStore.getCartProducts"/>
             </div>
         </template>
     </div>

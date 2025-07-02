@@ -1,22 +1,17 @@
 <script setup>
-import {ElButton, ElCard, ElInput, ElInputNumber, ElMessage} from "element-plus";
+import {ElButton, ElCard, ElInput, ElInputNumber} from "element-plus";
 import { Search } from "@element-plus/icons-vue";
-import {computed, ref} from "vue";
+import {ref, watch} from "vue";
 import {useCartStore} from "@/store/modules/cart.js";
 import {useRouter} from "vue-router";
-import { reqCoupon } from "@/api/front/cart"
 
 const props = defineProps({
     data: Array
 })
-
+const emit = defineEmits(["update-cart"])
 const cartStore = useCartStore()
 const router = useRouter()
 const loading = ref(false)
-const perCouponName = computed(() => {
-    const code = cartStore.cartList[0]?.coupon?.code;
-    return code && code.length > 0 ? code : "";
-})
 const perCoupon = ref("")
 
 const handleQtyChange = async(row) => {
@@ -34,27 +29,18 @@ const handleDeleteProduct = async(id) =>{
 
 const handleGetCoupon = async(perInput) => {
     try {
-        const res = await reqCoupon({
-            data: {
-                code: perInput
-            }
-        })
-        if(res.success) {
-            perCouponName.value = perInput
-            ElMessage({
-                type:"success",
-                message: "已成功使用折價券"
-            })
-        } else {
-            ElMessage({
-                type: "error",
-                message: res.message
-            })
-        }
-    } catch(error) {
+        await cartStore.getCoupon(perInput)
+        emit("update-cart")
+    } catch(error){
         console.error(error)
     }
 }
+
+watch(()=>cartStore.couponCode, (value) => {
+    if(value) {
+        perCoupon.value = value
+    }
+}, { immediate: true} )
 </script>
 
 <template>
@@ -110,9 +96,9 @@ const handleGetCoupon = async(perInput) => {
         </ElCard>
         <ElCard class="cart-price-card">
             <h5>購物車清單</h5>
-            <div class="discount" v-if="perCouponName">
+            <div class="discount" v-if="cartStore.couponCode.length >0">
                 <p>優惠碼</p>
-                <p>{{ perCouponName }}</p>
+                <p>{{ cartStore.couponCode }}</p>
             </div>
             <div class="final-total">
                 <p>小計</p>
