@@ -54,7 +54,13 @@ watch(()=>cartStore.couponCode, (value) => {
                 />
             </template>
         </ElTableColumn>
-        <ElTableColumn prop="product.title" label="商品名稱" />
+        <ElTableColumn prop="product.title" label="商品名稱">
+            <template #default="{ row }">
+                <RouterLink :to="{ path: `/product/${row.product.id}` }">
+                    {{row.product.title}}
+                </RouterLink>
+            </template>
+        </ElTableColumn>
         <ElTableColumn label="價格" width="1" align="center">
             <template #default="{ row }">
                 <span class="new-price">NTD {{ row.product.price }}</span>

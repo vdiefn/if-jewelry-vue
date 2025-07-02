@@ -55,7 +55,9 @@ watch(()=>cartStore.couponCode, (value) => {
                 <img :src="item.product.imagesUrl[0]" alt="商品圖片" />
             </div>
             <div class="info">
-                <h3 class="title">{{ item.product.title }}</h3>
+                <RouterLink :to="{ path: `/product/${item.product.id}` }">
+                    <h3 class="title">{{ item.product.title }}</h3>
+                </RouterLink>
                 <p class="content">{{ item.product.content }}</p>
                 <div class="price">
                     <span class="price-old">NTD {{ item.product.origin_price }}</span>
