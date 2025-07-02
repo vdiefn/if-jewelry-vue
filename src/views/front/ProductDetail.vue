@@ -96,9 +96,9 @@ onMounted(() => {
             </ElBreadcrumbItem>
         </ElBreadcrumb>
         <div class="top">
-            <ElCarousel :autoplay="false" height="200">
+            <ElCarousel :autoplay="false">
                 <ElCarouselItem v-for="(image, index) in data.product.imagesUrl" :key="index">
-                    <img :src="image" alt="product image"/>
+                    <img :src="image" alt="product image" style="margin:0 auto;"/>
                 </ElCarouselItem>
             </ElCarousel>
             <div class="image-section">
@@ -180,6 +180,7 @@ onMounted(() => {
     .top {
         display: flex;
         flex-direction: column;
+        margin-top: 1rem;
 
         .el-carousel {
             min-height: 200px;
@@ -190,7 +191,8 @@ onMounted(() => {
                 img {
                     width:100%;
                     height:100%;
-                    object-fit: cover
+                    object-fit: cover;
+                    margin: 0 auto;
                 }
             }
         }
