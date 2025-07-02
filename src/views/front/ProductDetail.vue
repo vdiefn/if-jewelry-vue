@@ -1,13 +1,14 @@
 <script setup>
 import { ElInputNumber, ElButton, ElCarousel, ElCarouselItem, ElTabs, ElTabPane, ElDivider, ElBreadcrumb, ElBreadcrumbItem, ElMessage } from "element-plus"
 import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
 import { CardProduct, DrawerCartList } from "@/components/front/index.js";
 import { useCartStore } from "@/store/modules/cart.js";
 import { useIsMobile } from "@/composables/useIsMobile";
 
 const route = useRoute();
+const router = useRouter();
 const count = ref(1)
 const data = ref({})
 const activeName = ref("first")
@@ -62,6 +63,15 @@ const addToCart = async(id, count) => {
     if(isMobile.value) {
         await drawerCartListRef.value.open()
     }
+}
+
+const goToCheckout = async(id, count) => {
+    await cartStore.addToCart({
+        product_id: id,
+        qty: count
+    })
+
+    await router.push("/cart")
 }
 
 
@@ -119,7 +129,7 @@ onMounted(() => {
                 <ElInputNumber v-model="count" :min="1" :max="10"/>
                 <div class="button-wrapper">
                     <ElButton type="primary" @click="addToCart(data.product.id, count)">加入購物車</ElButton>
-                    <ElButton type="warning">立即購買</ElButton>
+                    <ElButton type="warning" @click="goToCheckout(data.product.id, count)">立即購買</ElButton>
                 </div>
 
             </div>
