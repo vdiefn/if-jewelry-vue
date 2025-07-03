@@ -1,3 +1,6 @@
+<script setup>
+
+</script>
 <template>
     <div class="container">
         <div class="checkout-success">
@@ -14,33 +17,29 @@
     </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style lang="scss" scoped>
 .container {
     display: flex;
     flex-direction: column;
     margin-top: 46px;
-    height: 100%;
-    flex:1;
 
     .checkout-success {
         padding: 2rem;
-        border: 1px solid red;
+
+        .el-button {
+            margin-top: 2rem;
+        }
     }
 
     .image-wrapper {
+        height: 100%;
         overflow: hidden;
-        border: 1px solid green;
 
         img {
             width: 100%;
-            height: 100%;
-            display: block;
-            max-height: none;
+            height: 200px;
             object-fit: cover;
+            display: block;
         }
     }
 }
@@ -48,16 +47,33 @@
 @media(min-width: $breakpoint-tablet) {
     .container {
         display: grid;
-        grid-template-columns: 70% 30%;
+        grid-template-columns: 60% 40%;
+        height: calc(100vh - $base-footer-height);
+
+        .checkout-success {
+            padding: 2rem 10%;
+
+            .el-button {
+                width: 100px;
+                margin-top:2rem;
+            }
+        }
 
         .image-wrapper {
-            border: 1px solid green;
+            height: 100%;
 
             img {
                 width: 100%;
-                height: 500px;
+                height: 100%;
             }
         }
+    }
+}
+
+@media(min-width: $breakpoint-desktop) {
+    .container {
+        display: grid;
+        grid-template-columns: 70% 30%;
     }
 }
 </style>
