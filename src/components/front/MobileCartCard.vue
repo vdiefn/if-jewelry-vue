@@ -58,7 +58,6 @@ watch(()=>cartStore.couponCode, (value) => {
                 <RouterLink :to="{ path: `/product/${item.product.id}` }">
                     <h3 class="title">{{ item.product.title }}</h3>
                 </RouterLink>
-                <p class="content">{{ item.product.content }}</p>
                 <div class="price">
                     <span class="price-old">NTD {{ item.product.origin_price }}</span>
                     <span class="price-now">NTD {{ item.product.price }}</span>
@@ -109,7 +108,7 @@ watch(()=>cartStore.couponCode, (value) => {
     </ElCard>
     <div class="operation-btn">
         <ElButton type="primary" @click="router.push('/checkout')">前往結帳</ElButton>
-        <ElButton @click="router.back()">繼續購物</ElButton>
+        <ElButton @click="router.push('/products')">繼續購物</ElButton>
     </div>
 </template>
 

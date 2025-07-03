@@ -117,7 +117,7 @@ watch(()=>cartStore.couponCode, (value) => {
         </ElCard>
         <div class="operation-btn">
             <ElButton type="primary" @click="router.push('/checkout')">前往結帳</ElButton>
-            <ElButton @click="router.back()">繼續購物</ElButton>
+            <ElButton @click="router.push('/products')">繼續購物</ElButton>
         </div>
     </div>
 </template>
