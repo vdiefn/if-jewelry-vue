@@ -4,7 +4,9 @@ import {ElSteps, ElStep, ElMessage} from "element-plus"
 import { useRouter } from "vue-router"
 import { reqAddOrder } from "@/api/front/order.js";
 import { reqAddPayment } from "@/api/front/pay.js";
+import { useCartStore } from "@/store/modules/cart.js";
 
+const cartStore = useCartStore();
 const router = useRouter()
 const orderId = ref("")
 const activeStep = ref(0)
@@ -352,10 +354,24 @@ const submitPayment = async() => {
         </div>
 
         <ElCard>
-            <h5>訂單摘要</h5>
             <ElCollapse >
-                <ElCollapseItem title="商品內容">
-                    <p>A</p>
+                <ElCollapseItem class="order-info-container">
+                    <template #title>
+                        <h5>訂單摘要</h5>
+                    </template>
+                    <div v-for="item in cartStore.cartList" :key="item.id" class="product-wrapper">
+                        <div class="image-wrapper">
+                            <img :src="item.product.imagesUrl[0]" alt="product picture" />
+                        </div>
+                        <div class="info-wrapper">
+                            <h5>{{ item.product.title }}</h5>
+                            <p>NTD{{ item.product.price }} x {{item.qty}}</p>
+                        </div>
+                    </div>
+                    <div class="final-info">
+                        <h6>使用優惠券:{{cartStore.cartData.coupon? cartStore.cartData.coupon : " 無 "}}</h6>
+                        <h6>總金額: {{cartStore.cartData.final_total}}</h6>
+                    </div>
                 </ElCollapseItem>
             </ElCollapse>
         </ElCard>
@@ -421,6 +437,57 @@ const submitPayment = async() => {
     .el-collapse {
         margin: 20px auto;
     }
+}
+
+.order-info-container {
+    display: flex;
+    flex-direction: column;
+
+    :deep(.el-collapse-item__wrap) {
+        border-bottom: none;
+
+        .el-collapse-item__content {
+            padding-bottom: 0;
+        }
+    }
+
+    .product-wrapper {
+        display: flex;
+        flex-direction: row;
+
+        .image-wrapper {
+            min-width: 40px;
+            max-width: 60px;
+            width: 100%;
+            aspect-ratio: 1/1;
+            border: 1px solid whitesmoke;
+
+            img {
+                object-fit: cover;
+            }
+        }
+
+        .info-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 0 10px;
+
+            p {
+                text-align: end;
+                display: block;
+                font-size: 0.8rem;
+            }
+
+        }
+    }
+
+    .final-info {
+        margin: 10px 0;
+        padding: 0 10px;
+        text-align: end;
+    }
+
 }
 
 @media (min-width: $breakpoint-tablet) {

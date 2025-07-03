@@ -81,7 +81,6 @@ defineExpose({ open })
             flex-direction: row;
             padding: 5px 0;
             border-bottom: 1px solid whitesmoke;
-        ;
 
             .image-wrapper {
                 min-width: 40px;
