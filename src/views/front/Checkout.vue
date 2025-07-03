@@ -202,7 +202,7 @@ const submitPayment = async() => {
                 type:"success",
                 message: res.message
             })
-            await router.push("/success")
+            await router.push({ path: "/success", query: { orderId: orderId.value}})
         } else {
             ElMessage({
                 type:"error",
@@ -278,29 +278,21 @@ const submitPayment = async() => {
                                 <ElFormItem label="持卡人姓名" class="card-holder-wrapper" prop="cardHolderName">
                                     <ElInput v-model="creditCardForm.cardHolderName" placeholder="持卡人姓名"/>
                                 </ElFormItem>
-                                <ElFormItem label="信用卡卡號">
-                                    <ElRow :gutter="5">
-                                        <ElCol :span="6" :xs="12">
-                                            <ElFormItem prop="cardNumber1">
-                                                <ElInput v-model="creditCardForm.cardNumber1" placeholder="1234" maxlength="4" />
-                                            </ElFormItem>
-                                        </ElCol>
-                                        <ElCol :span="6" :xs="12">
-                                            <ElFormItem prop="cardNumber2">
-                                                <ElInput v-model="creditCardForm.cardNumber2" placeholder="5678" maxlength="4" />
-                                            </ElFormItem>
-                                        </ElCol>
-                                        <ElCol :span="6" :xs="12">
-                                            <ElFormItem prop="cardNumber3">
-                                                <ElInput v-model="creditCardForm.cardNumber3" placeholder="9012" maxlength="4" />
-                                            </ElFormItem>
-                                        </ElCol>
-                                        <ElCol :span="6" :xs="12">
-                                            <ElFormItem prop="cardNumber4">
-                                                <ElInput v-model="creditCardForm.cardNumber4" placeholder="3456" maxlength="4" />
-                                            </ElFormItem>
-                                        </ElCol>
-                                    </ElRow>
+                                <ElFormItem label="信用卡卡號" class="credit-card-grid-wrapper">
+                                    <div class="credit-card-grid">
+                                        <ElFormItem prop="cardNumber1" label-width="0">
+                                            <ElInput v-model="creditCardForm.cardNumber1" placeholder="1234" maxlength="4" />
+                                        </ElFormItem>
+                                        <ElFormItem prop="cardNumber2" label-width="0">
+                                            <ElInput v-model="creditCardForm.cardNumber2" placeholder="5678" maxlength="4" />
+                                        </ElFormItem>
+                                        <ElFormItem prop="cardNumber3" label-width="0">
+                                            <ElInput v-model="creditCardForm.cardNumber3" placeholder="9012" maxlength="4" />
+                                        </ElFormItem>
+                                        <ElFormItem prop="cardNumber4" label-width="0">
+                                            <ElInput v-model="creditCardForm.cardNumber4" placeholder="3456" maxlength="4" />
+                                        </ElFormItem>
+                                    </div>
                                 </ElFormItem>
                                 <div class="expire-date-wrapper">
                                     <ElFormItem label="到期月份" prop="expireMonth">
@@ -397,14 +389,24 @@ const submitPayment = async() => {
 
             .credit-card-info-wrapper {
                 .card-holder-wrapper, .cvv-wrapper {
-                    .el-input {
-                        width: 150px;
+                    width: 100%;
+                    max-width: 320px;
+
+                }
+
+                .credit-card-grid {
+                    display: grid;
+                    gap: 1.2rem;
+
+                    :deep(.el-form-item__content) {
+                        flex: auto;
                     }
                 }
 
                 .expire-date-wrapper {
                     display: flex;
                     width: 100%;
+                    flex-direction: column;
 
                     :deep(.el-form-item__content) {
                         gap: 5px;
@@ -497,6 +499,30 @@ const submitPayment = async() => {
         .el-steps {
             max-width: 750px;
         }
+
+        .credit-card-info-wrapper {
+            .credit-card-grid {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+
+                .el-form-item {
+                    margin-bottom: 0;
+                    width: auto;
+                }
+            }
+
+            .expire-date-wrapper {
+                display: flex;
+                flex-direction: row !important;
+                align-items: flex-start;
+
+                :deep(.el-form-item__content) {
+                    gap: 5px;
+                }
+            }
+        }
+
     }
 }
 
@@ -506,6 +532,13 @@ const submitPayment = async() => {
 
         .el-steps {
             max-width: 1000px;
+        }
+
+        .credit-card-info-wrapper {
+            .credit-card-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
     }
 }
