@@ -163,6 +163,15 @@ export const constantRouter = [
                     hidden: true
                 }
             },
+            {
+                path:"faq",
+                component: () => import("@/views/front/Faq.vue"),
+                name: "Faq",
+                meta: {
+                    title: "FAQ 常見問題",
+                    hidden: true
+                }
+            },
         ]
     }
 ]
