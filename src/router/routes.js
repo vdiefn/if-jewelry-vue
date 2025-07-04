@@ -81,24 +81,6 @@ export const constantRouter = [
         ]
     },
     {
-        path: "/404",
-        component: () => import("@/views/404.vue"),
-        name: "404",
-        meta: {
-            title: "404",
-            hidden: true,
-        },
-    },
-    {
-        path: "/:pathMatch(.*)*",
-        redirect: "/404",
-        name: "any",
-        meta: {
-            title: "任意路由",
-            hidden: true,
-        },
-    },
-    {
         path: "/",
         component:() => import("@/layout/front/frontLayout.vue"),
         name: "frontLayout",
@@ -180,6 +162,24 @@ export const constantRouter = [
                     title: "運送及付款方式",
                     hidden: true
                 }
+            },
+            {
+                path: "/404",
+                component: () => import("@/views/front/404.vue"),
+                name: "404",
+                meta: {
+                    title: "404",
+                    hidden: true,
+                },
+            },
+            {
+                path: "/:pathMatch(.*)*",
+                redirect: "/404",
+                name: "any",
+                meta: {
+                    title: "任意路由",
+                    hidden: true,
+                },
             },
         ]
     }
