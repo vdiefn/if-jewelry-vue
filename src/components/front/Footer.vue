@@ -13,13 +13,14 @@ import { ref } from 'vue';
         <div class="service footer-item">
             <h4>Service</h4>
             <p><RouterLink :to="{name: 'Faq'}">常見問題</RouterLink></p>
-            <RouterLink><p>運送及付款方式</p></RouterLink>
+            <p><RouterLink :to="{name: 'ShippingAndPayment'}">運送及付款方式</RouterLink></p>
         </div>
         <div class="contact-us footer-item">
             <h4>Contact Us</h4>
             <p>If Jewelry 如果工作室</p>
-            <p>客服電話:02-8765-4321</p>
-            <p>服務時間:週一~週五 09:00 - 18:30</p>
+            <p>客服電話: 02-8765-4321</p>
+            <p>客服信箱: support@if-jewelry.com</p>
+            <p>服務時間: 週一~週五 09:00 - 18:30</p>
         </div>
         <div class="follow-us footer-item">
             <h4>Follow Us</h4>
