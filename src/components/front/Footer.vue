@@ -12,8 +12,8 @@ import { ref } from 'vue';
         </div>
         <div class="service footer-item">
             <h4>Service</h4>
-            <a><p>常見問題</p></a>
-            <a><p>運送及付款方式</p></a>
+            <p><RouterLink :to="{name: 'Faq'}">常見問題</RouterLink></p>
+            <RouterLink><p>運送及付款方式</p></RouterLink>
         </div>
         <div class="contact-us footer-item">
             <h4>Contact Us</h4>
