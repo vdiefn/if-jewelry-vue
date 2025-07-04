@@ -172,6 +172,15 @@ export const constantRouter = [
                     hidden: true
                 }
             },
+            {
+                path:"shippingAndPayment",
+                component: () => import("@/views/front/ShippingAndPayment.vue"),
+                name: "ShippingAndPayment",
+                meta: {
+                    title: "運送及付款方式",
+                    hidden: true
+                }
+            },
         ]
     }
 ]
