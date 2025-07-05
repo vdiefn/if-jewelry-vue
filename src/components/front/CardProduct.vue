@@ -28,13 +28,13 @@ const props = defineProps({
 <style scoped lang="scss">
 .card {
     width: 100%;
-    overflow: hidden;
+    overflow: contain;
 
     .product-image {
         width: 100%;
-        height: 100%;
         min-height: 80px;
         max-height: 200px;
+        height: auto;
         display: block;
         object-fit: cover;
     }
@@ -67,9 +67,11 @@ const props = defineProps({
 
 @media (min-width: $breakpoint-tablet) {
     .card {
+        height: 100%;
+
         .product-image {
             width: 100%;
-            height: 100%;
+            height: auto;
             min-height: 100px;
             max-height: 200px;
         }
@@ -80,7 +82,7 @@ const props = defineProps({
     .card {
         .product-image {
             width: 100%;
-            height: 100%;
+            height: auto;
             min-height: 150px;
             max-height: 200px;
         }

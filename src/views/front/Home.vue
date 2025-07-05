@@ -115,10 +115,11 @@ onMounted(() => {
 
 @media(min-width: $breakpoint-tablet) {
     :deep(.el-carousel__container) {
-        height: 350px;
+        height: 400px;
     }
 
     .category-container {
+        margin: 0 100px;
         .card-wrapper {
             display: grid;
             grid-template-columns: repeat(3, minmax(200px, 1fr));
@@ -129,10 +130,11 @@ onMounted(() => {
 
 @media(min-width: $breakpoint-desktop) {
     :deep(.el-carousel__container) {
-        height: 450px;
+        height: 550px;
     }
 
     .category-container {
+        margin: 0 150px;
         .card-wrapper {
             display: grid;
             grid-template-columns: repeat(4, minmax(200px, 1fr));
