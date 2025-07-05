@@ -164,6 +164,15 @@ export const constantRouter = [
                 }
             },
             {
+                path:"about",
+                component: () => import("@/views/front/about.vue"),
+                name: "About",
+                meta: {
+                    title: "品牌故事",
+                    hidden: true
+                }
+            },
+            {
                 path: "/404",
                 component: () => import("@/views/front/404.vue"),
                 name: "404",
