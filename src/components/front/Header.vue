@@ -45,16 +45,16 @@ const handleDeleteProduct = async(id) =>{
                 <font-awesome-icon :icon="['fas', 'bars']" />
             </div>
             <div class="products all" v-if="route.path !== '/products'">
-                <router-link class="products nav-link" to="/products"><h6>全部產品</h6></router-link>
+                <RouterLink class="products nav-link" to="/products"><h6>全部產品</h6></RouterLink>
             </div>
             <div class="brand">
-                <router-link class="brand nav-link" to="/">
+                <RouterLink class="brand nav-link" to="/">
                     <h2>If Jewelry</h2>
-                </router-link>
+                </RouterLink>
             </div>
             <div class="cart">
                 <template v-if="isMobile && isProductPage">
-                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item" @click="getCartItems" style="cursor: pointer;">
+                    <ElBadge :value="cartStore.cartList.length" :max="99" class="item" @click="getCartItems" style="cursor: pointer;" :show-zero="false">
                         <i>
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                         </i>
@@ -67,7 +67,7 @@ const handleDeleteProduct = async(id) =>{
                         width="300"
                     >
                         <template #reference>
-                            <ElBadge :value="cartStore.cartList.length" :max="99" class="item">
+                            <ElBadge :value="cartStore.cartList.length" :max="99" class="item" :show-zero="false">
                                 <i>
                                     <font-awesome-icon :icon="['fas', 'cart-shopping']" />
                                 </i>
