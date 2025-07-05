@@ -7,7 +7,7 @@ import { ref } from 'vue';
     <div class="container">
         <div class="about-us footer-item">
             <h4>About Us</h4>
-            <a><p>品牌故事</p></a>
+            <p><RouterLink :to="{name: 'About'}">品牌故事</RouterLink></p>
             <a><p>會員制度</p></a>
         </div>
         <div class="service footer-item">
