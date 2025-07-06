@@ -173,6 +173,15 @@ export const constantRouter = [
                 }
             },
             {
+                path:"jewelryStory",
+                component: () => import("@/views/front/jewelryStory.vue"),
+                name: "JewelryStory",
+                meta: {
+                    title: "珠寶小教室",
+                    hidden: true
+                }
+            },
+            {
                 path: "/404",
                 component: () => import("@/views/front/404.vue"),
                 name: "404",
