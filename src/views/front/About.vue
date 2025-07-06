@@ -45,7 +45,7 @@ import { DefaultContainer } from "@/components/front/index.js"
 
 @media(min-width: $breakpoint-tablet){
     .wrapper {
-        margin: 0 100px;
+        margin: 0 150px;
 
         section {
             display: flex;
@@ -62,6 +62,12 @@ import { DefaultContainer } from "@/components/front/index.js"
             min-width: 250px;
             margin: 0 auto;
         }
+    }
+}
+
+@media(min-width: $breakpoint-desktop) {
+    .wrapper {
+        margin: 0 250px;
     }
 }
 </style>
