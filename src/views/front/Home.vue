@@ -130,11 +130,11 @@ onMounted(() => {
 
 @media(min-width: $breakpoint-desktop) {
     :deep(.el-carousel__container) {
-        height: 550px;
+        height: 650px;
     }
 
     .category-container {
-        margin: 0 150px;
+        margin: 0 200px;
         .card-wrapper {
             display: grid;
             grid-template-columns: repeat(4, minmax(200px, 1fr));

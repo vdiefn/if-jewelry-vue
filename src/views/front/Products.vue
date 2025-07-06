@@ -41,10 +41,10 @@ onMounted(() => {
 <template>
     <div class="container" v-loading="loading">
         <template v-if="route.query.category">
-            <h5>{{route.query.category}}</h5>
+            <h3>{{route.query.category}}</h3>
         </template>
         <template v-else>
-            <h5>全部商品</h5>
+            <h3>全部商品</h3>
         </template>
         <div class="card-wrapper">
             <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
@@ -59,8 +59,9 @@ onMounted(() => {
 .container {
     margin-top: $base-header-height-tablet;
 
-    > h5 {
+    > h3 {
         padding: 0.5rem 1rem;
+        font-weight: 700;
     }
 
     .card-wrapper {
@@ -85,7 +86,7 @@ onMounted(() => {
 }
 
     @media(min-width: $breakpoint-tablet) {
-        h5 {
+        h3 {
             width: 90%;
             margin: 0 auto;
         }
@@ -100,7 +101,12 @@ onMounted(() => {
 
 
     @media(min-width: $breakpoint-desktop) {
+        h3 {
+            margin: 0 auto;
+            width: 80%;
+        }
         .card-wrapper {
+            width: 80%;
             display: grid;
             grid-template-columns: repeat(4, minmax(200px, 1fr));
         }

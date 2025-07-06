@@ -32,9 +32,8 @@ const props = defineProps({
 
     .product-image {
         width: 100%;
-        min-height: 80px;
-        max-height: 200px;
         height: auto;
+        aspect-ratio: 1/0.6;
         display: block;
         object-fit: cover;
     }
@@ -71,6 +70,7 @@ const props = defineProps({
 
         .product-image {
             width: 100%;
+            aspect-ratio: 1/0.6;
             height: auto;
             min-height: 100px;
             max-height: 200px;
@@ -80,8 +80,10 @@ const props = defineProps({
 
 @media (min-width: $breakpoint-desktop) {
     .card {
+
         .product-image {
             width: 100%;
+            aspect-ratio: 1/1;
             height: auto;
             min-height: 150px;
             max-height: 200px;
