@@ -136,7 +136,10 @@ onMounted(() => {
         </div>
 
         <ElTabs v-model="activeName" class="tabs-wrapper">
-            <ElTabPane label="商品描述" name="first">{{data.product.description}}</ElTabPane>
+            <ElTabPane label="商品描述" name="first" class="product-info">
+                <p>{{data.product.description}}</p>
+                <p>{{ data.product.content }}</p>
+            </ElTabPane>
             <ElTabPane label="送貨與付款方式" name="second" class="payment-and-delivery-method">
                 <div class="text">
                     <h6>送貨方式</h6>
@@ -150,7 +153,18 @@ onMounted(() => {
                     <p>銀行轉帳</p>
                 </div>
             </ElTabPane>
-            <ElTabPane label="保養方式" name="third">{{ data.product.content }}</ElTabPane>
+            <ElTabPane label="保養方式" name="third" class="jewelry-care">
+                <h5>飾品配戴時的保養</h5>
+                <p>1. 預防飾品損壞，需要避免飾品接觸到香水、酒精、去光水、清潔劑、化妝品或其它含有化學藥劑成分的物質</p>
+                <p>2. 避免於泡溫泉、洗澡、去海邊玩時配戴飾品，以免影響飾品光澤或是損壞飾品。</p>
+                <h5>飾品配戴後的保養</h5>
+                <p>1.若長時間不配戴，建議可用軟布擦拭掉飾品上因配戴後所殘留的汗水、油脂。</p>
+                <p>2. 因為飾品的材質不一，軟硬度也不同，建議把飾品個別收納在夾鏈袋中，不但可以隔絕空氣氧化，也可以避免放在同一個首飾盒中互相摩擦而受傷。</p>
+                <h5>飾品清潔保養</h5>
+                <p>1. 一般飾品只要以清水混合一點點中性洗碗精，搭配軟毛牙刷清洗，沖洗後以軟布將水分擦拭乾淨即可。</p>
+                <p>2. 銀飾品變黑是因為跟空氣中的硫產生硫化作用，只要使用洗銀水或拭銀布就可以讓銀飾品恢復以往光澤，若是擔心銀飾品失重，也可以使用較高級的洗銀乳來保養貴重的銀飾珠寶。</p>
+                <p>3. 輕微的汙垢可以用牙刷或化妝棉沾取牙膏在發黑的地方，輕輕畫圓擦拭後，就能除去氧化的部分，達到拋光的效果了。</p>
+            </ElTabPane>
         </ElTabs>
 
         <div class="other-products" v-if="similarProducts.length > 0">
@@ -245,7 +259,22 @@ onMounted(() => {
     }
 
     .tabs-wrapper {
+        width: 80%;
         margin: 0 auto;
+
+        .product-info, .payment-and-delivery-method, .jewelry-care {
+            padding: 10px;
+        }
+
+        :deep(.el-tabs__header) {
+            margin: 0 auto;
+        }
+
+        .product-info, .jewelry-care {
+            width:80%;
+            margin: 0 auto;
+        }
+
 
         .payment-and-delivery-method {
             display: flex;
@@ -263,6 +292,15 @@ onMounted(() => {
                     margin-bottom: 5px;
                     font-weight: bold;
                 }
+            }
+        }
+
+        .jewelry-care {
+
+            h5 {
+                margin: 10px 0;
+                font-weight: 700;
+                color:$base-brand-color;
             }
         }
     }
