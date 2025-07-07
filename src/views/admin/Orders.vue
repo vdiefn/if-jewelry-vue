@@ -1,21 +1,34 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import {ref, onMounted, watch} from "vue";
 import { reqOrders } from "@/api/admin/order"
+import { ElButton, ElCard } from "element-plus"
+import { Edit, Delete } from "@element-plus/icons-vue";
 
 const loading = ref(false)
 const data = ref()
+const currentPage = ref(1)
+const totalPages = ref(1)
 
-const getAllOrders = async() => {
+const getAllOrders = async(page=1) => {
+    currentPage.value = page;
     loading.value = true
     try{
-        const res = await reqOrders()
-        data.value = res
+        const res = await reqOrders(currentPage.value)
+        if(res.success) {
+            data.value = res.orders
+            currentPage.value = res.pagination.current_page
+            totalPages.value = res.pagination.total_pages
+        }
     } catch(err) {
         console.error(err)
     } finally {
         loading.value = false
     }
 }
+
+watch(currentPage, () => {
+    getAllOrders(currentPage.value);
+});
 
 onMounted(() => {
     getAllOrders()
@@ -36,11 +49,11 @@ onMounted(() => {
     >
         <ElTableColumn label="建立日期" prop="create_at">
             <template #default="{row}">
-                {{ new Date(row.due_date * 1000).toISOString().slice(0, 10) }}
+                {{ new Date(row.create_at * 1000).toISOString().slice(0, 10) }}
             </template>
         </ElTableColumn>
         <ElTableColumn label="購買人" prop="user.name"></ElTableColumn>
-        <ElTableColumn label="購買金額" prop="num"></ElTableColumn>
+        <ElTableColumn label="購買金額" prop="total"></ElTableColumn>
         <ElTableColumn label="付款完成" prop="is_paid" align="center">
             <template #default="{ row }">
                 <ElIcon v-if="row.is_enabled" class="check-icon">
@@ -70,12 +83,12 @@ onMounted(() => {
     </ElTable>
     </div>
     <div class="bottom-area">
-    <ElPagination
-        class="pagination"
-        v-model:current-page="currentPage"
-        layout="prev, pager, next, jumper"
-        :page-count="totalPages"
-    />
+        <ElPagination
+            class="pagination"
+            v-model:current-page="currentPage"
+            layout="prev, pager, next, jumper"
+            :page-count="totalPages"
+        />
     </div>
 </ElCard>
 </template>
