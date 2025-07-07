@@ -37,8 +37,6 @@ watch(
                 :default-active="route.path"
                 class="el-menu-vertical"
                 :collapse="layoutSetting.isCollapse ? true : false"
-                @open="handleOpen"
-                @close="handleClose"
             >
                 <MenuList :menuList="userStore.menuRoutes"></MenuList>
             </ElMenu>
