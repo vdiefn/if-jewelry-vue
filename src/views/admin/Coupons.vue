@@ -80,6 +80,7 @@ onMounted(() => {
 <template>
     <ElCard class="card">
         <div class="top-area">
+            <h3>優惠券列表</h3>
             <ElButton type="primary" @click="addNewCoupon">
                 新增優惠券
             </ElButton>
@@ -143,7 +144,7 @@ onMounted(() => {
 
   .top-area {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-bottom: 1rem;
 
     :deep(.el-input),
