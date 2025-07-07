@@ -8,7 +8,7 @@ import { ref } from 'vue';
         <div class="about-us footer-item">
             <h4>About Us</h4>
             <p><RouterLink :to="{name: 'About'}">品牌故事</RouterLink></p>
-            <p><RouterLink :to="{name: 'JelewryStory'}">寶石小教室</RouterLink></p>
+            <p><RouterLink :to="{name: 'JewelryStory'}">寶石小教室</RouterLink></p>
         </div>
         <div class="service footer-item">
             <h4>Service</h4>
