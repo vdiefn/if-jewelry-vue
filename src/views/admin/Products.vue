@@ -50,9 +50,9 @@ const getAllProducts = async (page = 1, category = "") => {
     try {
         const result = await reqProducts(currentPage.value, selectCategory.value);
         if (result.success) {
-        data.value = result.products;
-        currentPage.value = result.pagination.current_page;
-        totalPages.value = result.pagination.total_pages;
+            data.value = result.products;
+            currentPage.value = result.pagination.current_page;
+            totalPages.value = result.pagination.total_pages;
         }
     } catch (error) {
         console.error(error);
