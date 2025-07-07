@@ -93,7 +93,7 @@ defineExpose({ open })
                             placeholder="選擇付款時間"
                             format="YYYY-MM-DD HH:mm:ss"
                             value-format="x"
-                            disabled
+                            :disabled="form.is_paid"
                         />
                     </ElFormItem>
                 </ElCol>
