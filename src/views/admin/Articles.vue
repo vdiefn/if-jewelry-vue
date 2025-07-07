@@ -1,14 +1,16 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, useTemplateRef } from "vue";
 import { reqArticles } from "@/api/admin/article"
 import {ElButton, ElCard} from "element-plus"
 import { Edit, Delete } from "@element-plus/icons-vue";
+import { DialogAdminArticle } from "@/components/admin";
 
 const loading = ref(false)
 const data = ref()
 const pagination = ref()
 const currentPage = ref(1)
 const totalPages = ref(1)
+const dialogAdminArticleRef = useTemplateRef("dialogAdminArticleRef")
 
 const getArticles = async() => {
     loading.value = true
@@ -19,7 +21,7 @@ const getArticles = async() => {
             data.value = res.articles
             pagination.value = res.pagination
             currentPage.value = res.pagination.current_page
-            totalPage.value = res.pagination.total_pages
+            totalPages.value = res.pagination.total_pages
         }
     } catch(errpr) {
         console.error(errpr)
@@ -28,7 +30,9 @@ const getArticles = async() => {
     }
 }
 
-const addNewArticle = async() => {}
+const addNewArticle = async() => {
+    dialogAdminArticleRef.value.open()
+}
 
 const editArticle = async() => {
     loading.value = true
@@ -96,6 +100,7 @@ onMounted(() => {
             />
         </div>
     </ElCard>
+    <DialogAdminArticle ref="dialogAdminArticleRef" />
 </template>
 
 <style scoped lang="scss">
