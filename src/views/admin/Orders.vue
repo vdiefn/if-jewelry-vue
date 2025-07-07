@@ -1,13 +1,15 @@
 <script setup>
-import {ref, onMounted, watch} from "vue";
+import {ref, onMounted, watch, useTemplateRef} from "vue";
 import { reqOrders } from "@/api/admin/order"
 import { ElButton, ElCard } from "element-plus"
 import { Edit, Delete } from "@element-plus/icons-vue";
+import {DialogAdminOrder} from "@/components/admin/index.js";
 
 const loading = ref(false)
 const data = ref()
 const currentPage = ref(1)
 const totalPages = ref(1)
+const dialogAdminOrderRef = useTemplateRef("dialogAdminOrderRef")
 
 const getAllOrders = async(page=1) => {
     currentPage.value = page;
@@ -26,6 +28,12 @@ const getAllOrders = async(page=1) => {
     }
 }
 
+const handleEditOrder = (row) =>{
+    dialogAdminOrderRef.value.open(row)
+}
+
+const handleDeleteOrder = () =>{}
+
 watch(currentPage, () => {
     getAllOrders(currentPage.value);
 });
@@ -36,61 +44,62 @@ onMounted(() => {
 </script>
 
 <template>
-<ElCard class="card">
-    <div class="top-area">
-        <h3>訂單列表</h3>
-    </div>
-    <div class="content-area">
-    <ElTable
-        :stripe="true"
-        v-loading="loading"
-        style="height: 100%"
-        :data="data"
-    >
-        <ElTableColumn label="建立日期" prop="create_at">
-            <template #default="{row}">
-                {{ new Date(row.create_at * 1000).toISOString().slice(0, 10) }}
-            </template>
-        </ElTableColumn>
-        <ElTableColumn label="購買人" prop="user.name"></ElTableColumn>
-        <ElTableColumn label="購買金額" prop="total"></ElTableColumn>
-        <ElTableColumn label="付款完成" prop="is_paid" align="center">
-            <template #default="{ row }">
-                <ElIcon v-if="row.is_enabled" class="check-icon">
-                <font-awesome-icon :icon="['fas', 'check']" />
-                </ElIcon>
-                <ElIcon v-else class="x-icon">
-                <font-awesome-icon :icon="['fas', 'xmark']" />
-                </ElIcon>
-            </template>
-        </ElTableColumn>
-        <ElTableColumn label="留言訊息" prop="message"></ElTableColumn>
-        <ElTableColumn>
-            <template #default="{ row }">
-                <ElButton
-                    :icon="Edit"
-                    size="small"
-                    @click="editCoupon(row)"
-                />
-                <ElButton
-                    :icon="Delete"
-                    type="danger"
-                    size="small"
-                    @click="deleteCoupon(row)"
-                />
-            </template>
-        </ElTableColumn>
-    </ElTable>
-    </div>
-    <div class="bottom-area">
-        <ElPagination
-            class="pagination"
-            v-model:current-page="currentPage"
-            layout="prev, pager, next, jumper"
-            :page-count="totalPages"
-        />
-    </div>
-</ElCard>
+    <ElCard class="card">
+        <div class="top-area">
+            <h3>訂單列表</h3>
+        </div>
+        <div class="content-area">
+        <ElTable
+            :stripe="true"
+            v-loading="loading"
+            style="height: 100%"
+            :data="data"
+        >
+            <ElTableColumn label="建立日期" prop="create_at">
+                <template #default="{row}">
+                    {{ new Date(row.create_at * 1000).toISOString().slice(0, 10) }}
+                </template>
+            </ElTableColumn>
+            <ElTableColumn label="購買人" prop="user.name"></ElTableColumn>
+            <ElTableColumn label="購買金額" prop="total"></ElTableColumn>
+            <ElTableColumn label="付款完成" prop="is_paid" align="center">
+                <template #default="{ row }">
+                    <ElIcon v-if="row.is_enabled" class="check-icon">
+                    <font-awesome-icon :icon="['fas', 'check']" />
+                    </ElIcon>
+                    <ElIcon v-else class="x-icon">
+                    <font-awesome-icon :icon="['fas', 'xmark']" />
+                    </ElIcon>
+                </template>
+            </ElTableColumn>
+            <ElTableColumn label="留言訊息" prop="message"></ElTableColumn>
+            <ElTableColumn>
+                <template #default="{ row }">
+                    <ElButton
+                        :icon="Edit"
+                        size="small"
+                        @click="handleEditOrder(row)"
+                    />
+                    <ElButton
+                        :icon="Delete"
+                        type="danger"
+                        size="small"
+                        @click="handleDeleteOrder(row)"
+                    />
+                </template>
+            </ElTableColumn>
+        </ElTable>
+        </div>
+        <div class="bottom-area">
+            <ElPagination
+                class="pagination"
+                v-model:current-page="currentPage"
+                layout="prev, pager, next, jumper"
+                :page-count="totalPages"
+            />
+        </div>
+    </ElCard>
+    <DialogAdminOrder ref="dialogAdminOrderRef" />
 </template>
 
 <style scoped lang="scss">
