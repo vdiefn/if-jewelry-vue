@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, useTemplateRef } from 'vue';
 import { reqCoupons, reqDeleteCoupon } from "@/api/admin/coupon.js"
-import { ElPagination, ElTable, ElTableColumn, ElButton } from "element-plus"
+import { ElPagination, ElTable, ElTableColumn, ElButton, ElMessage, ElMessageBox } from "element-plus"
 import { DialogAdminCoupon } from "@/components/admin/index.js"
 import { Edit, Delete } from "@element-plus/icons-vue";
 
@@ -41,31 +41,31 @@ const deleteCoupon = async(row) => {
     cancelButtonText: "取消",
     type: "warning",
     beforeClose: async (action, instance, done) => {
-      if (action === "confirm") {
-        instance.confirmButtonLoading = true;
-         try {
-           const res = await reqDeleteCoupon(row.id)
+        if (action === "confirm") {
+            instance.confirmButtonLoading = true;
+             try {
+                 const res = await reqDeleteCoupon(row.id)
 
-         if (res.success) {
-           ElMessage({
-             type: "success",
-             message: res.message,
-           });
-           await getAllCoupons();
-           done()
-         } else {
-           ElMessage({
-             type: "error",
-             message: res.message
-           });
-           instance.confirmButtonLoading = false;
-         }
-       } catch (error) {
-         console.error(error);
-       }
-     } else {
-        done();
-     }
+             if (res.success) {
+                 ElMessage({
+                   type: "success",
+                   message: res.message,
+                 });
+                 done()
+                   await getAllCoupons();
+             } else {
+                 ElMessage({
+                   type: "error",
+                   message: res.message
+                 });
+                 instance.confirmButtonLoading = false;
+             }
+           } catch (error) {
+               console.error(error);
+           }
+        } else {
+            done();
+        }
    },
   });
 }
