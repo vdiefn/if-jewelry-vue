@@ -1,8 +1,11 @@
 <script setup>
 import { ref, reactive, computed } from "vue"
-import { ElButton, ElDialog, ElForm, ElFormItem, ElDatePicker, ElDivider, ElRow, ElCol } from "element-plus"
+import {ElButton, ElDialog, ElForm, ElFormItem, ElDatePicker, ElDivider, ElRow, ElCol, ElMessage} from "element-plus"
+import { reqEditOrder } from "@/api/admin/order.js";
 
 const dialogVisible = ref(false)
+const loading = ref(false)
+const emit = defineEmits(['order-update'])
 const form = reactive({
     create_at: "",
     is_paid: false,
@@ -29,6 +32,31 @@ const open = (row) => {
     dialogVisible.value = true
 }
 
+const confirm = async() => {
+    loading.value = true
+    form.create_at = form.create_at/1000
+    form.paid_date = form.paid_date/1000
+    try {
+        const res = await reqEditOrder(form)
+        if(res.success) {
+            ElMessage({
+                type: "success",
+                message: res.message
+            })
+            emit("order-update")
+        } else {
+            ElMessage({
+                type:"error",
+                message: res.message
+            })
+        }
+    } catch(error) {
+        console.error(error)
+    } finally {
+        dialogVisible.value = false
+    }
+}
+
 defineExpose({ open })
 </script>
 
@@ -37,6 +65,7 @@ defineExpose({ open })
         v-model="dialogVisible"
         width="1000px"
         align-center
+        v-loading="loading"
     >
         <template #header>
             <h3>修改訂單</h3>
@@ -134,7 +163,7 @@ defineExpose({ open })
         <template #footer>
             <div class="dialog-footer">
                 <ElButton @click="dialogVisible = false">關閉</ElButton>
-                <ElButton type="primary" @click="dialogVisible = false">
+                <ElButton type="primary" @click="confirm">
                     確認
                 </ElButton>
             </div>

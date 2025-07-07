@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, watch, useTemplateRef} from "vue";
-import { reqOrders } from "@/api/admin/order"
-import { ElButton, ElCard } from "element-plus"
+import { reqOrders, reqDeleteOrder } from "@/api/admin/order"
+import { ElButton, ElCard, ElMessage, ElMessageBox } from "element-plus"
 import { Edit, Delete } from "@element-plus/icons-vue";
 import {DialogAdminOrder} from "@/components/admin/index.js";
 
@@ -32,7 +32,40 @@ const handleEditOrder = (row) =>{
     dialogAdminOrderRef.value.open(row)
 }
 
-const handleDeleteOrder = () =>{}
+const handleDeleteOrder = async(row) =>{
+    await ElMessageBox.confirm("請確認是否刪除訂單", "Warning", {
+        confirmButtonText: "確認",
+        cancelButtonText: "取消",
+        type: "warning",
+        beforeClose: async (action, instance, done) => {
+            if (action === "confirm") {
+                instance.confirmButtonLoading = true;
+                try {
+                    const res = await reqDeleteOrder(row.id)
+
+                    if (res.success) {
+                        ElMessage({
+                            type: "success",
+                            message: res.message,
+                        });
+                        done()
+                        await getAllOrders(currentPage.value);
+                    } else {
+                        ElMessage({
+                            type: "error",
+                            message: res.message
+                        });
+                        instance.confirmButtonLoading = false;
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                done();
+            }
+        },
+    });
+}
 
 watch(currentPage, () => {
     getAllOrders(currentPage.value);
@@ -64,11 +97,11 @@ onMounted(() => {
             <ElTableColumn label="購買金額" prop="total"></ElTableColumn>
             <ElTableColumn label="付款完成" prop="is_paid" align="center">
                 <template #default="{ row }">
-                    <ElIcon v-if="row.is_enabled" class="check-icon">
-                    <font-awesome-icon :icon="['fas', 'check']" />
+                    <ElIcon v-if="row.is_paid" class="check-icon">
+                        <font-awesome-icon :icon="['fas', 'check']" />
                     </ElIcon>
                     <ElIcon v-else class="x-icon">
-                    <font-awesome-icon :icon="['fas', 'xmark']" />
+                        <font-awesome-icon :icon="['fas', 'xmark']" />
                     </ElIcon>
                 </template>
             </ElTableColumn>
@@ -99,7 +132,7 @@ onMounted(() => {
             />
         </div>
     </ElCard>
-    <DialogAdminOrder ref="dialogAdminOrderRef" />
+    <DialogAdminOrder ref="dialogAdminOrderRef" @order-update="getAllOrders(1)"/>
 </template>
 
 <style scoped lang="scss">
