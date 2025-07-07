@@ -3,7 +3,8 @@ import {
     Discount,
     Document,
     Monitor,
-    Histogram
+    Histogram,
+    Reading
 } from "@element-plus/icons-vue";
 import { markRaw } from "vue"
 
@@ -66,6 +67,16 @@ export const constantRouter = [
                     title: "折價券列表",
                     hidden: false,
                     icon: markRaw(Discount),
+                },
+            },
+            {
+                path: "/admin/articles",
+                component: () => import("@/views/admin/Articles.vue"),
+                name: "AdminArticles",
+                meta: {
+                    title: "文章列表",
+                    hidden: false,
+                    icon: markRaw(Reading),
                 },
             },
             {
