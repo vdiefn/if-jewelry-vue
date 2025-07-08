@@ -128,68 +128,69 @@ onMounted(() => {
 <template>
     <ElCard class="card">
         <div class="top-area">
-        <ElSelect
-            v-model="selectCategory"
-            filterable
-            placeholder="請選擇查詢類別"
-            @change="getAllProducts(1, selectCategory)"
-        >
-            <ElOption
-            v-for="(item, index) in categoryList"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
-            />
-        </ElSelect>
-        <ElButton type="primary" class="btn-add-product" @click="addNewProduct">
-            新增產品
-        </ElButton>
+            <ElSelect
+                v-model="selectCategory"
+                filterable
+                placeholder="請選擇查詢類別"
+                @change="getAllProducts(1, selectCategory)"
+            >
+                <ElOption
+                    v-for="(item, index) in categoryList"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                />
+            </ElSelect>
+            <ElButton type="primary" class="btn-add-product" @click="addNewProduct">
+                新增產品
+            </ElButton>
         </div>
         <div class="content-area">
-        <ElTable
-            :stripe="true"
-            :data="data"
-            v-loading="loading"
-            style="height: 100%"
-        >
-            <ElTableColumn label="名稱" prop="title"></ElTableColumn>
-            <ElTableColumn label="分類" prop="category"></ElTableColumn>
-            <ElTableColumn label="原價" prop="origin_price" align="center"></ElTableColumn>
-            <ElTableColumn label="特價" prop="price" align="center"></ElTableColumn>
-            <ElTableColumn label="啟用" prop="is_enabled" align="center">
-            <template #default="{ row }">
-                <ElIcon v-if="row.is_enabled" class="check-icon">
-                <font-awesome-icon :icon="['fas', 'check']" />
-                </ElIcon>
-                <ElIcon v-else class="x-icon">
-                <font-awesome-icon :icon="['fas', 'xmark']" />
-                </ElIcon>
-            </template>
-            </ElTableColumn>
-            <ElTableColumn>
-            <template #default="{ row }">
-                <ElButton
-                :icon="Edit"
-                size="small"
-                @click="editProduct(row)"
-                ></ElButton>
-                <ElButton
-                :icon="Delete"
-                type="danger"
-                size="small"
-                @click="deleteProduct(row)"
-                ></ElButton>
-            </template>
-            </ElTableColumn>
-        </ElTable>
+            <ElTable
+                :stripe="true"
+                :data="data"
+                v-loading="loading"
+                style="height: 100%"
+                table-layout="auto"
+            >
+                <ElTableColumn label="名稱" prop="title" />
+                <ElTableColumn label="分類" prop="category" />
+                <ElTableColumn label="原價" prop="origin_price" align="center" />
+                <ElTableColumn label="特價" prop="price" align="center" />
+                <ElTableColumn label="啟用" prop="is_enabled" align="center">
+                    <template #default="{ row }">
+                        <ElIcon v-if="row.is_enabled" class="check-icon">
+                            <font-awesome-icon :icon="['fas', 'check']" />
+                        </ElIcon>
+                        <ElIcon v-else class="x-icon">
+                            <font-awesome-icon :icon="['fas', 'xmark']" />
+                        </ElIcon>
+                    </template>
+                </ElTableColumn>
+                <ElTableColumn width="1">
+                    <template #default="{ row }">
+                        <ElButton
+                            :icon="Edit"
+                            size="small"
+                            @click="editProduct(row)"
+                        />
+                        <ElButton
+                            :icon="Delete"
+                            type="danger"
+                            size="small"
+                            @click="deleteProduct(row)"
+                        />
+                    </template>
+                </ElTableColumn>
+            </ElTable>
         </div>
         <div class="bottom-area">
-        <ElPagination
-            class="pagination"
-            v-model:current-page="currentPage"
-            layout="prev, pager, next, jumper"
-            :page-count="totalPages"
-        />
+            <ElPagination
+                class="pagination"
+                v-model:current-page="currentPage"
+                layout="prev, pager, next, jumper"
+                :page-count="totalPages"
+            />
         </div>
     </ElCard>
     <DialogAdminProduct
@@ -220,13 +221,17 @@ onMounted(() => {
   }
 
   .content-area {
-    .check-icon {
-      color: green;
-    }
+      :deep(.cell) {
+          white-space: nowrap;
+      }
 
-    .x-icon {
-      color: red;
-    }
+      .check-icon {
+        color: green;
+      }
+
+      .x-icon {
+        color: red;
+      }
   }
 
   .bottom-area {

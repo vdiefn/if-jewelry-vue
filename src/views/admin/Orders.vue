@@ -87,14 +87,15 @@ onMounted(() => {
             v-loading="loading"
             style="height: 100%"
             :data="data"
+            table-layout="auto"
         >
             <ElTableColumn label="建立日期" prop="create_at">
                 <template #default="{row}">
-                    {{ new Date(row.create_at * 1000).toISOString().slice(0, 10) }}
+                    {{ new Date(row.create_at * 1000).toLocaleDateString().slice(0, 10) }}
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="購買人" prop="user.name"></ElTableColumn>
-            <ElTableColumn label="購買金額" prop="total"></ElTableColumn>
+            <ElTableColumn label="購買人" prop="user.name" />
+            <ElTableColumn label="購買金額" prop="total" />
             <ElTableColumn label="付款完成" prop="is_paid" align="center">
                 <template #default="{ row }">
                     <ElIcon v-if="row.is_paid" class="check-icon">
@@ -105,8 +106,8 @@ onMounted(() => {
                     </ElIcon>
                 </template>
             </ElTableColumn>
-            <ElTableColumn label="留言訊息" prop="message"></ElTableColumn>
-            <ElTableColumn>
+            <ElTableColumn label="留言訊息" prop="message" />
+            <ElTableColumn width="1">
                 <template #default="{ row }">
                     <ElButton
                         :icon="Edit"
@@ -155,13 +156,17 @@ onMounted(() => {
   }
 
   .content-area {
-    .check-icon {
-      color: green;
-    }
+      :deep(.cell) {
+          white-space: nowrap;
+      }
 
-    .x-icon {
-      color: red;
-    }
+      .check-icon {
+          color: green;
+      }
+
+      .x-icon {
+          color: red;
+      }
   }
 
   .bottom-area {

@@ -86,53 +86,54 @@ onMounted(() => {
             </ElButton>
         </div>
         <div class="content-area">
-        <ElTable
-            :stripe="true"
-            v-loading="loading"
-            style="height: 100%"
-            :data="data"
-        >
-            <ElTableColumn label="名稱" prop="title"></ElTableColumn>
-            <ElTableColumn label="折扣(%)" prop="percent" align="center"></ElTableColumn>
-            <ElTableColumn label="到期日" prop="due_date">
-                <template #default="{row}">
-                    {{ new Date(row.due_date * 1000).toISOString().slice(0, 10) }}
-                </template>
-            </ElTableColumn>
-            <ElTableColumn label="啟用狀態" prop="is_enabled" align="center">
-                <template #default="{ row }">
-                    <ElIcon v-if="row.is_enabled" class="check-icon">
-                    <font-awesome-icon :icon="['fas', 'check']" />
-                    </ElIcon>
-                    <ElIcon v-else class="x-icon">
-                    <font-awesome-icon :icon="['fas', 'xmark']" />
-                    </ElIcon>
-                </template>
-            </ElTableColumn>
-            <ElTableColumn>
-                <template #default="{ row }">
-                    <ElButton
-                        :icon="Edit"
-                        size="small"
-                        @click="editCoupon(row)"
-                    />
-                    <ElButton
-                        :icon="Delete"
-                        type="danger"
-                        size="small"
-                        @click="deleteCoupon(row)"
-                    />
-                </template>
-            </ElTableColumn>
-        </ElTable>
+            <ElTable
+                :stripe="true"
+                v-loading="loading"
+                style="height: 100%"
+                :data="data"
+                table-layout="auto"
+            >
+                <ElTableColumn label="名稱" prop="title" />
+                <ElTableColumn label="折扣(%)" prop="percent" align="center" />
+                <ElTableColumn label="到期日" prop="due_date">
+                    <template #default="{row}">
+                        {{ new Date(row.due_date * 1000).toLocaleDateString().slice(0, 10) }}
+                    </template>
+                </ElTableColumn>
+                <ElTableColumn label="啟用狀態" prop="is_enabled" align="center">
+                    <template #default="{ row }">
+                        <ElIcon v-if="row.is_enabled" class="check-icon">
+                            <font-awesome-icon :icon="['fas', 'check']" />
+                        </ElIcon>
+                        <ElIcon v-else class="x-icon">
+                            <font-awesome-icon :icon="['fas', 'xmark']" />
+                        </ElIcon>
+                    </template>
+                </ElTableColumn>
+                <ElTableColumn width="1">
+                    <template #default="{ row }">
+                        <ElButton
+                            :icon="Edit"
+                            size="small"
+                            @click="editCoupon(row)"
+                        />
+                        <ElButton
+                            :icon="Delete"
+                            type="danger"
+                            size="small"
+                            @click="deleteCoupon(row)"
+                        />
+                    </template>
+                </ElTableColumn>
+            </ElTable>
         </div>
         <div class="bottom-area">
-        <ElPagination
-            class="pagination"
-            v-model:current-page="currentPage"
-            layout="prev, pager, next, jumper"
-            :page-count="totalPages"
-        />
+            <ElPagination
+                class="pagination"
+                v-model:current-page="currentPage"
+                layout="prev, pager, next, jumper"
+                :page-count="totalPages"
+            />
         </div>
     </ElCard>
     <DialogAdminCoupon ref="dialogAdminCouponRef" @coupon-added="getAllCoupons"/>
@@ -159,13 +160,17 @@ onMounted(() => {
   }
 
   .content-area {
-    .check-icon {
-      color: green;
-    }
+      :deep(.cell) {
+          white-space: nowrap;
+      }
 
-    .x-icon {
-      color: red;
-    }
+      .check-icon {
+          color: green;
+      }
+
+      .x-icon {
+        color: red;
+      }
   }
 
   .bottom-area {
