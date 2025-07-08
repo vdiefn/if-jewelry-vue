@@ -2,6 +2,7 @@
 import { ref,reactive, nextTick } from 'vue';
 import {ElDialog, ElButton, ElForm, ElFormItem, ElInput, ElRow, ElCol, ElTag, ElMessage, ElDatePicker} from "element-plus"
 import { reqAddArticle, reqEditArticle } from "@/api/admin/article.js";
+import { uploadImage } from "@/api/admin/upload.js";
 
 const dialogVisible = ref(false)
 const inputValue = ref('')
@@ -10,6 +11,7 @@ const inputVisible = ref(false)
 const InputRef = ref()
 const isEdit = ref(false)
 const emit = defineEmits("article-update")
+const upload = ref()
 const form = reactive({
     id:"",
     author:"",
@@ -55,6 +57,24 @@ const handleInputConfirm = () => {
     inputVisible.value = false
     inputValue.value = ''
 }
+
+const handleRemove = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles)
+}
+
+const customUploadRequest = async ({ file, onError, onSuccess }) => {
+    try {
+        const res = await uploadImage(file);
+        form.image = res.imageUrl
+        onSuccess();
+    } catch (err) {
+        ElMessage.error({
+            type: "error",
+            message: "圖片上傳失敗",
+        });
+        onError(err);
+    }
+};
 
 const confirm = async() => {
     loading.value = true
@@ -122,16 +142,6 @@ defineExpose({ open })
                     </ElFormItem>
                 </ElCol>
                 <ElCol :span=24>
-                    <ElFormItem label="描述">
-                        <ElInput v-model="form.description" type="textarea"/>
-                    </ElFormItem>
-                </ElCol>
-                <ElCol :span=24>
-                <ElFormItem label="內容">
-                    <ElInput v-model="form.content" type="textarea"/>
-                </ElFormItem>
-                </ElCol>
-                <ElCol :span=16>
                     <ElFormItem label="標籤">
                         <ElTag
                             v-for="tag in form.tag"
@@ -158,6 +168,37 @@ defineExpose({ open })
                         </ElButton>
                     </ElFormItem>
                 </ElCol>
+                <ElCol :span=24>
+                    <ElFormItem label="描述">
+                        <ElInput v-model="form.description" type="textarea"/>
+                    </ElFormItem>
+                </ElCol>
+                <ElCol :span=24>
+                    <ElFormItem label="內容">
+                        <ElInput v-model="form.content" type="textarea"/>
+                    </ElFormItem>
+                </ElCol>
+                <ElCol :span="24">
+                    <ElFormItem label="圖片">
+                        <ElUpload
+                            v-model="form.image"
+                            class="upload-demo"
+                            :on-remove="handleRemove"
+                            :http-request="customUploadRequest"
+                            list-type="picture"
+                            :limit="1"
+                            ref="upload"
+                        >
+                            <img v-if="form.image.length > 0" :src="form.image" class="article-image" alt="article-image"/>
+                            <ElButton v-else type="plain">選擇照片</ElButton>
+                        </ElUpload>
+                    </ElFormItem>
+                </ElCol>
+                <ElCol :span="24">
+                    <ElFormItem label="是否公開">
+                        <ElSwitch v-model="form.isPublic"/>
+                    </ElFormItem>
+                </ElCol>
             </ElRow>
         </ElForm>
         <template #footer>
@@ -172,4 +213,9 @@ defineExpose({ open })
 </template>
 
 <style scoped>
+.article-image {
+    border: 1px solid lightgray;
+    width: 100px;
+    height: 100px;
+}
 </style>

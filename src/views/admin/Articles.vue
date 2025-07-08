@@ -31,7 +31,7 @@ const getAllArticles = async() => {
 }
 
 const addNewArticle = async() => {
-    dialogAdminArticleRef.value.open(row)
+    dialogAdminArticleRef.value.open()
 }
 
 const editArticle = async(row) => {

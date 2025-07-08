@@ -16,11 +16,8 @@ import {
 } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { ref, reactive } from "vue";
-import {
-    reqAddNewProduct,
-    uploadImage,
-    reqEditProduct,
-} from "@/api/admin/product";
+import { reqAddNewProduct, reqEditProduct} from "@/api/admin/product";
+import { uploadImage } from "@/api/admin/upload.js";
 
 const props = defineProps({
     categoryList: {

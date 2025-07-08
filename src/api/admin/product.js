@@ -12,13 +12,6 @@ export const reqEditProduct = (data) => {
     return api.put(`/admin/product/${data.id}`, data)
 }
 
-export const uploadImage = (file) => {
-    const formData = new FormData();
-    formData.append('file-to-upload', file);
-
-    return api.post(`/admin/upload`, formData);
-};
-
 export const reqDeleteProduct = (id) => {
     return api.delete(`/admin/product/${id}`)
 }
