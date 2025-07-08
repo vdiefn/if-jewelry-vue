@@ -8,10 +8,13 @@ const request = axios.create({
 
 request.interceptors.request.use((config) => {
     const userStore = useUserStore()
-    if(userStore.token){
-        config.headers.Authorization = userStore.token
+    const token = userStore.token
+    if(token){
+        config.headers.Authorization = token
     }
     return config
+},(error) =>{
+    return Promise.reject(error);
 })
 
 request.interceptors.response.use(
