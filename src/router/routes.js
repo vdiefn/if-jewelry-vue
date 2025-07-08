@@ -193,6 +193,15 @@ export const constantRouter = [
                 }
             },
             {
+                path:"jewelryStory/:id",
+                component: () => import("@/views/front/storyDetail.vue"),
+                name: "storyDetail",
+                meta: {
+                    title: "珠寶文章",
+                    hidden: true
+                }
+            },
+            {
                 path: "/404",
                 component: () => import("@/views/front/404.vue"),
                 name: "404",
