@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, useTemplateRef } from "vue";
-import { reqArticles } from "@/api/admin/article"
-import {ElButton, ElCard} from "element-plus"
+import { reqArticles, reqDeleteArticle, reqArticle } from "@/api/admin/article"
+import { ElButton, ElCard, ElMessage, ElMessageBox } from "element-plus"
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { DialogAdminArticle } from "@/components/admin";
 
@@ -12,7 +12,7 @@ const currentPage = ref(1)
 const totalPages = ref(1)
 const dialogAdminArticleRef = useTemplateRef("dialogAdminArticleRef")
 
-const getArticles = async() => {
+const getAllArticles = async() => {
     loading.value = true
 
     try {
@@ -31,19 +31,62 @@ const getArticles = async() => {
 }
 
 const addNewArticle = async() => {
-    dialogAdminArticleRef.value.open()
+    dialogAdminArticleRef.value.open(row)
 }
 
-const editArticle = async() => {
-    loading.value = true
+const editArticle = async(row) => {
+    try {
+        const res = await reqArticle(row.id)
+        if(res.success){
+            dialogAdminArticleRef.value.open(res.article)
+        } else {
+            ElMessage({
+                type: "error",
+                message: res.message
+            })
+        }
+    } catch(error){
+        console.error(error)
+    }
 }
 
-const deleteArticle = async() => {
-    loading.value = true
+const deleteArticle = async(row) => {
+    await ElMessageBox.confirm(`請確認是否刪除文章：${row.title}`, "Warning", {
+        confirmButtonText: "確認",
+        cancelButtonText: "取消",
+        type: "warning",
+        beforeClose: async (action, instance, done) => {
+            if (action === "confirm") {
+                instance.confirmButtonLoading = true;
+                try {
+                    const res = await reqDeleteArticle(row.id)
+
+                    if (res.success) {
+                        ElMessage({
+                            type: "success",
+                            message: res.message,
+                        });
+                        done()
+                        await getAllArticles();
+                    } else {
+                        ElMessage({
+                            type: "error",
+                            message: res.message
+                        });
+                        instance.confirmButtonLoading = false;
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                done();
+            }
+        },
+    });
 }
 
 onMounted(() => {
-    getArticles()
+    getAllArticles()
 })
 </script>
 
@@ -61,20 +104,21 @@ onMounted(() => {
                 v-loading="loading"
                 style="height: 100%"
                 :data="data"
+                table-layout="auto"
             >
                 <ElTableColumn label="建立日期" prop="create_at">
                     <template #default="{row}">
-                        {{ new Date(row.due_date * 1000).toISOString().slice(0, 10) }}
+                        {{ new Date(row.create_at * 1000).toLocaleDateString().slice(0, 10) }}
                     </template>
                 </ElTableColumn>
-                <ElTableColumn label="作者" prop="author"></ElTableColumn>
-                <ElTableColumn label="文章名稱" prop="title"></ElTableColumn>
+                <ElTableColumn label="作者" prop="author" />
+                <ElTableColumn label="文章名稱" prop="title" />
                 <ElTableColumn label="標籤" prop="tag">
                     <template #default="{row}">
-                        <ElTag v-for="(item ,index) in row.tag" :key="index" effect="light">{{item}}</ElTag>
+                        <ElTag v-for="(item ,index) in row.tag" :key="index" effect="plain">{{item}}</ElTag>
                     </template>
                 </ElTableColumn>
-                <ElTableColumn>
+                <ElTableColumn width="1">
                     <template #default="{ row }">
                         <ElButton
                             :icon="Edit"
@@ -100,7 +144,7 @@ onMounted(() => {
             />
         </div>
     </ElCard>
-    <DialogAdminArticle ref="dialogAdminArticleRef" />
+    <DialogAdminArticle ref="dialogAdminArticleRef" @article-update="getAllArticles"/>
 </template>
 
 <style scoped lang="scss">
@@ -124,6 +168,10 @@ onMounted(() => {
     }
 
     .content-area {
+        :deep(.cell) {
+            white-space: nowrap;
+        }
+
         .check-icon {
             color: green;
         }
@@ -139,4 +187,6 @@ onMounted(() => {
         margin-top: 3rem;
     }
 }
+
+
 </style>

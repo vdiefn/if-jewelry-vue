@@ -12,8 +12,8 @@ export const reqAddArticle = (payload) => {
     return api.post("/admin/article", payload)
 }
 
-export const reqEditArticle = (payload) => {
-    return api.put(`/admin/article/${payload.id}`, payload)
+export const reqEditArticle = (id, payload) => {
+    return api.put(`/admin/article/${id}`, payload)
 }
 
 export const reqDeleteArticle = (id) => {
