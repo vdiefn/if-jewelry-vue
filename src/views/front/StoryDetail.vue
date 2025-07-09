@@ -1,12 +1,11 @@
 <script setup>
 import { DefaultContainer } from "@/components/front/index.js";
 import { useRoute } from "vue-router"
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { reqArticle } from "@/api/front/article.js"
 import { ElBreadcrumb, ElBreadcrumbItem, ElBacktop } from "element-plus";
 
 const route = useRoute()
-const currentId = ref()
 const data = ref()
 const loading = ref(false)
 
@@ -23,6 +22,10 @@ const getArticle = async() => {
         loading.value = false
     }
 }
+
+watch(()=>route.params.id, (value) => {
+    getArticle()
+})
 
 onMounted(() => {
     getArticle()
@@ -42,7 +45,7 @@ onMounted(() => {
             <img :src="data?.image" alt="story picture" />
         </div>
         <div class="text-wrapper">
-            <h5>{{data?.title}}</h5>
+            <h4>{{data?.title}}</h4>
             <h6>{{data?.description}}</h6>
             <p>{{data?.content}}</p>
         </div>
