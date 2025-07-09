@@ -200,8 +200,7 @@ defineExpose({ open })
                             :limit="1"
                             ref="upload"
                         >
-                            <img v-if="form.image.length > 0" :src="form.image" class="article-image"       alt="article-image"/>
-                            <ElButton v-else type="plain">選擇照片</ElButton>
+                            <ElButton type="plain">選擇照片</ElButton>
                         </ElUpload>
                     </ElFormItem>
                 </ElCol>
