@@ -43,31 +43,31 @@ const deleteCoupon = async(row) => {
     beforeClose: async (action, instance, done) => {
         if (action === "confirm") {
             instance.confirmButtonLoading = true;
-             try {
-                 const res = await reqDeleteCoupon(row.id)
+                try {
+                    const res = await reqDeleteCoupon(row.id)
 
-             if (res.success) {
-                 ElMessage({
-                   type: "success",
-                   message: res.message,
-                 });
-                 done()
-                   await getAllCoupons();
-             } else {
-                 ElMessage({
-                   type: "error",
-                   message: res.message
-                 });
-                 instance.confirmButtonLoading = false;
-             }
-           } catch (error) {
-               console.error(error);
-           }
+                if (res.success) {
+                    ElMessage({
+                    type: "success",
+                    message: res.message,
+                    });
+                    done()
+                    await getAllCoupons();
+                } else {
+                    ElMessage({
+                    type: "error",
+                    message: res.message
+                    });
+                    instance.confirmButtonLoading = false;
+                }
+            } catch (error) {
+                console.error(error);
+            }
         } else {
             done();
         }
-   },
-  });
+    },
+    });
 }
 
 
@@ -141,42 +141,42 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .card {
-  height: 100%;
+    height: 100%;
 
-  .top-area {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+    .top-area {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
 
-    :deep(.el-input),
-    :deep(.el-select) {
-      width: 200px;
+        :deep(.el-input),
+        :deep(.el-select) {
+        width: 200px;
+        }
+
+        .top-left {
+        display: flex;
+        gap: 5px;
+        }
     }
 
-    .top-left {
-      display: flex;
-      gap: 5px;
+    .content-area {
+        :deep(.cell) {
+            white-space: nowrap;
+        }
+
+        .check-icon {
+            color: green;
+        }
+
+        .x-icon {
+            color: red;
+        }
     }
-  }
 
-  .content-area {
-      :deep(.cell) {
-          white-space: nowrap;
-      }
-
-      .check-icon {
-          color: green;
-      }
-
-      .x-icon {
-        color: red;
-      }
-  }
-
-  .bottom-area {
-    display: flex;
-    justify-content: center;
-    margin-top: 3rem;
-  }
+    .bottom-area {
+        display: flex;
+        justify-content: center;
+        margin-top: 3rem;
+    }
 }
 </style>
