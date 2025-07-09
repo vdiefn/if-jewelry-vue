@@ -50,7 +50,6 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <ElBacktop :right="100" :bottom="100" />
     </DefaultContainer>
 </template>
 
@@ -97,6 +96,11 @@ onMounted(() => {
 
         .story-wrapper {
             display: flex;
+
+            .img-wrapper {
+                width: 450px;
+                aspect-ratio: 1/1;
+            }
         }
     }
 }
