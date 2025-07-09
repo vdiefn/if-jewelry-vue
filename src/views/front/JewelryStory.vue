@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { DefaultContainer } from "@/components/front/index.js";
 import { reqAllArticles } from "@/api/front/article.js"
 import { useRouter } from "vue-router";
+import { ElBacktop } from "element-plus";
 
 const data = ref()
 const router = useRouter();
@@ -49,7 +50,7 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-
+        <ElBacktop :right="100" :bottom="100" />
     </DefaultContainer>
 </template>
 
@@ -58,6 +59,10 @@ onMounted(() => {
     margin: 0 auto;
     width: 100%;
     padding: 10px;
+
+    h3 {
+        margin-top: 10px;
+    }
 
     .story-wrapper {
         margin-top: 1rem;
