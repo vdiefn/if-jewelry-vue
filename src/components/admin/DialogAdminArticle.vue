@@ -27,6 +27,17 @@ const form = reactive({
 const open = (row) => {
     dialogVisible.value = true
     loading.value = true
+    Object.assign(form, {
+        id:"",
+        author:"",
+        title:"",
+        description:"",
+        content:"",
+        image:"",
+        tag:[],
+        create_at:"",
+        isPublic: false
+    })
     if(row){
         isEdit.value = true
         Object.assign(form, row)
@@ -189,7 +200,7 @@ defineExpose({ open })
                             :limit="1"
                             ref="upload"
                         >
-                            <img v-if="form.image.length > 0" :src="form.image" class="article-image" alt="article-image"/>
+                            <img v-if="form.image.length > 0" :src="form.image" class="article-image"       alt="article-image"/>
                             <ElButton v-else type="plain">選擇照片</ElButton>
                         </ElUpload>
                     </ElFormItem>

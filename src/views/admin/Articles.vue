@@ -115,7 +115,19 @@ onMounted(() => {
                 <ElTableColumn label="文章名稱" prop="title" />
                 <ElTableColumn label="標籤" prop="tag">
                     <template #default="{row}">
-                        <ElTag v-for="(item ,index) in row.tag" :key="index" effect="plain">{{item}}</ElTag>
+                        <ElTag v-for="(item ,index) in row.tag" :key="index" effect="plain" class="tag">
+                            {{item}}
+                        </ElTag>
+                    </template>
+                </ElTableColumn>
+                <ElTableColumn label="是否公開" prop="isPublic" align="center">
+                    <template #default="{ row }">
+                        <ElIcon v-if="row.isPublic" class="check-icon">
+                            <font-awesome-icon :icon="['fas', 'check']" />
+                        </ElIcon>
+                        <ElIcon v-else class="x-icon">
+                            <font-awesome-icon :icon="['fas', 'xmark']" />
+                        </ElIcon>
                     </template>
                 </ElTableColumn>
                 <ElTableColumn width="1">
@@ -170,6 +182,10 @@ onMounted(() => {
     .content-area {
         :deep(.cell) {
             white-space: nowrap;
+        }
+
+        .tag {
+            margin-right: 5px;
         }
 
         .check-icon {
