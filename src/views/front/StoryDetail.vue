@@ -65,13 +65,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1rem;
+    margin: 1rem auto;
 
     .text-wrapper {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+        margin: 1rem;
         padding: 1rem;
     }
 }
@@ -82,14 +83,12 @@ onMounted(() => {
     }
 
     .el-breadcrumb {
-        width: 850px;
+        width: 100%;
     }
 
     .story-wrapper {
         width: 650px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        margin: 0 auto;
 
         .img-wrapper {
             padding: 1rem;
