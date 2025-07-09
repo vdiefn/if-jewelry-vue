@@ -6,18 +6,21 @@ import { useRouter } from "vue-router";
 
 const data = ref()
 const router = useRouter();
+const loading = ref(false);
 
 const getAllArticles = async() => {
+    loading.value = true;
     try {
         const res = await reqAllArticles();
         if(res.success) {
             data.value = res.articles
-            console.log(data.value)
         } else {
 
         }
     } catch(error) {
         console.error(error);
+    } finally {
+        loading.value = false;
     }
 }
 
@@ -35,7 +38,7 @@ onMounted(() => {
         <div class="outer-container">
             <h3>寶石小教室</h3>
 
-            <div class="story-wrapper" v-for="item in data" :key="item.id">
+            <div class="story-wrapper" v-for="item in data" :key="item.id" v-loading="loading">
                 <div class="img-wrapper">
                     <img :src="item.image" alt="story picture" />
                 </div>
@@ -56,19 +59,23 @@ onMounted(() => {
     width: 100%;
     padding: 10px;
 
-    .text-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-        padding: 10px;
+    .story-wrapper {
+        margin-top: 1rem;
 
-        .read-more {
-            align-self: flex-end;
-            color: $base-primary-color;
-            cursor: pointer;
-            font-size: 12px;
-            transition: color 0.2s;
+        .text-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            padding: 10px;
+
+            .read-more {
+                align-self: flex-end;
+                color: $base-primary-color;
+                cursor: pointer;
+                font-size: 12px;
+                transition: color 0.2s;
+            }
         }
     }
 }
@@ -81,8 +88,11 @@ onMounted(() => {
 
 @media(min-width: $breakpoint-desktop){
     .outer-container {
-        border: 1px solid blue;
         width: 900px;
+
+        .story-wrapper {
+            display: flex;
+        }
     }
 }
 </style>
