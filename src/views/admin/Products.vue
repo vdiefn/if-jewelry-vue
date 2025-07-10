@@ -85,6 +85,7 @@ const deleteProduct = async (row) => {
                         type: "success",
                         message: result.message,
                     });
+                    done();
                     const response = await getAllProducts(
                         currentPage.value,
                         selectCategory.value
@@ -97,7 +98,8 @@ const deleteProduct = async (row) => {
                             currentPage.value -= 1;
                         }
                     }
-                    done();
+
+
                     await getAllProducts(currentPage.value, selectCategory.value);
 
                 }  else {
@@ -108,6 +110,9 @@ const deleteProduct = async (row) => {
                     }
             } catch (error) {
                 console.error(error);
+
+            } finally {
+                loading.value = false
             }
         } else {
             done();
