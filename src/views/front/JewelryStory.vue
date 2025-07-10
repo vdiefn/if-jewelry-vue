@@ -101,7 +101,7 @@ onMounted(() => {
             .tag-wrapper{
                 align-self: flex-end;
                 display: flex;
-                gap: 5px;
+                gap: 3px;
             }
         }
 
