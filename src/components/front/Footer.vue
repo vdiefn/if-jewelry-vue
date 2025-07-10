@@ -7,13 +7,13 @@ import { ref } from 'vue';
     <div class="container">
         <div class="about-us footer-item">
             <h4>About Us</h4>
-            <p><RouterLink :to="{name: 'About'}">品牌故事</RouterLink></p>
-            <p><RouterLink :to="{name: 'JewelryStory'}">寶石小教室</RouterLink></p>
+            <RouterLink :to="{name: 'About'}"><p>品牌故事</p></RouterLink>
+            <RouterLink :to="{name: 'JewelryStory'}"><p>寶石小教室</p></RouterLink>
         </div>
         <div class="service footer-item">
             <h4>Service</h4>
-            <p><RouterLink :to="{name: 'Faq'}">常見問題</RouterLink></p>
-            <p><RouterLink :to="{name: 'ShippingAndPayment'}">運送及付款方式</RouterLink></p>
+            <RouterLink :to="{name: 'Faq'}"><p>常見問題</p></RouterLink>
+            <RouterLink :to="{name: 'ShippingAndPayment'}"><p>運送及付款方式</p></RouterLink>
         </div>
         <div class="contact-us footer-item">
             <h4>Contact Us</h4>
