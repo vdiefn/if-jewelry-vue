@@ -20,7 +20,7 @@ export const shippingAndPayment = [
         answer: 'A：目前無法指定確切到貨時間，商品會於 1–3 個工作天內寄出。',
     },
     {
-        question: 'Q6：若以上問題沒有辦法解決我的問題怎麼辦？',
+        question: 'Q6：若以上無法解決我的問題怎麼辦？',
         answer: 'A：若以上未解決您的問題，歡迎透過客服信箱或客服電話與我們聯絡:)'
     }
 ]
