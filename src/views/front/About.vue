@@ -17,7 +17,6 @@ import { DefaultContainer } from "@/components/front/index.js"
                 </div>
             </section>
             <section class="second">
-
                 <div class="image-wrapper">
                     <img src='https://images.unsplash.com/photo-1532039956299-1614b86a6d2f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt="picture"/>
                 </div>
@@ -41,9 +40,21 @@ import { DefaultContainer } from "@/components/front/index.js"
     .image-wrapper, .text-wrapper {
         padding: 0.5rem;
     }
+
+    .text-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap:10px;
+    }
 }
 
 @media(min-width: $breakpoint-tablet){
+    .wrapper {
+        margin: 0 50px;
+    }
+}
+
+@media(min-width: $breakpoint-desktop) {
     .wrapper {
         margin: 0 150px;
 
@@ -59,15 +70,9 @@ import { DefaultContainer } from "@/components/front/index.js"
         .image-wrapper {
             width: 100%;
             max-width: 500px;
-            min-width: 250px;
+            min-width: 350px;
             margin: 0 auto;
         }
-    }
-}
-
-@media(min-width: $breakpoint-desktop) {
-    .wrapper {
-        margin: 0 250px;
     }
 }
 </style>
