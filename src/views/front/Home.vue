@@ -122,7 +122,7 @@ onMounted(() => {
         margin: 0 100px;
         .card-wrapper {
             display: grid;
-            grid-template-columns: repeat(3, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
     }
 
@@ -137,7 +137,7 @@ onMounted(() => {
         margin: 0 200px;
         .card-wrapper {
             display: grid;
-            grid-template-columns: repeat(4, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
     }
 }
