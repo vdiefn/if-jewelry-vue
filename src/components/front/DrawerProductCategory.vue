@@ -17,12 +17,12 @@ defineExpose({ open })
 
 <template>
     <ElDrawer v-model="drawer" size="60%">
-        <span>Hi there!</span>
-        <p>品牌故事</p>
+        <h5>Contact Us</h5>
+        <RouterLink :to="{name: 'About'}"><p>品牌故事</p></RouterLink>
         <RouterLink class="products nav-link" to="/products" @click="close">
             <p>所有商品</p>
         </RouterLink>
-        <p>寶石小教室</p>
+        <RouterLink :to="{name: 'JewelryStory'}"><p>寶石小教室</p></RouterLink>
         <ElDivider />
         <h5>分類</h5>
         <RouterLink class="products nav-link" to="/products" @click="close">
@@ -34,13 +34,21 @@ defineExpose({ open })
         <RouterLink class="products nav-link" :to="{path: '/products', query: {category: '手鐲'}}" @click="close"><h6>手鐲</h6></RouterLink>
         <ElDivider />
         <h5>其他</h5>
-        <p>常見問題</p>
+        <RouterLink :to="{name: 'Faq'}"><p>常見問題</p></RouterLink>
+        <RouterLink :to="{name: 'ShippingAndPayment'}"><p>運送及付款方式</p></RouterLink>
+        <ElDivider />
+        <h5>聯絡我們</h5>
+        <p>If Jewelry 如果工作室</p>
         <p>服務時間：週一~週五 09:00~18:30</p>
-        <p>聯絡我們：Email</p>
+        <p>客服信箱: support@if-jewelry.com</p>
+        <p>客服電話: 02-8765-4321</p>
     </ElDrawer>
 
 </template>
 
 <style scoped lang="scss">
-
+h5 {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
 </style>
