@@ -39,9 +39,8 @@ defineExpose({ open })
         <ElDivider />
         <h5>聯絡我們</h5>
         <p>If Jewelry 如果工作室</p>
-        <p>服務時間：週一~週五 09:00~18:30</p>
-        <p>客服信箱: support@if-jewelry.com</p>
-        <p>客服電話: 02-8765-4321</p>
+        <p><font-awesome-icon :icon="['far', 'envelope']" /> : support@if-jewelry.com</p>
+        <p><font-awesome-icon :icon="['fas', 'phone']" /> : 02-8765-4321</p>
     </ElDrawer>
 
 </template>
