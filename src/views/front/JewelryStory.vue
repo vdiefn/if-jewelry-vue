@@ -3,11 +3,16 @@ import { ref, onMounted } from 'vue';
 import { DefaultContainer } from "@/components/front/index.js";
 import { reqAllArticles } from "@/api/front/article.js"
 import { useRouter } from "vue-router";
-import { ElCard } from "element-plus";
+import {ElCard, ElTag} from "element-plus";
 
 const data = ref()
 const router = useRouter();
 const loading = ref(false);
+
+const getType = (index) => {
+    const type = ["primary", "success", "info", "warning", "danger"]
+    return type[index%5]
+}
 
 const getAllArticles = async() => {
     loading.value = true;
@@ -40,7 +45,14 @@ onMounted(() => {
             <h3>寶石小教室</h3>
             <ElCard v-for="item in data" :key="item.id" v-loading="loading" shadow="hover">
                 <div class="story-wrapper">
-                    <h5>{{ item.title }}</h5>
+                    <div class="title-wrapper">
+                        <h5>{{ item.title }}</h5>
+                        <div class="tag-wrapper">
+                            <ElTag v-for="(i, index) in item.tag" :key="index" effect="plain" round size="small" :type="getType(index)">
+                                {{ i }}
+                            </ElTag>
+                        </div>
+                    </div>
                     <p>{{ item.description.slice(0, 50) }} ......</p>
                     <span class="read-more" @click="goToArticle(item.id)">READ MORE</span>
                 </div>
@@ -75,8 +87,22 @@ onMounted(() => {
         gap: 5px;
         padding: 10px;
 
-        h5 {
-            font-weight: bold;
+        .title-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+
+            h5 {
+                font-weight: bold;
+            }
+
+            .tag-wrapper{
+                align-self: flex-end;
+                display: flex;
+                gap: 5px;
+            }
         }
 
         .read-more {
@@ -86,30 +112,31 @@ onMounted(() => {
             font-size: 10px;
             transition: color 0.2s;
         }
-
-
-
-        //.text-wrapper {
-        //    display: flex;
-        //    flex-direction: column;
-        //    align-items: flex-start;
-        //    gap: 5px;
-        //    padding: 10px;
-        //
-        //    .read-more {
-        //        align-self: flex-end;
-        //        color: $base-primary-color;
-        //        cursor: pointer;
-        //        font-size: 12px;
-        //        transition: color 0.2s;
-        //    }
-        //}
     }
 }
 
 @media(min-width: $breakpoint-tablet){
     .outer-container {
         width: 650px;
+
+        .story-wrapper {
+
+            .title-wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                h5 {
+                    font-weight: bold;
+                }
+
+                .tag-wrapper {
+                    display: flex;
+                    gap: 5px;
+                }
+            }
+        }
     }
 }
 
