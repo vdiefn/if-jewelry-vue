@@ -96,11 +96,6 @@ onMounted(() => {
             </ElBreadcrumbItem>
         </ElBreadcrumb>
         <div class="top">
-            <ElCarousel :autoplay="false">
-                <ElCarouselItem v-for="(image, index) in data.product.imagesUrl" :key="index">
-                    <img :src="image" alt="product image" style="margin:0 auto;"/>
-                </ElCarouselItem>
-            </ElCarousel>
             <div class="image-section">
                 <div class="big-image">
                     <img :src="imageList[activeImage]" alt="target product picture">
@@ -118,14 +113,14 @@ onMounted(() => {
                 </div>
             </div>
             <div class="purchase-section">
-                <h4>{{data.product.title}}</h4>
+                <h5>{{data.product.title}}</h5>
                 <div class="price-info">
                     <p>$NTD {{ data.product.origin_price }}</p>
-                    <h5>$NTD {{ data.product.price }}</h5>
+                    <h6>$NTD {{ data.product.price }}</h6>
                 </div>
-                <h5>
-                    {{ data.product.content }}
-                </h5>
+                <h6>
+                    {{ data.product.description }}
+                </h6>
                 <ElInputNumber v-model="count" :min="1" :max="10"/>
                 <div class="button-wrapper">
                     <ElButton type="primary" @click="addToCart(data.product.id, count)">加入購物車</ElButton>
@@ -196,21 +191,6 @@ onMounted(() => {
         flex-direction: column;
         margin-top: 1rem;
 
-        .el-carousel {
-            min-height: 200px;
-            max-height: 300px;
-            height: 100%;
-
-            .el-carousel-item {
-                img {
-                    width:100%;
-                    height:100%;
-                    object-fit: cover;
-                    margin: 0 auto;
-                }
-            }
-        }
-
         .image-section {
             display: none;
         }
@@ -223,16 +203,31 @@ onMounted(() => {
             margin: 1rem 0;
             padding: 0 1rem;
 
+            h5 {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
             .price-info {
                 display: flex;
                 flex-direction: row;
                 gap: 0.5rem;
+
+                h6 {
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                }
 
                 > :first-child {
                     text-decoration: line-through;
                     opacity: 0.7;
                     font-style: italic;
                 }
+            }
+
+            h6 {
+                white-space: pre-line;
+                word-break: break-word;
             }
 
             .el-input-number {
@@ -256,10 +251,15 @@ onMounted(() => {
     .product-info {
         margin: 0.5rem 0;
         padding: 0 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        white-space: pre-line;
+        word-break: break-word;
     }
 
     .tabs-wrapper {
-        width: 80%;
+        width: 100%;
         margin: 0 auto;
 
         .product-info, .payment-and-delivery-method, .jewelry-care {
@@ -271,7 +271,7 @@ onMounted(() => {
         }
 
         .product-info, .jewelry-care {
-            width:80%;
+            width:90%;
             margin: 0 auto;
         }
 
@@ -412,6 +412,21 @@ onMounted(() => {
                     justify-content: center;
                 }
 
+            }
+        }
+
+        .tabs-wrapper {
+            width: 80%;
+            margin: 0 auto;
+            :deep(.el-tabs__header) {
+                margin: 0 auto;
+            }
+
+            .product-info, .jewelry-care {
+                max-width: 80%;
+                width: 100%;
+                padding: 20px 20px;
+                margin: 10px auto;
             }
         }
 
