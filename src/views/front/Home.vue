@@ -1,13 +1,15 @@
 <script setup>
 import { ElCarousel, ElCarouselItem } from 'element-plus';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, useTemplateRef } from 'vue';
 import { reqAllProducts } from '@/api/front/frontProducts';
-import { CardProduct } from "@/components/front/index.js";
+import { CardProduct, DialogShowCoupon } from "@/components/front/index.js";
 
 const data = ref({
     success: false,
     products: []
 })
+
+const dialogShowCouponRef = useTemplateRef("dialogShowCouponRef");
 
 const getAllProducts = async () => {
     data.value = await reqAllProducts()
@@ -31,6 +33,7 @@ const braceletProducts = computed(() => {
 
 onMounted(() => {
     getAllProducts()
+    dialogShowCouponRef.value.open()
 })
 
 
@@ -75,6 +78,7 @@ onMounted(() => {
             </div>
         </template>
     </div>
+    <DialogShowCoupon ref="dialogShowCouponRef" />
 </template>
 
 <style scoped lang="scss">
