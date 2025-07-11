@@ -94,6 +94,7 @@ onMounted(() => {
                 table-layout="auto"
             >
                 <ElTableColumn label="名稱" prop="title" />
+                <ElTableColumn label="折扣碼" prop="code" />
                 <ElTableColumn label="折扣(%)" prop="percent" align="center" />
                 <ElTableColumn label="到期日" prop="due_date">
                     <template #default="{row}">
