@@ -43,6 +43,10 @@ const props = defineProps({
         flex-direction: column;
         align-items: center;
 
+        h5 {
+            font-size: 0.8rem;
+        }
+
         .price-wrapper {
             display: flex;
             flex-direction: row;
@@ -73,7 +77,17 @@ const props = defineProps({
             aspect-ratio: 1/0.6;
             height: auto;
             min-height: 100px;
-            max-height: 200px;
+            max-height: 250px;
+        }
+
+        .card-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h5 {
+                font-size: 0.9rem;
+            }
         }
     }
 }
@@ -86,7 +100,17 @@ const props = defineProps({
             aspect-ratio: 1/1;
             height: auto;
             min-height: 150px;
-            max-height: 200px;
+            max-height: 350px;
+        }
+
+        .card-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h5 {
+                font-size: 1rem;
+            }
         }
     }
 }
