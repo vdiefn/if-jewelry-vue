@@ -38,9 +38,11 @@ onMounted(() => {
 
 <template>
     <div class="carousel-container" v-if="data">
-        <ElCarousel>
+        <ElCarousel type="card">
             <ElCarouselItem v-for="product in data.products.slice(0, 4)" :key="product.id" class="carousel-item">
-                <img :src="product.imagesUrl[0]" alt="carousel item" class="image"/>
+                <RouterLink :to="{path:`/product/${product.id}`}">
+                    <img :src="product.imagesUrl[0]" alt="carousel item" class="image"/>
+                </RouterLink>
             </ElCarouselItem>
         </ElCarousel>
     </div>
@@ -83,11 +85,14 @@ onMounted(() => {
 
     .carousel-item {
         height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         .image {
-            height: 120%;
             width: 100%;
-            object-fit: cover;
+            height: 100%;
+            object-fit: contain;
         }
     }
 }
@@ -115,7 +120,7 @@ onMounted(() => {
 
 @media(min-width: $breakpoint-tablet) {
     :deep(.el-carousel__container) {
-        height: 400px;
+        height: 350px;
     }
 
     .category-container {
@@ -130,7 +135,7 @@ onMounted(() => {
 
 @media(min-width: $breakpoint-desktop) {
     :deep(.el-carousel__container) {
-        height: 650px;
+        height: 450px;
     }
 
     .category-container {
