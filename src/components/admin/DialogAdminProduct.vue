@@ -38,24 +38,24 @@ const form = reactive({
     unit: "",
     description: "",
     content: "",
-    is_enabled: true,
+    is_enabled: 1,
     imageUrl: "",
     imagesUrl: [],
 });
 
 const open = (row) => {
     fileList.value = [];
-    Object.assign(form, {
-    title: "",
-    category: "",
-    origin_price: 0,
-    price: 0,
-    unit: "",
-    description: "",
-    content: "",
-    is_enabled: true,
-    imageUrl: "",
-    imagesUrl: [],
+        Object.assign(form, {
+        title: "",
+        category: "",
+        origin_price: 0,
+        price: 0,
+        unit: "",
+        description: "",
+        content: "",
+        is_enabled: 1,
+        imageUrl: "",
+        imagesUrl: [],
     });
     if (row) {
         isEdit.value = true;
@@ -67,6 +67,7 @@ const open = (row) => {
         };
         });
         Object.assign(form, row);
+        form.is_enabled = 1 ? true : false
         form.imagesUrl = editImagesUrl;
         fileList.value = editImagesUrl;
         dialogVisible.value = true;
@@ -77,7 +78,6 @@ const open = (row) => {
 };
 
 const confirm = async (info) => {
-    console.log("更新資料:", info);
     if (isEdit.value) {
     const payload = {
         id: info.id,
@@ -198,7 +198,10 @@ const handlePreview = (file) => {
 defineExpose({ open });
 </script>
 <template>
-    <ElDialog v-model="dialogVisible" title="新增產品" width="800">
+    <ElDialog v-model="dialogVisible" width="800">
+        <template #header>
+            <h3>{{isEdit? "修改產品" : "新增產品"}}</h3>
+        </template>
         <ElForm :model="form" label-width="auto">
         <ElRow :gutter="20">
             <ElCol :span="24">
@@ -263,7 +266,7 @@ defineExpose({ open });
             </ElCol>
         </ElRow>
         <ElFormItem label="是否啟用">
-            <ElSwitch v-model="form.is_enable" />
+            <ElSwitch v-model="form.is_enabled" />
         </ElFormItem>
         </ElForm>
         <template #footer>
