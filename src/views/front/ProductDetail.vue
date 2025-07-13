@@ -132,7 +132,6 @@ onMounted(() => {
 
         <ElTabs v-model="activeName" class="tabs-wrapper">
             <ElTabPane label="商品描述" name="first" class="product-info">
-                <p>{{data.product.description}}</p>
                 <p>{{ data.product.content }}</p>
             </ElTabPane>
             <ElTabPane label="送貨與付款方式" name="second" class="payment-and-delivery-method">
@@ -248,15 +247,15 @@ onMounted(() => {
     }
 
 
-    .product-info {
-        margin: 0.5rem 0;
-        padding: 0 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        white-space: pre-line;
-        word-break: break-word;
-    }
+    // .product-info {
+    //     margin: 0.5rem 0;
+    //     padding: 0 1rem;
+    //     display: flex;
+    //     flex-direction: column;
+    //     gap: 10px;
+    //     white-space: pre-line;
+    //     word-break: break-word;
+    // }
 
     .tabs-wrapper {
         width: 100%;
@@ -270,16 +269,18 @@ onMounted(() => {
             margin: 0 auto;
         }
 
-        .product-info, .jewelry-care {
+        .jewelry-care {
             width:90%;
             margin: 0 auto;
         }
 
 
-        .payment-and-delivery-method {
+        .payment-and-delivery-method, .product-info {
             display: flex;
             flex-direction: column;
             align-items: center;
+            white-space: pre-line;
+            word-break: break-word;
 
             .text {
                 margin: 0.5rem auto;
@@ -422,7 +423,7 @@ onMounted(() => {
                 margin: 0 auto;
             }
 
-            .product-info, .jewelry-care {
+            .jewelry-care {
                 max-width: 80%;
                 width: 100%;
                 padding: 20px 20px;
