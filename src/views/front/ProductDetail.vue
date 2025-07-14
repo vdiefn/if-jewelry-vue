@@ -246,17 +246,6 @@ onMounted(() => {
         }
     }
 
-
-    // .product-info {
-    //     margin: 0.5rem 0;
-    //     padding: 0 1rem;
-    //     display: flex;
-    //     flex-direction: column;
-    //     gap: 10px;
-    //     white-space: pre-line;
-    //     word-break: break-word;
-    // }
-
     .tabs-wrapper {
         width: 100%;
         margin: 0 auto;
