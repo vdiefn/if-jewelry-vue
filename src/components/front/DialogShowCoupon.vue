@@ -1,66 +1,92 @@
 <script setup>
-import {ElButton, ElDialog} from "element-plus";
-import {ref} from "vue";
+import { ElButton } from "element-plus";
+import { ref } from "vue";
 
-const dialogVisible = ref(false)
+const showCoupon = ref(true)
 
 const close = () => {
-    dialogVisible.value = false
+    showCoupon.value = false
 }
 
-const open = () => {
-    dialogVisible.value = true
-}
-
-defineExpose({ close, open })
+defineExpose({ close })
 </script>
 
 <template>
-    <ElDialog
-        v-model="dialogVisible"
-        custom-class="bottom-left-dialog"
-        title="折扣碼"
-        width="200"
-        draggable
-        :close-on-click-modal="false"
-        :modal="false"
-    >
-        <div class="title-wrapper">
-            <font-awesome-icon :icon="['fas', 'cake-candles']" />
-            <h5>If Jewelry 生日快樂!</h5>
+    <div v-if="showCoupon" class="custom-dialog">
+        <div class="dialog-header">
+            <ElButton class="close-btn" @click="close" size="small">X</ElButton>
         </div>
-        <div class="code-wrapper">
-            <p>HBD2025</p>
-        </div>
-        <template #footer>
-            <div class="dialog-footer">
-                <ElButton @click="dialogVisible = false" type="info" size="small">關閉</ElButton>
+        <section class="dialog-body">
+            <div class="top">
+                <font-awesome-icon :icon="['fas', 'cake-candles']" />
+                <h5>If Jewelry 生日快樂!</h5>
             </div>
-        </template>
-    </ElDialog>
+            <div class="coupon-info">
+                <p>HBD2025</p>
+            </div>
+        </section>
+        <div class="dialog-footer">
+            <ElButton @click="close" size="small">關閉</ElButton>
+        </div>
+    </div>
 </template>
 
 <style scope lang="scss" >
-.el-dialog {
-    margin: var(--el-dialog-margin-top, 15vh) 5px 50px;
+.custom-dialog {
+    position: fixed;
+    top: 55vh;
+    left: 10px;
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid lightgray;
+    z-index: 99;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.2);
 
-    .title-wrapper{
+    .dialog-header {
         display: flex;
-        gap: 3px;
-        justify-content: space-between;
-        align-items: center ;
-    }
-    .code-wrapper {
-        border: 1px solid lightgray;
-        height: 2rem;
-        margin-top: 10px;
+        justify-content:flex-end;
+        align-items: center;
+        padding: 10px;
+        margin: 0;
 
-        p {
-            margin-left: 15px;
-            font-size: 1.2rem;
-            text-align: left;
-            line-height: 2rem;
+        .el-button {
+            border: none;
+            width: 15px;
+            margin: 0;
         }
+    }
+
+    .dialog-body {
+        display: column;
+        gap: 5px;
+
+        .top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            gap: 5px;
+            padding: 3px;
+        }
+
+        .coupon-info {
+            border: 1px solid lightgray;
+            height: 2rem;
+            margin: 10px;
+            padding: 0 10px;
+
+            p {
+                text-align: left;
+                line-height: 2rem;
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+    .dialog-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin: 5px 8px;
     }
 }
 </style>
