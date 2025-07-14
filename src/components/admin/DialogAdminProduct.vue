@@ -28,6 +28,7 @@ const props = defineProps({
 
 const emit = defineEmits(["product-added"]);
 const fileList = ref([]);
+const loading = ref(false);
 const dialogVisible = ref(false);
 const isEdit = ref(true);
 const form = reactive({
@@ -60,15 +61,17 @@ const open = (row) => {
     if (row) {
         isEdit.value = true;
         let editImagesUrl = row.imagesUrl.map((url, index) => {
-        return {
-            name: `image${index + 1}`,
-            url: url,
-            status: "success",
-        };
+            return {
+                name: `image${index + 1}`,
+                url: url,
+                status: "success",
+            };
         });
-        Object.assign(form, row);
-        form.is_enabled = 1 ? true : false
-        form.imagesUrl = editImagesUrl;
+        Object.assign(form, {
+            ...row,
+            is_enabled: !!row.is_enabled,
+            imagesUrl: editImagesUrl
+        });
         fileList.value = editImagesUrl;
         dialogVisible.value = true;
     } else {
@@ -78,24 +81,25 @@ const open = (row) => {
 };
 
 const confirm = async (info) => {
-    if (isEdit.value) {
+    loading.value = true;
     const payload = {
-        id: info.id,
-        data: {
-        title: info.title,
-        category: info.category,
+        ...info,
         origin_price: Number(info.origin_price),
         price: Number(info.price),
-        unit: info.unit,
-        description: info.description,
-        content: info.content,
-        is_enabled: info.is_enabled ? 1 : 0,
+        is_enabled: +info.is_enabled,
         imageUrl: "",
         imagesUrl: info.imagesUrl,
-        },
-    };
-        try {
-            const res = await reqEditProduct(payload);
+    }
+
+    if(isEdit.value) {
+        payload.imagesUrl = info.imagesUrl.map(item => {
+            if (typeof item === 'string') return item
+            if (typeof item.url === 'string') return item.url
+        })
+    }
+
+    try {
+        const res = isEdit.value? await reqEditProduct(info.id, payload) : await reqAddNewProduct(payload)
             if (res.success) {
                 ElMessage({
                     type: "success",
@@ -105,51 +109,19 @@ const confirm = async (info) => {
                 dialogVisible.value = false;
             } else {
                 ElMessage({
-                    type: "success",
+                    type: "error",
                     message: res.message,
                 });
             }
-        } catch (err) {
-            console.error(err);
-        }
-    } else {
-        try {
-        const response = await reqAddNewProduct({
-            data: {
-            title: info.title,
-            category: info.category,
-            origin_price: Number(info.origin_price),
-            price: Number(info.price),
-            unit: info.unit,
-            description: info.description,
-            content: info.content,
-            is_enabled: info.is_enabled ? 1 : 0,
-            imageUrl: "",
-            imagesUrl: info.imagesUrl,
-            },
-        });
-            if (response.success) {
-                    ElMessage({
-                    type: "success",
-                    message: "成功新增商品",
-                });
-                emit("product-added");
-                dialogVisible.value = false;
-            } else {
-                instance.confirmButtonLoading = false;
-                ElMessage({
-                    type: "error",
-                    message: response.message,
-                })
-            }
-        } catch (error) {
-            console.error(error);
-            const msg = error?.response?.data?.message.join(",") || "商品新增錯誤";
-            ElMessage({
-                type: "error",
-                message: msg,
-            });
-        }
+    } catch(error) {
+        console.error(error)
+        const msg = error?.response?.data?.message?.join?.(",") || "操作失敗"
+        ElMessage({
+            type: "error",
+            message: msg
+        })
+    } finally {
+        loading.value = false
     }
 };
 
@@ -179,14 +151,14 @@ const customUploadRequest = async ({ file, onSuccess, onError }) => {
             status: res.success ? "success" : "false",
         };
         fileList.value.push(uploadFile);
-        form.imagesUrl.push(uploadFile.url);
+        form.imagesUrl.push(uploadFile.url)
         onSuccess();
     } catch (err) {
         onError(err);
     }
 };
 
-    const handleRemove = (file) => {
+const handleRemove = (file) => {
     form.imagesUrl = form.imagesUrl.filter((item) => item.url !== file.url);
     fileList.value = fileList.value.filter((item) => item.url !== file.url);
 };
@@ -205,54 +177,54 @@ defineExpose({ open });
         <ElForm :model="form" label-width="auto">
         <ElRow :gutter="20">
             <ElCol :span="24">
-            <ElFormItem label="標題">
-                <ElInput v-model="form.title" />
-            </ElFormItem>
+                <ElFormItem label="標題">
+                    <ElInput v-model="form.title" />
+                </ElFormItem>
             </ElCol>
             <ElCol :span="12">
-            <ElFormItem label="分類">
-                <ElSelect
-                v-model="form.category"
-                filterable
-                placeholder="請選擇類別"
-                >
-                <ElOption
-                    v-for="(item, index) in props.categoryList"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                />
-                </ElSelect>
-            </ElFormItem>
+                <ElFormItem label="分類">
+                    <ElSelect
+                    v-model="form.category"
+                    filterable
+                    placeholder="請選擇類別"
+                    >
+                    <ElOption
+                        v-for="(item, index) in props.categoryList"
+                        :key="index"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                    </ElSelect>
+                </ElFormItem>
             </ElCol>
             <ElCol :span="12">
-            <ElFormItem label="單位">
-                <ElInput v-model="form.unit" />
-            </ElFormItem>
+                <ElFormItem label="單位">
+                    <ElInput v-model="form.unit" />
+                </ElFormItem>
             </ElCol>
             <ElCol :span="12">
-            <ElFormItem label="原價">
-                <ElInput type="number" v-model="form.origin_price" />
-            </ElFormItem>
+                <ElFormItem label="原價">
+                    <ElInput type="number" v-model="form.origin_price" />
+                </ElFormItem>
             </ElCol>
             <ElCol :span="12">
-            <ElFormItem label="售價">
-                <ElInput type="number" v-model="form.price" />
-            </ElFormItem>
+                <ElFormItem label="售價">
+                    <ElInput type="number" v-model="form.price" />
+                </ElFormItem>
             </ElCol>
             <ElCol :span="24">
-            <ElFormItem label="圖片上傳">
-                <ElUpload
-                :http-request="customUploadRequest"
-                :file-list="fileList"
-                list-type="picture-card"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload"
-                :on-preview="handlePreview"
-                >
-                <ElIcon><Plus /></ElIcon>
-                </ElUpload>
-            </ElFormItem>
+                <ElFormItem label="圖片上傳">
+                    <ElUpload
+                        :http-request="customUploadRequest"
+                        :file-list="fileList"
+                        list-type="picture-card"
+                        :on-remove="handleRemove"
+                        :before-upload="beforeAvatarUpload"
+                        :on-preview="handlePreview"
+                    >
+                    <ElIcon><Plus /></ElIcon>
+                    </ElUpload>
+                </ElFormItem>
             </ElCol>
             <ElCol :span="12">
             <ElFormItem label="產品描述">
@@ -278,7 +250,6 @@ defineExpose({ open });
     </ElDialog>
 </template>
 <style scoped>
-/* 關閉滑入圖片的動畫 */
 :deep(.el-upload-list__item) {
     transition: none !important;
 }

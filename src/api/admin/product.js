@@ -5,11 +5,11 @@ export const reqProducts = (page = 1, category="") => {
 }
 
 export const reqAddNewProduct = (data) => {
-    return api.post("/admin/product", data)
+    return api.post("/admin/product", {data})
 }
 
-export const reqEditProduct = (data) => {
-    return api.put(`/admin/product/${data.id}`, data)
+export const reqEditProduct = (id, data) => {
+    return api.put(`/admin/product/${id}`, {data})
 }
 
 export const reqDeleteProduct = (id) => {
