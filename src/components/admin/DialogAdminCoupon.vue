@@ -58,7 +58,7 @@ const open = (row) => {
     })
     if(row) {
         Object.assign(form, row)
-        form.is_enabled = row.is_enabled === 1? true: false
+        form.is_enabled = row.is_enabled === 1
         form.due_date = row.due_date * 1000
         isEdit.value = true
     }
