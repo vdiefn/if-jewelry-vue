@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { DefaultContainer } from "@/components/front/index.js";
 import { reqAllArticles } from "@/api/front/article.js"
 import { useRouter } from "vue-router";
-import {ElCard, ElTag} from "element-plus";
+import {ElCard, ElTag, ElMessage} from "element-plus";
 
 const data = ref()
 const router = useRouter();
@@ -21,7 +21,10 @@ const getAllArticles = async() => {
         if(res.success) {
             data.value = res.articles
         } else {
-
+            ElMessage({
+                type:"error",
+                message:"res.message"
+            })
         }
     } catch(error) {
         console.error(error);
