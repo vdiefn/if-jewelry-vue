@@ -164,7 +164,7 @@ onMounted(() => {
         <div class="other-products" v-if="similarProducts.length > 0">
             <ElDivider content-position="center"><h5>你可能也會喜歡</h5></ElDivider>
             <div class="card-wrapper">
-                <CardProduct :data="product" v-for="product in similarProducts.slice(0,4)" :key="product.id"/>
+                <CardProduct :data="product" v-for="product in similarProducts.slice(0,3)" :key="product.id"/>
             </div>
         </div>
     </div>
@@ -309,13 +309,10 @@ onMounted(() => {
         }
 
         .card-wrapper {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(150px, 1fr));
-            grid-gap: 1rem;
-            margin: 2rem auto;
+            display: flex;
+            gap: 1.5rem;
             padding: 0 1rem;
-            width: 100%;
-            justify-items: center;
+            margin: 1rem auto;
         }
     }
 }
@@ -421,13 +418,8 @@ onMounted(() => {
         }
 
         .other-products {
-            width: 95%;
+            width: 70%;
             margin: 0 auto;
-
-            .card-wrapper {
-                display: grid;
-                grid-template-columns: repeat(4, minmax(150px, 1fr));
-            }
         }
     }
 }
@@ -435,13 +427,8 @@ onMounted(() => {
 @media (min-width: $breakpoint-desktop) {
     .container {
         .other-products {
-            width: 80%;
+            width: 50%;
             margin: 0 auto;
-
-            .card-wrapper {
-                display: grid;
-                grid-template-columns: repeat(4, minmax(150px, 1fr));
-            }
         }
     }
 
