@@ -105,13 +105,14 @@ onMounted(() => {
         font-family: 'Cormorant Garamond', serif;
         font-style: italic;
         font-weight: 400;
+        margin-top: 50px;
     }
 
     .card-wrapper {
         display: grid;
         grid-template-columns: repeat(2, minmax(150px, 1fr));
         grid-gap: 1rem;
-        margin: 2rem auto;
+        margin: 4rem auto;
         padding: 0 1rem;
         width: 100%;
         justify-items: center;
