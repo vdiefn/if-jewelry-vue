@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { ElDialog, ElButton, ElForm, ElFormItem, ElInput, ElDatePicker, ElRow, ElCol } from "element-plus"
+import { ElDialog, ElButton, ElForm, ElFormItem, ElInput, ElDatePicker, ElRow, ElCol, ElMessage } from "element-plus"
 import { reqAddNewCoupon, reqEditCoupon } from "@/api/admin/coupon.js"
 
 const dialogVisible = ref(false)
@@ -57,7 +57,6 @@ const open = (row) => {
         code: ""
     })
     if(row) {
-        console.log(row)
         Object.assign(form, row)
         form.is_enabled = row.is_enabled === 1? true: false
         form.due_date = row.due_date * 1000
@@ -69,54 +68,29 @@ const open = (row) => {
 const confirm = async(form) => {
     loading.value = true
 
+    let payload = {
+        title: form.title,
+        is_enabled: form.is_enabled ? 0 : 1,
+        percent: Number(form.percent),
+        due_date: Math.floor(form.due_date / 1000),
+        code: form.code
+    }
+
     try{
-        if(!isEdit.value) {
-            const res = await reqAddNewCoupon({
-                title:form.title,
-                is_enabled: form.title === true? 0:1,
-                percent: Number(form.percent),
-                due_date: Math.floor(form.due_date / 1000),
-                code: form.code
+        const res = isEdit.value ? await reqEditCoupon(form.id, {data: payload}) :await reqAddNewCoupon({data: payload})
+        if(res.success) {
+            ElMessage({
+                type: "success",
+                message: res.message
             })
-            if(res.success) {
-                ElMessage({
-                    type: "success",
-                    message: res.message
-                })
-                dialogVisible.value = false
-                emit("coupon-added")
-            } else {
-                ElMessage({
-                    type: "error",
-                    message: res.message
-                })
-            }
+            dialogVisible.value = false
+            emit("coupon-added")
         } else {
-            let payload = {
-                id:form.id,
-                title:form.title,
-                is_enabled: form.is_enabled? 0: 1,
-                percent: Number(form.percent),
-                due_date: Math.floor(form.due_date / 1000),
-                code: form.code
-            }
-            const res = await reqEditCoupon(payload)
-            if(res.success){
-                ElMessage({
-                    type:"success",
-                    message:res.message
-                })
-                emit("coupon-added")
-                dialogVisible.value = false
-            } else {
-                ElMessage({
-                    type: "error",
-                    message: res.message
-                })
-            }
+            ElMessage({
+                type: "error",
+                message: res.message
+            })
         }
-
-
     } catch(error){
         console.error(error)
     } finally {
@@ -138,7 +112,7 @@ defineExpose({ open })
         width="800"
     >
         <template #header>
-            <h3>新增折價券</h3>
+            <h3>{{isEdit? "修改折價券" : "新增折價券"}}</h3>
         </template>
         <ElForm label-width="auto" :model="form">
             <ElRow :gutter="20">

@@ -5,11 +5,11 @@ export const reqCoupons = (page=1) => {
 }
 
 export const reqAddNewCoupon = (data) => {
-    return api.post("/admin/coupon", { data })
+    return api.post("/admin/coupon",  data )
 }
 
-export const reqEditCoupon = (data) => {
-    return api.put(`/admin/coupon/${data.id}`, { data })
+export const reqEditCoupon = (id, data) => {
+    return api.put(`/admin/coupon/${id}`,  data )
 }
 
 export const reqDeleteCoupon = (id) => {
