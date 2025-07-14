@@ -9,6 +9,12 @@ export const useCartStore = defineStore("cart", () => {
     const cartData = ref({})
     const couponCode = ref("")
 
+    const clearCart = () => {
+        cartList.value = []
+        cartData.value = {}
+        couponCode.value = ""
+    }
+
     const addToCart = async (id, qty) => {
         loading.value = true
 
@@ -112,5 +118,5 @@ export const useCartStore = defineStore("cart", () => {
         }
     }
 
-    return { cartList, cartData, couponCode, addToCart, deleteCartProduct, getCartProducts, editCartProduct, getCoupon }
+    return { cartList, cartData, couponCode, clearCart, addToCart, deleteCartProduct, getCartProducts, editCartProduct, getCoupon }
 })
