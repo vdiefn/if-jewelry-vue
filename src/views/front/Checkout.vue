@@ -328,6 +328,13 @@ const submitPayment = async() => {
                                 <p>銀行代碼: 999</p>
                                 <p>銀行帳號: 1234567654321</p>
                             </ElCard>
+                            <ElCard>
+                                <h6>注意事項：</h6>
+                                <p>付款完成後須主動與客服人員聯繫，確認款項無誤後才會出貨</p>
+                                <p>Email: support@if-jewelry.com</p>
+                                <p>電話: 02-8765-4321</p>
+                                <p>服務時間: 週一~週五 09:00 - 18:30</p>
+                            </ElCard>
                         </template>
                     </ElForm>
                 </ElCard>
@@ -438,6 +445,11 @@ const submitPayment = async() => {
 
     .el-card {
         margin: 2rem auto;
+
+        h6 {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
 
     }
 
