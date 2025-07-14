@@ -179,9 +179,13 @@ const handleStepAction = async() => {
             activeStep.value++;
         }
     } else if (activeStep.value === 2) {
-        const valid = await nextStep(creditCardFormRef.value)
-        if(valid) {
+        if (form.payment === 'atm transfer') {
             await submitPayment();
+        } else {
+            const valid = await nextStep(creditCardFormRef.value);
+            if (valid) {
+                await submitPayment();
+            }
         }
     }
 }
@@ -202,6 +206,7 @@ const submitPayment = async() => {
                 type:"success",
                 message: res.message
             })
+            cartStore.clearCart()
             await router.push({ path: "/success", query: { orderId: orderId.value}})
         } else {
             ElMessage({
@@ -361,8 +366,8 @@ const submitPayment = async() => {
                         </div>
                     </div>
                     <div class="final-info">
-                        <h6>使用優惠券:{{cartStore.cartData.coupon? cartStore.cartData.coupon : " 無 "}}</h6>
-                        <h6>總金額: {{cartStore.cartData.final_total}}</h6>
+                        <h6>使用優惠券: {{cartStore.couponCode? cartStore.couponCode : " 無 "}}</h6>
+                        <h6>總金額: {{Math.round(cartStore.cartData.final_total)}}</h6>
                     </div>
                 </ElCollapseItem>
             </ElCollapse>
