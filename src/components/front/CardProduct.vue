@@ -33,7 +33,7 @@ const props = defineProps({
     .product-image {
         width: 100%;
         height: auto;
-        aspect-ratio: 1/0.6;
+        aspect-ratio: 1/0.8;
         display: block;
         object-fit: cover;
     }
@@ -74,7 +74,7 @@ const props = defineProps({
 
         .product-image {
             width: 100%;
-            aspect-ratio: 1/0.6;
+            aspect-ratio: 1/0.8;
             height: auto;
             min-height: 100px;
             max-height: 250px;
@@ -97,7 +97,7 @@ const props = defineProps({
 
         .product-image {
             width: 100%;
-            aspect-ratio: 1/1;
+            aspect-ratio: 1/0.8;
             height: auto;
             min-height: 150px;
             max-height: 350px;
