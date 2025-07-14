@@ -26,18 +26,25 @@ const productList = computed(() => {
 })
 
 const open = (row) => {
-    Object.assign(form, row)
-    form.create_at = row.create_at*1000
-    form.paid_date = row.paid_date*1000
+    Object.assign(form, {
+        ...row,
+        create_at: row.create_at*1000,
+        paid_date: row.paid_date*1000
+    })
     dialogVisible.value = true
 }
 
 const confirm = async() => {
     loading.value = true
-    form.create_at = form.create_at/1000
-    form.paid_date = form.paid_date/1000
+
+    const payload = {
+        ...form,
+        create_at: form.create_at/1000,
+        paid_date: form.paid_date/1000
+    }
+
     try {
-        const res = await reqEditOrder(form)
+        const res = await reqEditOrder(payload)
         if(res.success) {
             ElMessage({
                 type: "success",
