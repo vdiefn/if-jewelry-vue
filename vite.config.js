@@ -7,40 +7,40 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig(({command, mode}) =>　{
-  let env = loadEnv(mode, process.cwd())
-  return {
-    plugins: [
-    vue(),
-    vueDevTools(),
-    AutoImport({
-      resolvers: [ElementPlusResolver({importStyle : "false"})],
-    }),
-    Components({
-      resolvers: [ElementPlusResolver({ importStyle: "false" })],
-    }),
-  ],
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
-      },
+export default defineConfig(({command, mode}) =>{
+let env = loadEnv(mode, process.cwd())
+return {
+plugins: [
+vue(),
+vueDevTools(),
+AutoImport({
+    resolvers: [ElementPlusResolver({importStyle : "false"})],
+}),
+Components({
+    resolvers: [ElementPlusResolver({ importStyle: "false" })],
+}),
+],
+resolve: {
+    alias: {
+    '@': fileURLToPath(new URL('./src', import.meta.url))
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@use "@/assets/style/variables.scss" as *;`
-        },
-      },
+},
+css: {
+    preprocessorOptions: {
+    scss: {
+        additionalData: `@use "@/assets/style/variables.scss" as *;`
     },
-    server: {
-      proxy: {
-        '/v2': {
-          target: 'https://ec-course-api.hexschool.io',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/v2/, '/v2'),
-        },
-      },
     },
+},
+server: {
+    proxy: {
+    '/v2': {
+        target: 'https://ec-course-api.hexschool.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/v2/, '/v2'),
+    },
+    },
+},
     base: command === 'serve' ? '/' : '/if-jewelry-vue/',
-  }
+}
 })
