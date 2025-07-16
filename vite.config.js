@@ -41,5 +41,6 @@ export default defineConfig(({command, mode}) =>　{
         },
       },
     },
+    base: command === 'serve' ? '/' : '/if-jewelry-vue/',
   }
 })
