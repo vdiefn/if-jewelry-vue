@@ -1,0 +1,1 @@
+import{aD as s,u as o}from"./index-DTjOUT29.js";const t=s.create({baseURL:"/v2/api/if_jewelry",timeout:5e3});t.interceptors.request.use(e=>{const r=o().token;return r&&(e.headers.Authorization=r),e},e=>Promise.reject(e));t.interceptors.response.use(e=>e.data,e=>Promise.reject(e));export{t as a};
