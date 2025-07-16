@@ -9,7 +9,6 @@
         "preview": "vite preview",
         "lint": "eslint src",
         "fix": "eslint src --fix",
-        "deploy": "gh-pages -d dist"
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
