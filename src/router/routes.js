@@ -176,7 +176,7 @@ export const constantRouter = [
             },
             {
                 path:"about",
-                component: () => import("@/views/front/about.vue"),
+                component: () => import("@/views/front/About.vue"),
                 name: "About",
                 meta: {
                     title: "品牌故事",
@@ -185,7 +185,7 @@ export const constantRouter = [
             },
             {
                 path:"jewelryStory",
-                component: () => import("@/views/front/jewelryStory.vue"),
+                component: () => import("@/views/front/JewelryStory.vue"),
                 name: "JewelryStory",
                 meta: {
                     title: "珠寶小教室",
@@ -194,7 +194,7 @@ export const constantRouter = [
             },
             {
                 path:"jewelryStory/:id",
-                component: () => import("@/views/front/storyDetail.vue"),
+                component: () => import("@/views/front/StoryDetail.vue"),
                 name: "storyDetail",
                 meta: {
                     title: "珠寶文章",
