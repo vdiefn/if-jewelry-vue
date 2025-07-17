@@ -1,0 +1,23 @@
+@forward "../variables";
+
+$--colors: (
+        "primary": (
+                "base": #81b59e //#7bbcbf
+        ),
+        "success": (
+                "base": #849271
+        ),
+        "warning": (
+                "base": #CF9546
+        ),
+        "danger": (
+                "base": #e97c54
+        ),
+        "info": (
+                "base": #C1AE8D
+        )
+);
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+    $colors: $--colors,
+);

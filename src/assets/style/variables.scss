@@ -1,0 +1,41 @@
+:root {
+    color: #303133;
+}
+
+// RWD大小設定
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;
+
+// 字型設定
+$font-en: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-zh: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+// 合併中英字型（預設字型）
+$font-family-base: #{$font-en}, #{$font-zh};
+
+// Base
+$base-background-color: #f8f5f2;
+$base-header-color: #e0cba6;
+$base-header-category-color: #f1e7d3;
+
+// Theme Colors
+$base-primary-color: #7A989A;
+$base-success-color: #849271;
+$base-danger-color: #C45A5A;
+$base-warning-color: #CF9546;
+$base-info-color: #e0cba6;
+
+// text color
+$base-text-color: #3c3c3c;
+$base-muted-text-color: #777;
+// 標題文字顏色
+$base-brand-color: #5A4A42;
+$base-subtitle-color: #7A6B5C;
+$base-section-color: #6D8688;
+
+// size
+$base-aside-width: 200;
+$base-header-height: 45px;
+$base-header-height-tablet:80px;
+$base-footer-height: 212px;
