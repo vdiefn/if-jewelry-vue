@@ -1,8 +1,15 @@
 import axios from "axios"
 import { useUserStore } from "@/store/modules/user"
 
+// const request = axios.create({
+//     baseURL: import.meta.env.VITE_APP_API_URL,
+//     timeout: 5000
+// })
+
+const baseURL = `${import.meta.env.VITE_APP_API_URL}v2/api/${import.meta.env.VITE_APP_API_PATH}/`
+
 const request = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_URL,
+    baseURL,
     timeout: 5000
 })
 
