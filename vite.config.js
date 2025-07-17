@@ -41,6 +41,5 @@ return {
         },
         },
     },
-        base: mode === "production" ? "/if-jewelry-vue/" : ""
     }
 })
