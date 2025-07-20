@@ -24,9 +24,6 @@ const form = reactive({
 })
 
 const validatePhone = (rule, value, callback) => {
-    if(!value) {
-        return callback(new Error("請提供手機號碼!"))
-    }
     const regex = /^09\d{8}$/
     if(!regex.test(value)) {
         return callback(new Error("手機號碼格式錯誤!"))
@@ -46,7 +43,10 @@ const validatePickupStore = (rule, value, callback) => {
 const rules = reactive({
     name: [{ required: true, message:"請提供收件人姓名", trigger:"blur" }],
     address: [{ required: true, message:"請提供收件地址", trigger:"blur"}],
-    phone:[{ validator: validatePhone, trigger: 'blur' }],
+    phone: [
+        { required: true, message: "請提供手機號碼", trigger: "blur" },
+        { validator: validatePhone, trigger: "blur" }
+    ],
     email:[
         { required: true, message:"請提供Email", trigger:"blur"},
         { type: 'email', message: 'Email 格式錯誤', trigger: "blur" }
@@ -369,12 +369,12 @@ const submitPayment = async() => {
                         </div>
                         <div class="info-wrapper">
                             <h5>{{ item.product.title }}</h5>
-                            <p>NTD{{ item.product.price }} x {{item.qty}}</p>
+                            <p>NTD {{ item.product.price }} x {{item.qty}}</p>
                         </div>
                     </div>
                     <div class="final-info">
-                        <h6>使用優惠券: {{cartStore.couponCode? cartStore.couponCode : " 無 "}}</h6>
-                        <h6>總金額: {{Math.round(cartStore.cartData.final_total)}}</h6>
+                        <p>使用優惠券: {{cartStore.couponCode? cartStore.couponCode : " 無 "}}</p>
+                        <p>總金額: {{Math.round(cartStore.cartData.final_total)}}</p>
                     </div>
                 </ElCollapseItem>
             </ElCollapse>
@@ -505,6 +505,10 @@ const submitPayment = async() => {
         margin: 10px 0;
         padding: 0 10px;
         text-align: end;
+
+        p {
+            font-size: 0.9rem;
+        }
     }
 
 }
