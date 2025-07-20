@@ -138,7 +138,6 @@ onMounted(() => {
                 <div class="text">
                     <h6>送貨方式</h6>
                     <p>If Jewelry 門市取貨</p>
-                    <p>7-11 取貨不付款</p>
                     <p>全家 取貨不付款</p>
                 </div>
                 <div class="text">
