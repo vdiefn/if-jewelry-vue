@@ -1,5 +1,5 @@
 import api from "@/utils/api.ts"
-import type { AllProductsResponse, ProductsResponse, GetProductDetail } from "@/types/front/products"
+import type { AllProductsResponse, ProductsResponse, GetProductDetail } from "@/types/front/product"
 import type { AxiosResponse } from "axios"
 
 export const reqAllProducts = (): Promise<AxiosResponse<AllProductsResponse>> => {

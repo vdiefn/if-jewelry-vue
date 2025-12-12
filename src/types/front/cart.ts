@@ -1,4 +1,4 @@
-import type { ProductData } from "./products"
+import type { ProductData } from "./product"
 
 export interface CartData {
     product_id: string,
