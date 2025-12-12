@@ -24,7 +24,7 @@ export interface CouponData {
     title: string,
 }
 
-export interface CompleteCartData {
+export interface FullCartData {
     coupon: CouponData,
     product: ProductData,
     final_total: number,
@@ -37,24 +37,27 @@ export interface CompleteCartData {
 export interface GetCartResponse {
     success: boolean,
     data: {
-        carts: CompleteCartData[],
+        carts: FullCartData[],
         final_total: number,
         total: number,
     }
     messages: string[],
 }
 
-
-
-export interface CreateCartParams {
+export interface CartParams {
     data: {
         product_id: string,
         qty: number,
     }
 }
 
+export interface EditCartResponse {
+    success: boolean,
+    message: string,
+    data: CartParams
+}
 
-
-export interface EditCartParams {
-
+export interface DeleteCartResponse {
+    success: boolean,
+    message: string,
 }
