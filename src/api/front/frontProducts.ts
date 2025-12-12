@@ -1,0 +1,16 @@
+import api from "@/utils/api.ts"
+import type { AllProductsResponse, ProductsResponse, GetProductDetail } from "@/types/front/products"
+import type { AxiosResponse } from "axios"
+
+export const reqAllProducts = (): Promise<AxiosResponse<AllProductsResponse>> => {
+    return api.get("products/all")
+}
+
+export const reqProducts = (page: number, category: string): Promise<AxiosResponse<ProductsResponse>> => {
+    return api.get(`products?page=${page}&category=${category}`)
+}
+
+export const reqProductDetail = (id: string): Promise<AxiosResponse<GetProductDetail>> => {
+    return api.get(`product/${id}`)
+}
+
