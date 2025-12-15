@@ -23,7 +23,7 @@ export interface GetArticleDetailResponse {
     success: boolean,
     articles: ArticleData,
     pagination: Pagination,
-    message: string[]
+    messages: string[]
 }
 
 

@@ -18,6 +18,3 @@ export const reqDeleteCart = (id:string):Promise<AxiosResponse<DeleteCartRespons
     return api.delete(`/cart/${id}`)
 }
 
-export const reqCoupon = (payload) => {
-    return api.post("/coupon", payload)
-}
