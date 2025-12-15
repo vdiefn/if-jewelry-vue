@@ -99,7 +99,7 @@ const confirm = async (info) => {
     }
 
     try {
-        const res = isEdit.value? await reqEditProduct(info.id, payload) : await reqAddNewProduct(payload)
+        const res = isEdit.value? await reqEditProduct(payload) : await reqAddNewProduct(payload)
             if (res.success) {
                 ElMessage({
                     type: "success",
