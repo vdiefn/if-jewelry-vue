@@ -1,6 +1,6 @@
 import router from "@/router"
 import { useUserStore } from "./store/modules/user"
-import setting from "@/setting"
+import setting from "@/setting.ts"
 
 
 

@@ -11,7 +11,7 @@ import {
 } from "element-plus";
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { reqProducts, reqDeleteProduct } from "@/api/admin/product";
-import { DialogAdminProduct } from "@/components/admin/index.js";
+import { DialogAdminProduct } from "@/components/admin/index.ts";
 
 const loading = ref(false);
 const currentPage = ref(1);

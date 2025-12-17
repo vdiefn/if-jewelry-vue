@@ -3,7 +3,7 @@ import { ElContainer, ElAside, ElHeader, ElMain, ElMenu } from "element-plus";
 import { RouterView, useRoute } from "vue-router";
 import { ref, watch, nextTick } from "vue";
 import {} from "@element-plus/icons-vue";
-import setting from "@/setting";
+import setting from "@/setting.ts";
 import Header from "@/components/admin/AdminHeader.vue";
 import MenuList from "./MenuList.vue";
 import { useUserStore } from "@/store/modules/user";
