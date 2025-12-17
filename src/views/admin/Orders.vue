@@ -15,7 +15,7 @@ const getAllOrders = async(page=1) => {
     currentPage.value = page;
     loading.value = true
     try{
-        const res = await reqOrders(currentPage.value)
+        const res = await reqOrders({ page:currentPage.value })
         if(res.success) {
             data.value = res.orders
             currentPage.value = res.pagination.current_page
@@ -44,10 +44,7 @@ const handleDeleteOrder = async(row) =>{
                     const res = await reqDeleteOrder(row.id)
 
                     if (res.success) {
-                        ElMessage({
-                            type: "success",
-                            message: res.message,
-                        });
+                        ElMessage({ type: "success",message: res.message });
                         done()
                         await getAllOrders(currentPage.value);
                     } else {

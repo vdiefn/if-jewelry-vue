@@ -7,8 +7,8 @@ export const reqOrders = (params: { page:number }):Promise<AxiosResponse<GetOrde
 }
 
 export const reqEditOrder = (params: EditOrderParams):Promise<AxiosResponse<OrderResponse>> => {
-    const { data } = params
-    return api.put(`/admin/order/${data.products.id}`, { data })
+    const { id, ...data } = params
+    return api.put(`/admin/order/${id}`, { data })
 }
 
 export const reqDeleteOrder = (id:string):Promise<AxiosResponse<OrderResponse>> => {

@@ -25,15 +25,6 @@ export interface OrderData {
     num: number
 }
 
-export interface DataDetail {
-    create_at: number,
-    is_paid: boolean,
-    message: string,
-    products: ProductData,
-    user: UserData,
-    num: number
-}
-
 export interface GetOrderResponse {
     success: boolean
     orders: OrderData
@@ -42,7 +33,14 @@ export interface GetOrderResponse {
 }
 
 export interface EditOrderParams {
-    data: DataDetail
+    create_at: number,
+    id: string,
+    is_paid: boolean,
+    message: string,
+    products: ProductData,
+    user: UserData,
+    num: number,
+    paid_date: number | null
 }
 
 export interface OrderResponse {

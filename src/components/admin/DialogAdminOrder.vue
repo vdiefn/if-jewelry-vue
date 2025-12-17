@@ -6,7 +6,7 @@ import { reqEditOrder } from "@/api/admin/order.js";
 const dialogVisible = ref(false)
 const loading = ref(false)
 const emit = defineEmits(['order-update'])
-const form = reactive({
+const initialForm = {
     create_at: "",
     is_paid: false,
     paid_date:"",
@@ -18,14 +18,16 @@ const form = reactive({
         email: '',
         tel: '',
         address: ''
-    },
-})
+    }    
+}
+const form = reactive({ ...initialForm });
 
 const productList = computed(() => {
     return Object.values(form.products)
 })
 
 const open = (row) => {
+    Object.assign(form, initialForm)
     Object.assign(form, {
         ...row,
         create_at: row.create_at*1000,
@@ -46,10 +48,7 @@ const confirm = async() => {
     try {
         const res = await reqEditOrder(payload)
         if(res.success) {
-            ElMessage({
-                type: "success",
-                message: res.message
-            })
+            ElMessage({ type: "success", message: res.message })
             emit("order-update")
         } else {
             ElMessage({
