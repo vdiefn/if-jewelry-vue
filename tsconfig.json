@@ -18,7 +18,7 @@
       "@/*": ["./src/*"]
     },
      // 允許導入 JavaScript 文件
-     "allowJs": false,
+     "allowJs": true,
 
     // Other Outputs
     "sourceMap": true,
@@ -46,6 +46,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "noUnusedParameters": true
-    
+
   }
 }
