@@ -1,6 +1,6 @@
-import api from "@/utils/api.js";
+import api from "@/utils/api.ts";
 
-export const uploadImage = (file) => {
+export const uploadImage = (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file-to-upload', file);
 

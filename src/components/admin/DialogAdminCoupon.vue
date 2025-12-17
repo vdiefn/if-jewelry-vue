@@ -7,14 +7,15 @@ const dialogVisible = ref(false)
 const loading = ref(false)
 const isEdit = ref(false)
 const emit = defineEmits(["coupon-added"])
-const form = reactive({
+const initialForm = {
     id:"",
     title:"",
     is_enabled: true,
     percent: 0,
     due_date: Date.now(),
     code: ""
-})
+}
+const form = reactive({ ...initialForm });
 
 const shortcuts = [
     {
@@ -49,13 +50,7 @@ const shortcuts = [
 
 const open = (row) => {
     isEdit.value = false
-    Object.assign(form, {
-        title:"",
-        is_enabled: true,
-        percent: 0,
-        due_date: Date.now(),
-        code: ""
-    })
+    Object.assign(form, initialForm)
     if(row) {
         Object.assign(form, row)
         form.is_enabled = row.is_enabled === 1
@@ -65,34 +60,29 @@ const open = (row) => {
     dialogVisible.value = true
 }
 
-const confirm = async(form) => {
+const confirm = async() => {
     loading.value = true
 
     let payload = {
-        title: form.title,
-        is_enabled: form.is_enabled ? 0 : 1,
+        ...form,
+        is_enabled: form.is_enabled ? 1 : 0,
         percent: Number(form.percent),
         due_date: Math.floor(form.due_date / 1000),
-        code: form.code
     }
 
     try{
-        const res = isEdit.value ? await reqEditCoupon(form.id, {data: payload}) :await reqAddNewCoupon({data: payload})
+        const res = isEdit.value ? await reqEditCoupon(payload) :await reqAddNewCoupon(payload)
         if(res.success) {
-            ElMessage({
-                type: "success",
-                message: res.message
-            })
+            ElMessage({ type: "success", message: res.message })
             dialogVisible.value = false
             emit("coupon-added")
         } else {
-            ElMessage({
-                type: "error",
-                message: res.message
-            })
+            ElMessage({ type: "error", message: res.message })
         }
     } catch(error){
         console.error(error)
+        const msg = error?.response?.data?.message || "操作失敗";
+        ElMessage({ type: "error", message: msg });
     } finally {
         loading.value = false
     }
@@ -153,7 +143,7 @@ defineExpose({ open })
         <template #footer>
         <div class="dialog-footer">
             <ElButton @click="dialogVisible = false">取消</ElButton>
-            <ElButton type="primary" @click=confirm(form)>
+            <ElButton type="primary" @click=confirm>
                 確認
             </ElButton>
         </div>

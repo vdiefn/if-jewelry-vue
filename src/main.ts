@@ -16,9 +16,9 @@ import { faFacebook, faInstagram, faLine} from "@fortawesome/free-brands-svg-ico
 
 library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping, faBars, faTrashCan, faMagnifyingGlass, faHouse, faEnvelope, faPhone, faCakeCandles)
 
-import router from "./router"
+import router from "./router/index.ts"
 
-import pinia from './store'
+import pinia from "./store/index.ts"
 
 const app = createApp(App)
 
@@ -26,5 +26,5 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.use(pinia)
 app.use(ElementPlus)
-import "./permission"
+import "./permission.ts"
 app.mount('#app')

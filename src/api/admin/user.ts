@@ -1,12 +1,9 @@
 import axios from "axios"
 import { useUserStore } from "@/store/modules/user"
+import type { UserLoginResponse, UserCheckResponse, LoginForm } from "@/types/admin/user"
+import type { AxiosResponse } from "axios"
 
-// const request = axios.create({
-//     baseURL: import.meta.env.VITE_APP_API_URL,
-//     timeout: 5000
-// })
-
-const baseURL = `${import.meta.env.VITE_APP_API_URL}v2/api/${import.meta.env.VITE_APP_API_PATH}/`
+const baseURL = `${import.meta.env.VITE_BASE_URL}`
 
 const request = axios.create({
     baseURL,
@@ -25,10 +22,16 @@ request.interceptors.request.use((config) => {
 })
 
 request.interceptors.response.use(
-    response => response.data,
+    response => response,
     error => {
         return Promise.reject(error)
     }
 )
 
-export default request
+export const reqLogin = (data: LoginForm):Promise<AxiosResponse<UserLoginResponse>> => {
+  return request.post("/v2/admin/signin", data)
+}
+
+export const reqUserCheck = ():Promise<AxiosResponse<UserCheckResponse>> => {
+  return request.post("/v2/api/user/check")
+}

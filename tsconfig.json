@@ -46,6 +46,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "noUnusedParameters": true
-    
+
   }
 }

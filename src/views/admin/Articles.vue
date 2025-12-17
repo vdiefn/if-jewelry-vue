@@ -56,30 +56,25 @@ const deleteArticle = async(row) => {
         cancelButtonText: "取消",
         type: "warning",
         beforeClose: async (action, instance, done) => {
-            if (action === "confirm") {
-                instance.confirmButtonLoading = true;
-                try {
-                    const res = await reqDeleteArticle(row.id)
-
-                    if (res.success) {
-                        ElMessage({
-                            type: "success",
-                            message: res.message,
-                        });
-                        done()
-                        await getAllArticles();
-                    } else {
-                        ElMessage({
-                            type: "error",
-                            message: res.message
-                        });
-                        instance.confirmButtonLoading = false;
-                    }
-                } catch (error) {
-                    console.error(error);
+            if (action !== "confirm") return done()
+            instance.confirmButtonLoading = true; 
+            try {
+                const res = await reqDeleteArticle(row.id)
+                if (res.success) {
+                    ElMessage({ type: "success", message: res.message });
+                    done()
+                    await getAllArticles();
+                } else {
+                    ElMessage({ type: "error", message: res.message });
+                    done()
                 }
-            } else {
-                done();
+            } catch (error) {
+                console.error(error);
+                const msg = error?.response?.data?.message || "刪除失敗";
+                ElMessage({ type: "error", message: msg });
+                done()
+            } finally {
+                instance.confirmButtonLoading = false;
             }
         },
     });

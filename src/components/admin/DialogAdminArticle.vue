@@ -12,7 +12,7 @@ const InputRef = ref()
 const isEdit = ref(false)
 const emit = defineEmits("article-update")
 const upload = ref()
-const form = reactive({
+const initialForm = {
     id:"",
     author:"",
     title:"",
@@ -20,24 +20,15 @@ const form = reactive({
     content:"",
     image:"",
     tag:[],
-    create_at:"",
+    create_at:Date.now(),
     isPublic: false
-})
+}
+const form = reactive({...initialForm})
 
 const open = (row) => {
     dialogVisible.value = true
     loading.value = true
-    Object.assign(form, {
-        id:"",
-        author:"",
-        title:"",
-        description:"",
-        content:"",
-        image:"",
-        tag:[],
-        create_at:"",
-        isPublic: false
-    })
+    Object.assign(form, initialForm)
     if(row){
         isEdit.value = true
         Object.assign(form, row)
@@ -79,10 +70,7 @@ const customUploadRequest = async ({ file, onError, onSuccess }) => {
         form.image = res.imageUrl
         onSuccess();
     } catch (err) {
-        ElMessage.error({
-            type: "error",
-            message: "圖片上傳失敗",
-        });
+        ElMessage.error({ type: "error", message: "圖片上傳失敗",});
         onError(err);
     }
 };
@@ -94,18 +82,12 @@ const confirm = async() => {
         create_at: Number(form.create_at)/1000
     }
     try{
-        const res = isEdit.value? await reqEditArticle(payload.id, { data: payload }) :await reqAddArticle({ data: payload })
+        const res = isEdit.value? await reqEditArticle(payload) :await reqAddArticle(payload)
         if(res.success){
-            ElMessage({
-                type: "success",
-                message: res.message
-            })
+            ElMessage({ type: "success", message: res.message })
             emit("article-update")
         } else {
-            ElMessage({
-                type: "error",
-                message: res.message
-            })
+            ElMessage({ type: "error", message: res.message })
         }
     } catch(error){
         console.error(error)

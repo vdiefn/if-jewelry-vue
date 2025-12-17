@@ -46,27 +46,21 @@ const deleteCoupon = async(row) => {
                 try {
                     const res = await reqDeleteCoupon(row.id)
 
-                if (res.success) {
-                    ElMessage({
-                    type: "success",
-                    message: res.message,
-                    });
-                    done()
-                    await getAllCoupons();
-                } else {
-                    ElMessage({
-                    type: "error",
-                    message: res.message
-                    });
-                    instance.confirmButtonLoading = false;
+                    if (res.success) {
+                        ElMessage({ type: "success", message: res.message });
+                        done()
+                        await getAllCoupons();
+                    } else {
+                        ElMessage({ type: "error", message: res.message });
+                        instance.confirmButtonLoading = false;
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-            } catch (error) {
-                console.error(error);
+            } else {
+                done();
             }
-        } else {
-            done();
-        }
-    },
+        },
     });
 }
 
