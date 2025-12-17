@@ -1,11 +1,37 @@
-import request from "@/utils/request"
+import axios from "axios"
+import { useUserStore } from "@/store/modules/user"
 import type { UserLoginResponse, MessageResponse } from "@/types/admin/user"
 import type { AxiosResponse } from "axios"
 
+const baseURL = `${import.meta.env.VITE_BASE_URL}`
+
+const request = axios.create({
+    baseURL,
+    timeout: 5000
+})
+
+request.interceptors.request.use((config) => {
+    const userStore = useUserStore()
+    const token = userStore.token
+    if(token){
+        config.headers.Authorization = token
+    }
+    return config
+},(error) =>{
+    return Promise.reject(error);
+})
+
+request.interceptors.response.use(
+    response => response.data,
+    error => {
+        return Promise.reject(error)
+    }
+)
+
 export const reqLogin = (data: { username: string, password: string}):Promise<AxiosResponse<UserLoginResponse>> => {
-  return request.post("/admin/signin", data)
+  return request.post("/v2/admin/signin", data)
 }
 
 export const reqUserCheck = ():Promise<AxiosResponse<MessageResponse>> => {
-  return request.post("/api/user/check")
+  return request.post("/v2/api/user/check")
 }
