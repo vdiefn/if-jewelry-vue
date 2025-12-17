@@ -29,6 +29,7 @@ const login = async (formEl) => {
             message: `${getTime()}，歡迎登入`,
             });
         } catch (error) {
+            console.error(error)
             ElNotification({
             type: "error",
             message: error.response.data.message,
