@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useUserStore } from "@/store/modules/user"
-import type { UserLoginResponse, MessageResponse, LoginForm } from "@/types/admin/user"
+import type { UserLoginResponse, UserCheckResponse, LoginForm } from "@/types/admin/user"
 import type { AxiosResponse } from "axios"
 
 const baseURL = `${import.meta.env.VITE_BASE_URL}`
@@ -32,6 +32,6 @@ export const reqLogin = (data: LoginForm):Promise<AxiosResponse<UserLoginRespons
   return request.post("/v2/admin/signin", data)
 }
 
-export const reqUserCheck = ():Promise<AxiosResponse<MessageResponse>> => {
+export const reqUserCheck = ():Promise<AxiosResponse<UserCheckResponse>> => {
   return request.post("/v2/api/user/check")
 }

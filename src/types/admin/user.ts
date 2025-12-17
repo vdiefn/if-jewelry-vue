@@ -6,7 +6,7 @@ export interface UserLoginResponse {
     expired: number
 }
 
-export interface MessageResponse {
+export interface UserCheckResponse {
     success: boolean,
     uid: string
 }
