@@ -10,3 +10,8 @@ export interface MessageResponse {
     success: boolean,
     uid: string
 }
+
+export interface LoginForm {
+  username: string,
+  password: string
+}

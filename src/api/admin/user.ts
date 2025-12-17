@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useUserStore } from "@/store/modules/user"
-import type { UserLoginResponse, MessageResponse } from "@/types/admin/user"
+import type { UserLoginResponse, MessageResponse, LoginForm } from "@/types/admin/user"
 import type { AxiosResponse } from "axios"
 
 const baseURL = `${import.meta.env.VITE_BASE_URL}`
@@ -22,13 +22,13 @@ request.interceptors.request.use((config) => {
 })
 
 request.interceptors.response.use(
-    response => response.data,
+    response => response,
     error => {
         return Promise.reject(error)
     }
 )
 
-export const reqLogin = (data: { username: string, password: string}):Promise<AxiosResponse<UserLoginResponse>> => {
+export const reqLogin = (data: LoginForm):Promise<AxiosResponse<UserLoginResponse>> => {
   return request.post("/v2/admin/signin", data)
 }
 
