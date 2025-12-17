@@ -25,17 +25,15 @@ export interface GetArticleDetailResponse {
 }
 
 export interface EditArticleParams {
-    id: string,
-    data : {
-        title: string,
-        description: string,
-        image: string,
-        tag: string[],
-        create_at: number,
-        author: string,
-        isPublic: boolean,
-        content:string
-    }
+    id:string,
+    title: string,
+    description: string,
+    image: string,
+    tag: string[],
+    create_at: number,
+    author: string,
+    isPublic: boolean,
+    content:string
 }
 
 export interface MessageResponse {

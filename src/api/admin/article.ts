@@ -15,8 +15,8 @@ export const reqAddArticle = (payload: CreateArticleParams): Promise<AxiosRespon
 }
 
 export const reqEditArticle = (payload: EditArticleParams):Promise<AxiosResponse<MessageResponse>> => {
-    const { id, data } = payload
-    return api.put(`/admin/article/${id}`, { data })
+    const { id, ...data } = payload
+    return api.put(`/admin/article/${ id }`, { data })
 }
 
 export const reqDeleteArticle = (id:string):Promise<AxiosResponse<MessageResponse>> => {
