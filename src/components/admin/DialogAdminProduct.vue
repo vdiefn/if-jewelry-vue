@@ -31,7 +31,7 @@ const fileList = ref([]);
 const loading = ref(false);
 const dialogVisible = ref(false);
 const isEdit = ref(true);
-const form = reactive({
+const initialForm = {
     title: "",
     category: "",
     origin_price: 0,
@@ -42,42 +42,30 @@ const form = reactive({
     is_enabled: 1,
     imageUrl: "",
     imagesUrl: [],
-});
+};
+const form = reactive({ ...initialForm });
 
 const open = (row) => {
     fileList.value = [];
-        Object.assign(form, {
-        title: "",
-        category: "",
-        origin_price: 0,
-        price: 0,
-        unit: "",
-        description: "",
-        content: "",
-        is_enabled: 1,
-        imageUrl: "",
-        imagesUrl: [],
-    });
+    Object.assign(form, initialForm);
+    
     if (row) {
         isEdit.value = true;
-        let editImagesUrl = row.imagesUrl.map((url, index) => {
-            return {
-                name: `image${index + 1}`,
-                url: url,
-                status: "success",
-            };
-        });
+        const editImagesUrl = row.imagesUrl.map((url, index) => ({
+            name: `image${index + 1}`,
+            url: url,
+            status: "success",
+        }));
         Object.assign(form, {
             ...row,
             is_enabled: !!row.is_enabled,
             imagesUrl: editImagesUrl
         });
         fileList.value = editImagesUrl;
-        dialogVisible.value = true;
     } else {
         isEdit.value = false;
-        dialogVisible.value = true;
     }
+    dialogVisible.value = true;
 };
 
 const confirm = async (info) => {
@@ -88,56 +76,41 @@ const confirm = async (info) => {
         price: Number(info.price),
         is_enabled: +info.is_enabled,
         imageUrl: "",
-        imagesUrl: info.imagesUrl,
-    }
-
-    if(isEdit.value) {
-        payload.imagesUrl = info.imagesUrl.map(item => {
-            if (typeof item === 'string') return item
-            if (typeof item.url === 'string') return item.url
-        })
-    }
+        imagesUrl: isEdit.value 
+            ? info.imagesUrl.map(item => typeof item === 'string' ? item : item.url)
+            : info.imagesUrl,
+    };
 
     try {
-        const res = isEdit.value? await reqEditProduct(payload) : await reqAddNewProduct(payload)
-            if (res.success) {
-                ElMessage({
-                    type: "success",
-                    message: res.message,
-                });
-                emit("product-added");
-                dialogVisible.value = false;
-            } else {
-                ElMessage({
-                    type: "error",
-                    message: res.message,
-                });
-            }
+        const { id, ...data } = payload;
+        const res = isEdit.value 
+            ? await reqEditProduct({ id, data }) 
+            : await reqAddNewProduct(payload);
+        
+        if (res.success) {
+            ElMessage({ type: "success", message: res.message });
+            emit("product-added");
+            dialogVisible.value = false;
+        }
     } catch(error) {
-        console.error(error)
-        const msg = error?.response?.data?.message?.join?.(",") || "操作失敗"
-        ElMessage({
-            type: "error",
-            message: msg
-        })
+        console.error(error);
+        const msg = error?.response?.data?.message?.join?.(",") || "操作失敗";
+        ElMessage({ type: "error", message: msg });
     } finally {
-        loading.value = false
+        loading.value = false;
     }
 };
 
 const beforeAvatarUpload = (file) => {
-    if (file.type !== "image/jpeg" && file.type !== "image/png") {
-        ElMessage({
-        type: "error",
-        message: "上傳圖片檔案類型應為PNG或JPEG",
-        });
+    const isValidType = ["image/jpeg", "image/png"].includes(file.type);
+    const isValidSize = file.size / 1024 / 1024 <= 3;
+    
+    if (!isValidType) {
+        ElMessage({ type: "error", message: "上傳圖片檔案類型應為PNG或JPEG" });
         return false;
     }
-    if (file.size / 1024 / 1024 > 3) {
-        ElMessage({
-        type: "error",
-        message: "上傳圖片大小應小於3MB",
-        });
+    if (!isValidSize) {
+        ElMessage({ type: "error", message: "上傳圖片大小應小於3MB" });
         return false;
     }
 };
@@ -145,13 +118,13 @@ const beforeAvatarUpload = (file) => {
 const customUploadRequest = async ({ file, onSuccess, onError }) => {
     try {
         const res = await uploadImage(file);
-            const uploadFile = {
+        const uploadFile = {
             name: file.name,
             url: res.imageUrl,
             status: res.success ? "success" : "false",
         };
         fileList.value.push(uploadFile);
-        form.imagesUrl.push(uploadFile.url)
+        form.imagesUrl.push(uploadFile.url);
         onSuccess();
     } catch (err) {
         onError(err);
@@ -159,8 +132,9 @@ const customUploadRequest = async ({ file, onSuccess, onError }) => {
 };
 
 const handleRemove = (file) => {
-    form.imagesUrl = form.imagesUrl.filter((item) => item.url !== file.url);
-    fileList.value = fileList.value.filter((item) => item.url !== file.url);
+    const filterFn = (item) => item.url !== file.url;
+    form.imagesUrl = form.imagesUrl.filter(filterFn);
+    fileList.value = fileList.value.filter(filterFn);
 };
 
 const handlePreview = (file) => {

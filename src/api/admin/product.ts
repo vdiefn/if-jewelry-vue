@@ -7,12 +7,12 @@ export const reqProducts = (params: { page:number, category:string}):Promise<Axi
 }
 
 export const reqAddNewProduct = (params:CreateProductParams):Promise<AxiosResponse<ProductResponse>> => {
-    return api.post("/admin/product", { params })
+    return api.post("/admin/product", { data: params })
 }
 
 export const reqEditProduct = ( params: EditProductParams ):Promise<AxiosResponse<ProductResponse>> => {
     const { data, id } = params
-    return api.put(`/admin/product/${id}`, {data})
+    return api.put(`/admin/product/${id}`, { data })
 }
 
 export const reqDeleteProduct = (id:string):Promise<AxiosResponse<ProductResponse>> => {

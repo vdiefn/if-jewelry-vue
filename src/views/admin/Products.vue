@@ -48,7 +48,7 @@ const getAllProducts = async (page = 1, category = "") => {
     selectCategory.value = category;
     loading.value = true;
     try {
-        const result = await reqProducts(currentPage.value, selectCategory.value);
+        const result = await reqProducts({page: currentPage.value, category: selectCategory.value});
         if (result.success) {
             data.value = result.products;
             currentPage.value = result.pagination.current_page;

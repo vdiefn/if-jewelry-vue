@@ -1,20 +1,11 @@
 import axios from "axios"
 import { useUserStore } from "@/store/modules/user"
 
-const baseURL =
-    import.meta.env.MODE === 'development'
-        ? '/v2/api/if_jewelry'
-        : `${import.meta.env.VITE_APP_API_URL}v2/api/${import.meta.env.VITE_APP_API_PATH}`;
+const BASE_URL =`${import.meta.env.VITE_BASE_URL}/v2/api/${import.meta.env.VITE_API_PATH}`;
 
 const api = axios.create({
-    baseURL,
-    timeout: 5000
-})
-
-// const api = axios.create({
-//     baseURL: '/v2/api/if_jewelry',
-//     timeout: 5000
-// })
+    baseURL: BASE_URL,
+  })
 
 api.interceptors.request.use((config) => {
     const userStore = useUserStore()
