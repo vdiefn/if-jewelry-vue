@@ -8,7 +8,6 @@ import type {
     DeleteCouponResponse,
   } from '@/types/admin/coupon'
   import type { AxiosResponse } from 'axios'
-  import axios from 'axios'
 
 export const reqCoupons = (params: {page?:number}):Promise<AxiosResponse<GetCouponResponse>> => {
     return api.get(`admin/coupons`, { params })
@@ -19,10 +18,10 @@ export const reqAddNewCoupon = (params: CreateCouponParams):Promise<AxiosRespons
 }
 
 export const reqEditCoupon = (params: EditCouponParams):Promise<AxiosResponse<EditCouponResponse>> => {
-    const { id, data } = params
-    return api.put(`/admin/coupon/${id}`,  { data } )
+    const { id, ...data } = params
+    return api.put(`/admin/coupon/${ id }`,  { data } )
 }
 
 export const reqDeleteCoupon = (id:string):Promise<AxiosResponse<DeleteCouponResponse>> => {
-    return api.delete(`/admin/coupon/${id}`)
+    return api.delete(`/admin/coupon/${ id }`)
 }

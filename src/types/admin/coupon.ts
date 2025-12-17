@@ -32,13 +32,11 @@ export type Pagination = {
   
   export type EditCouponParams = {
     id: string
-    data: {
-      title: string
-      is_enabled: number
-      percent: number
-      due_date: number
-      code: string
-    }
+    title: string
+    is_enabled: number
+    percent: number
+    due_date: number
+    code: string
   }
   
   type MessageResponse = {
