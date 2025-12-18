@@ -1,22 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { ElPagination } from "element-plus"
 import { CardProduct } from "@/components/front/index.js";
 import { reqProducts } from "@/api/front/frontProducts.js"
 import { useRoute } from "vue-router"
+import type { ProductData } from '@/types/front/product';
 
-const data = ref({})
+const productsData = ref<ProductData[]>([])
 const route = useRoute()
 const totalPage= ref(1)
 const currentPage = ref(1)
 const loading = ref(false)
+const currentCategory = ref("")
 
-const getProducts = async (page, category) => {
+const getProducts = async (page:number, category:string):Promise<void> => {
     loading.value = true
     try {
-        data.value = await reqProducts(page, category);
-        totalPage.value = data.value.pagination.total_pages
+        const res = await reqProducts( { page, category });
+        productsData.value = res.data.products
+        totalPage.value = res.data.pagination.total_pages
         currentPage.value = page
+        currentCategory.value = category
     } catch(error) {
         console.error(error);
     } finally {
@@ -24,16 +28,24 @@ const getProducts = async (page, category) => {
     }
 }
 
-const changeCurrentPage = (page) => {
-    getProducts(page, route.query.category)
+const getCategoryFromRoute = (): string => {
+  const category = route.query.category
+  return typeof category === 'string' ? category : ''
 }
 
-watch(route, (value) => {
-    getProducts(1, value.query.category)
+const changeCurrentPage = (page: number) => {
+  currentCategory.value = getCategoryFromRoute()
+  getProducts(page, currentCategory.value)
+}
+
+watch(route, () => {
+  currentCategory.value = getCategoryFromRoute()
+  getProducts(1, currentCategory.value)
 })
 
 onMounted(() => {
-    getProducts(1, route.query.category)
+  currentCategory.value = getCategoryFromRoute()
+  getProducts(currentPage.value, currentCategory.value)
 })
 
 </script>
@@ -47,8 +59,9 @@ onMounted(() => {
             <h3>全部商品</h3>
         </template>
         <div class="card-wrapper">
-            <CardProduct :data="product" v-for="product in data.products" :key="product.id"/>
+            <CardProduct :data="product" v-for="product in productsData" :key="product.id"/>
         </div>
+
         <div class="pagination-block">
             <ElPagination layout="prev, pager, next" :page-count="totalPage" @current-change="changeCurrentPage"/>
         </div>

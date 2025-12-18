@@ -6,8 +6,8 @@ export const reqAllProducts = (): Promise<AxiosResponse<AllProductsResponse>> =>
     return api.get("products/all")
 }
 
-export const reqProducts = (page: number, category: string): Promise<AxiosResponse<ProductsResponse>> => {
-    return api.get(`products?page=${page}&category=${category}`)
+export const reqProducts = ( params: { page: number, category: string }): Promise<AxiosResponse<ProductsResponse>> => {
+    return api.get("products", { params })
 }
 
 export const reqProductDetail = (id: string): Promise<AxiosResponse<GetProductDetail>> => {
