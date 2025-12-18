@@ -100,15 +100,15 @@ onMounted(() => {
 
     @media(min-width: $breakpoint-tablet) {
         h3 {
-            width: 90%;
+            width: 80%;
             margin: 0 auto;
         }
 
         .card-wrapper {
             margin: 0 auto;
-            width: 90%;
+            width: 80%;
             display: grid;
-            grid-template-columns: repeat(3, minmax(200px, 1fr));
+            grid-template-columns: repeat(2, minmax(200px, 1fr));
         }
     }
 
@@ -116,12 +116,12 @@ onMounted(() => {
     @media(min-width: $breakpoint-desktop) {
         h3 {
             margin: 0 auto;
-            width: 80%;
+            width: 60%;
         }
         .card-wrapper {
-            width: 80%;
+            width: 60%;
             display: grid;
-            grid-template-columns: repeat(4, minmax(200px, 1fr));
+            grid-template-columns: repeat(2, minmax(200px, 1fr));
         }
     }
 }
