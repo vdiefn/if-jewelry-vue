@@ -12,7 +12,7 @@ export interface ProductData {
     title: string,
     unit: number
   }
-  
+
   export interface Pagination {
     total_pages: number,
     current_page: number,
@@ -20,17 +20,17 @@ export interface ProductData {
     has_next:boolean,
     category:string
   }
-  
+
   export interface AllProductsResponse {
     success: boolean,
     products: ProductData[],
-    messages: string[]
   }
-  
+
   export interface ProductsResponse extends AllProductsResponse {
     pagination: Pagination
+    messages: string[]
   }
-  
+
   export interface GetProductDetail {
     product: ProductData,
     success:boolean

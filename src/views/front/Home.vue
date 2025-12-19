@@ -1,32 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import { ElCarousel, ElCarouselItem } from 'element-plus';
 import { ref, onMounted, computed } from 'vue';
 import { reqAllProducts } from '@/api/front/frontProducts';
 import { CardProduct, DialogShowCoupon } from "@/components/front/index.js";
+import noImage from "@/assets/images/no-image.jpg"
+import type { ProductData } from "@/types/front/product"
 
-const data = ref({
-    success: false,
-    products: []
-})
+const data = ref<ProductData[]>([])
 
 const getAllProducts = async () => {
-    data.value = await reqAllProducts()
+  try{
+    const res = await reqAllProducts()
+    data.value = res.data.products
+    console.log(data.value)
+  } catch(error){
+    console.error(error)
+  }
 }
 
 const earringsProducts = computed(() => {
-    return data.value.products.filter(product => product.category === '耳環') || []
+    return data.value.filter(product => product.category === '耳環') || []
 })
 
 const necklaceProducts = computed(() => {
-    return data.value.products.filter(product => product.category === "項鍊") || []
+    return data.value.filter(product => product.category === "項鍊") || []
 })
 
 const ringProducts = computed(() => {
-    return data.value.products.filter(product => product.category === "戒指") || []
+    return data.value.filter(product => product.category === "戒指") || []
 })
 
 const braceletProducts = computed(() => {
-    return data.value.products.filter(product => product.category === "手鐲") || []
+    return data.value.filter(product => product.category === "手鐲") || []
 })
 
 onMounted(() => {
@@ -39,9 +44,9 @@ onMounted(() => {
 <template>
     <div class="carousel-container" v-if="data">
         <ElCarousel type="card">
-            <ElCarouselItem v-for="product in data.products.slice(0, 4)" :key="product.id" class="carousel-item">
+            <ElCarouselItem v-for="product in data.slice(0, 4)" :key="product.id" class="carousel-item">
                 <RouterLink :to="{path:`/product/${product.id}`}">
-                    <img :src="product.imagesUrl[0]" alt="carousel item" class="image"/>
+                    <img :src="product.imagesUrl[0]?? noImage" v-if="product.imagesUrl.length" alt="carousel item" class="image"/>
                 </RouterLink>
             </ElCarouselItem>
         </ElCarousel>
