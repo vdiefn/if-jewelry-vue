@@ -1,36 +1,39 @@
-<script setup>
-import { ElInputNumber, ElButton, ElCarousel, ElCarouselItem, ElTabs, ElTabPane, ElDivider, ElBreadcrumb, ElBreadcrumbItem, ElMessage } from "element-plus"
-import { ref, onMounted, watch } from 'vue';
+<script setup lang="ts">
+import { ElInputNumber, ElButton, ElTabs, ElTabPane, ElDivider, ElBreadcrumb, ElBreadcrumbItem } from "element-plus"
+import { ref, onMounted, watch, useTemplateRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
 import { CardProduct, DrawerCartList } from "@/components/front/index.js";
 import { useCartStore } from "@/store/modules/cart.js";
 import { useIsMobile } from "@/composables/useIsMobile";
+import { paymentAndDeliveryMethod, jewelryCare } from "@/data";
+import type { ProductData } from "@/types/front/product"
 
 const route = useRoute();
 const router = useRouter();
 const count = ref(1)
-const data = ref({})
-const activeName = ref("first")
+const productData = ref<ProductData>()
+const activeName = ref('first' as string)
 const currentCategory = ref("")
 const currentId = ref("")
-const similarProducts = ref([])
+const similarProducts = ref<ProductData[]>([])
 const activeImage = ref(0)
-const imageList = ref([])
+const imageList = ref<string[]>([])
 const loading = ref(false)
 const cartStore = useCartStore()
-const drawerCartListRef = ref()
+const drawerCartListRef = useTemplateRef<InstanceType<typeof DrawerCartList>>("drawerCartListRef")
 const { isMobile } = useIsMobile()
 
-const getProductDetail = async(id) => {
+const getProductDetail = async(id:string) => {
     loading.value = true
 
     try {
-        data.value = await reqProductDetail(id);
-        currentCategory.value = data.value.product.category
-        currentId.value = data.value.product.id
+        const res = await reqProductDetail(id);
+        productData.value = res.data.product
+        currentCategory.value = res.data.product.category
+        currentId.value = res.data.product.id
         await getSimilarProducts()
-        imageList.value = data.value.product.imagesUrl
+        imageList.value = res.data.product.imagesUrl
         window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch(error) {
         console.error(error);
@@ -39,33 +42,35 @@ const getProductDetail = async(id) => {
     }
 }
 
+const MAX_SIMILAR = 4
 const getSimilarProducts = async() => {
-    if(currentCategory.value.length > 0) {
-        try {
-            const res = await reqProducts(1, currentCategory.value);
-            similarProducts.value = res.products.filter(product => product.id !== currentId.value);
-        } catch(error) {
-            console.error(error);
-        }
+    if(currentCategory.value.length === 0) return
+    try {
+        const res = await reqProducts({ page:1, category: currentCategory.value });
+        similarProducts.value = res.data.products
+        .filter(product => product.id !== currentId.value)
+        .slice(0, MAX_SIMILAR)
+    } catch(error) {
+        console.error(error);
     }
 }
 
-const handleClickImage = (index) => {
+const handleClickImage = (index:number) => {
     activeImage.value = index
 }
 
-const addToCart = async(id, count) => {
+const addToCart = async(id:string, count:number) => {
     await cartStore.addToCart({
         product_id: id,
         qty: count
     })
 
     if(isMobile.value) {
-        await drawerCartListRef.value.open()
+        await drawerCartListRef.value?.open()
     }
 }
 
-const goToCheckout = async(id, count) => {
+const goToCheckout = async(id:string, count:number) => {
     await cartStore.addToCart({
         product_id: id,
         qty: count
@@ -74,19 +79,25 @@ const goToCheckout = async(id, count) => {
     await router.push("/cart")
 }
 
+watch(
+  () => route.params,
+  (val) => {
+    console.log('params changed', val)
+  },
+  { deep: true }
+)
 
-watch(() => route.params.id, (value) => {
-    getProductDetail(value)
-})
 
-onMounted(() => {
-    getProductDetail(route.params.id)
-})
+watch(() => route.params.id, (id) => {
+    if (!id) return
+    console.log("change")
+    getProductDetail(id as string)
+  }, { immediate:true })
 
 </script>
 
 <template>
-    <div class="container" v-if="data.product" v-loading="loading">
+    <div class="container" v-if="productData" v-loading="loading">
         <ElBreadcrumb separator="/">
             <ElBreadcrumbItem>
                 <RouterLink :to="{ path: '/products' }" style="font-weight: normal;">全部商品</RouterLink>
@@ -98,7 +109,7 @@ onMounted(() => {
         <div class="top">
             <div class="image-section">
                 <div class="big-image">
-                    <img :src="imageList[activeImage]" alt="target product picture">
+                    <img :src="imageList[activeImage] || ''" alt="target product picture">
                 </div>
                 <div class="small-image">
                     <div
@@ -113,50 +124,54 @@ onMounted(() => {
                 </div>
             </div>
             <div class="purchase-section">
-                <h5>{{data.product.title}}</h5>
+                <h5>{{productData.title}}</h5>
                 <div class="price-info">
-                    <p>$NTD {{ data.product.origin_price }}</p>
-                    <h6>$NTD {{ data.product.price }}</h6>
+                    <p>$NTD {{ productData.origin_price }}</p>
+                    <h6>$NTD {{ productData.price }}</h6>
                 </div>
                 <h6>
-                    {{ data.product.description }}
+                    {{ productData.description }}
                 </h6>
                 <ElInputNumber v-model="count" :min="1" :max="10"/>
                 <div class="button-wrapper">
-                    <ElButton type="primary" @click="addToCart(data.product.id, count)">加入購物車</ElButton>
-                    <ElButton type="warning" @click="goToCheckout(data.product.id, count)">立即購買</ElButton>
+                    <ElButton type="primary" @click="addToCart(productData.id, count)">加入購物車</ElButton>
+                    <ElButton type="warning" @click="goToCheckout(productData.id, count)">立即購買</ElButton>
                 </div>
 
             </div>
         </div>
 
-        <ElTabs v-model="activeName" class="tabs-wrapper">
-            <ElTabPane label="商品描述" name="first" class="product-info">
-                <p>{{ data.product.content }}</p>
+        <ElTabs v-model?="activeName as string" class="tabs-wrapper">
+            <ElTabPane label="商品描述" name?="first" class="product-info">
+                <p>{{ productData.content }}</p>
             </ElTabPane>
-            <ElTabPane label="送貨與付款方式" name="second" class="payment-and-delivery-method">
-                <div class="text">
-                    <h6>送貨方式</h6>
-                    <p>If Jewelry 門市取貨</p>
-                    <p>全家 取貨不付款</p>
-                </div>
-                <div class="text">
-                    <h6>付款方式</h6>
-                    <p>信用卡支付</p>
-                    <p>銀行轉帳</p>
+            <ElTabPane label="送貨與付款方式" name?="second" class="payment-and-delivery-method">
+                <div
+                  v-for="section in paymentAndDeliveryMethod"
+                  :key="section.title"
+                  class="text"
+                >
+                  <h6>{{ section.title }}</h6>
+                  <p v-for="item in section.items" :key="item">
+                    {{ item }}
+                  </p>
                 </div>
             </ElTabPane>
-            <ElTabPane label="保養方式" name="third" class="jewelry-care">
-                <h5>飾品配戴時的保養</h5>
-                <p>1. 預防飾品損壞，需要避免飾品接觸到香水、酒精、去光水、清潔劑、化妝品或其它含有化學藥劑成分的物質</p>
-                <p>2. 避免於泡溫泉、洗澡、去海邊玩時配戴飾品，以免影響飾品光澤或是損壞飾品。</p>
-                <h5>飾品配戴後的保養</h5>
-                <p>1.若長時間不配戴，建議可用軟布擦拭掉飾品上因配戴後所殘留的汗水、油脂。</p>
-                <p>2. 因為飾品的材質不一，軟硬度也不同，建議把飾品個別收納在夾鏈袋中，不但可以隔絕空氣氧化，也可以避免放在同一個首飾盒中互相摩擦而受傷。</p>
-                <h5>飾品清潔保養</h5>
-                <p>1. 一般飾品只要以清水混合一點點中性洗碗精，搭配軟毛牙刷清洗，沖洗後以軟布將水分擦拭乾淨即可。</p>
-                <p>2. 銀飾品變黑是因為跟空氣中的硫產生硫化作用，只要使用洗銀水或拭銀布就可以讓銀飾品恢復以往光澤，若是擔心銀飾品失重，也可以使用較高級的洗銀乳來保養貴重的銀飾珠寶。</p>
-                <p>3. 輕微的汙垢可以用牙刷或化妝棉沾取牙膏在發黑的地方，輕輕畫圓擦拭後，就能除去氧化的部分，達到拋光的效果了。</p>
+            <ElTabPane label="保養方式" name?="third" class="jewelry-care">
+                <div
+                  v-for="section in jewelryCare"
+                  :key="section.title"
+                  class="jewelry-care-section"
+                >
+                  <h5>{{ section.title }}</h5>
+
+                  <p
+                    v-for="(item, index) in section.items"
+                    :key="index"
+                  >
+                    {{ index + 1 }}. {{ item }}
+                  </p>
+               </div>
             </ElTabPane>
         </ElTabs>
 
@@ -190,7 +205,48 @@ onMounted(() => {
         margin-top: 1rem;
 
         .image-section {
-            display: none;
+            display: grid;
+            grid-template-columns: 80% 20%;
+            gap: 0.5rem;
+            margin: 10px;
+
+            .big-image {
+              aspect-ratio: 1 / 1;
+              width: 100%;
+              height: 100%;
+
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .small-image {
+              flex-direction: column;
+              display: flex;
+              gap: 0.5rem;
+
+
+              .image-wrapper {
+                padding: 5px;
+                cursor: pointer;
+
+                &.active img {
+                  border: 2px solid $base-primary-color;
+                }
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                  display: block;
+                }
+              }
+            }
+
+          }
         }
 
         .purchase-section {
@@ -316,6 +372,8 @@ onMounted(() => {
     }
 }
 
+
+
 @media (min-width: $breakpoint-tablet) {
     .container {
         .top {
@@ -325,10 +383,6 @@ onMounted(() => {
             padding: 0 1rem;
             max-width: 1000px;
             width: 100%;
-
-            .el-carousel {
-                display: none;
-            }
 
             .image-section {
                 aspect-ratio: 1 / 1;
@@ -345,12 +399,12 @@ onMounted(() => {
                     height: 80%;
                     object-fit: cover;
 
-                        img {
-                            width: 100%;
-                            height: 100%;
-                            object-fit: cover;
-                            display: block;
-                        }
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                    }
                 }
 
                 .small-image {
@@ -422,6 +476,8 @@ onMounted(() => {
         }
     }
 }
+
+
 
 @media (min-width: $breakpoint-desktop) {
     .container {
