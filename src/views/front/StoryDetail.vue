@@ -1,25 +1,30 @@
-<script setup>
+<script setup lang="ts">
 import { DefaultContainer } from "@/components/front/index.js";
 import { useRoute } from "vue-router"
 import { ref, onMounted, watch } from "vue";
 import { reqArticle } from "@/api/front/article.js"
 import { ElBreadcrumb, ElBreadcrumbItem, ElBacktop, ElTag } from "element-plus";
+import type { ArticleData } from "@/types/front/article"
+
+type TagType = "primary"| "success"| "info"| "warning"| "danger"
 
 const route = useRoute()
-const data = ref()
+const data = ref<ArticleData>()
 const loading = ref(false)
+const type:TagType[] = ["primary", "success", "info", "warning", "danger"]
 
-const getType = (index) => {
-    const type = ["primary", "success", "info", "warning", "danger"]
-    return type[index%5]
+const getType = (index:number):TagType => {
+    return type[index% type.length]
 }
+
 
 const getArticle = async() => {
     loading.value = true
     try {
-        const res = await reqArticle(route.params.id)
-        if(res.success){
-            data.value = res.article
+        const res = await reqArticle(route.params.id as string)
+        console.log(res)
+        if(res.data.success){
+            data.value = res.data.article
         }
     } catch(error){
         console.error(error)
@@ -28,7 +33,7 @@ const getArticle = async() => {
     }
 }
 
-watch(()=>route.params.id, (value) => {
+watch(()=>route.params.id, () => {
     getArticle()
 })
 
@@ -53,7 +58,7 @@ onMounted(() => {
             <div class="title-wrapper">
                 <h4>{{data?.title}}</h4>
                 <div class="tag-wrapper">
-                    <ElTag v-for="(item, index) in data?.tag" :key="index" effect="plain" round :type="getType(index)">
+                    <ElTag v-for="(item, index) in data?.tag" :key="index" effect="plain" round :type="getType(Number(index))">
                         {{ item }}
                     </ElTag>
                 </div>

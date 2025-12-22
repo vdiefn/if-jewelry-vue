@@ -1,25 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { DefaultContainer } from "@/components/front/index.js";
 import { reqAllArticles } from "@/api/front/article.js"
 import { useRouter } from "vue-router";
 import {ElCard, ElTag, ElMessage} from "element-plus";
 
+type TagType = "primary"| "success"| "info"| "warning"| "danger"
+
 const data = ref()
 const router = useRouter();
 const loading = ref(false);
+const type:TagType[] = ["primary", "success", "info", "warning", "danger"]
 
-const getType = (index) => {
-    const type = ["primary", "success", "info", "warning", "danger"]
-    return type[index%5]
+const getType = (index:number):TagType => {
+    return type[index% type.length]
 }
 
 const getAllArticles = async() => {
     loading.value = true;
     try {
         const res = await reqAllArticles();
-        if(res.success) {
-            data.value = res.articles
+        if(res.data.success) {
+            data.value = res.data.articles
         } else {
             ElMessage({
                 type:"error",
@@ -33,7 +35,7 @@ const getAllArticles = async() => {
     }
 }
 
-const goToArticle = (id) => {
+const goToArticle = (id:string) => {
     router.push(`/jewelryStory/${id}`)
 }
 
@@ -51,7 +53,7 @@ onMounted(() => {
                     <div class="title-wrapper">
                         <h5>{{ item.title }}</h5>
                         <div class="tag-wrapper">
-                            <ElTag v-for="(i, index) in item.tag" :key="index" effect="plain" round size="small" :type="getType(index)">
+                            <ElTag v-for="(i, index) in item.tag" :key="index" effect="plain" round size="small" :type="getType(Number(index))">
                                 {{ i }}
                             </ElTag>
                         </div>
