@@ -1,77 +1,75 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, useTemplateRef } from "vue";
 import { reqArticles, reqDeleteArticle, reqArticle } from "@/api/admin/article"
 import { ElButton, ElCard, ElMessage, ElMessageBox } from "element-plus"
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { DialogAdminArticle } from "@/components/admin";
+import type { ArticleData } from "@/types/admin/article";
+import type { Pagination } from "@/types/admin/coupon"
 
 const loading = ref(false)
-const data = ref()
-const pagination = ref()
+const data = ref<ArticleData[]>([])
+const pagination = ref<Pagination>()
 const currentPage = ref(1)
 const totalPages = ref(1)
-const dialogAdminArticleRef = useTemplateRef("dialogAdminArticleRef")
+const dialogAdminArticleRef = useTemplateRef<InstanceType<typeof DialogAdminArticle>>("dialogAdminArticleRef")
 
 const getAllArticles = async() => {
     loading.value = true
 
     try {
-        const res = await reqArticles()
-        if(res.success) {
-            data.value = res.articles
-            pagination.value = res.pagination
-            currentPage.value = res.pagination.current_page
-            totalPages.value = res.pagination.total_pages
+        const res = await reqArticles({ page: currentPage.value })
+        if(res.data.success) {
+            data.value = res.data.articles
+            pagination.value = res.data.pagination
+            currentPage.value = res.data.pagination.current_page
+            totalPages.value = res.data.pagination.total_pages
         }
-    } catch(errpr) {
-        console.error(errpr)
+    } catch(err) {
+        console.error(err)
     } finally {
         loading.value = false
     }
 }
 
 const addNewArticle = async() => {
-    dialogAdminArticleRef.value.open()
+    if(dialogAdminArticleRef.value){
+        dialogAdminArticleRef.value.open()
+    }
 }
 
-const editArticle = async(row) => {
+const editArticle = async(row:ArticleData) => {
     try {
         const res = await reqArticle(row.id)
-        if(res.success){
-            dialogAdminArticleRef.value.open(res.article)
-        } else {
-            ElMessage({
-                type: "error",
-                message: res.message
-            })
+        if(res.data.success){
+            dialogAdminArticleRef.value?.open(res.data.article)
         }
     } catch(error){
         console.error(error)
     }
 }
 
-const deleteArticle = async(row) => {
+const deleteArticle = async(row:ArticleData) => {
     await ElMessageBox.confirm(`請確認是否刪除文章：${row.title}`, "Warning", {
         confirmButtonText: "確認",
         cancelButtonText: "取消",
         type: "warning",
         beforeClose: async (action, instance, done) => {
             if (action !== "confirm") return done()
-            instance.confirmButtonLoading = true; 
+            instance.confirmButtonLoading = true;
             try {
                 const res = await reqDeleteArticle(row.id)
-                if (res.success) {
-                    ElMessage({ type: "success", message: res.message });
+                if (res.data.success) {
+                    ElMessage({ type: "success", message: res.data.message });
                     done()
                     await getAllArticles();
                 } else {
-                    ElMessage({ type: "error", message: res.message });
+                    ElMessage({ type: "error", message: res.data.message });
                     done()
                 }
             } catch (error) {
                 console.error(error);
-                const msg = error?.response?.data?.message || "刪除失敗";
-                ElMessage({ type: "error", message: msg });
+                ElMessage({ type: "error", message: "刪除失敗" });
                 done()
             } finally {
                 instance.confirmButtonLoading = false;

@@ -2,8 +2,8 @@ import api from "@/utils/api"
 import type { GetArticleDetailResponse, GetArticleResponse, EditArticleParams, CreateArticleParams, MessageResponse } from "@/types/admin/article"
 import type { AxiosResponse } from "axios"
 
-export const reqArticles = (page:number):Promise<AxiosResponse<GetArticleResponse>> => {
-    return api.get("/admin/articles", { params: page })
+export const reqArticles = (params: { page:number }):Promise<AxiosResponse<GetArticleResponse>> => {
+    return api.get("/admin/articles", { params })
 }
 
 export const reqArticle = (id:string): Promise<AxiosResponse<GetArticleDetailResponse>> => {
