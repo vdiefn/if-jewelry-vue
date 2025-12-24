@@ -38,7 +38,8 @@ export interface CreateProductParams {
   content: string
   is_enabled: number
   imageUrl: string
-  imagesUrl: string[]
+  imagesUrl: string[],
+  num:number
 }
 
 export interface ProductResponse {
@@ -48,16 +49,15 @@ export interface ProductResponse {
 
 export interface EditProductParams {
   id: string
-  data: {
-    title: string
-    category: string
-    origin_price: number
-    price: number
-    unit: string
-    description: string
-    content: string
-    is_enabled: number
-    imageUrl: string
-    imagesUrl: string[]
-  }
+  title: string
+  category: string
+  origin_price: number
+  price: number
+  unit: string
+  description: string
+  content: string
+  is_enabled: number
+  imageUrl: string
+  imagesUrl: string[]
+  num:number
 }

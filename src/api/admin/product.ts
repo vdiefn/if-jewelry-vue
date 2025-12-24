@@ -11,7 +11,7 @@ export const reqAddNewProduct = (params:CreateProductParams):Promise<AxiosRespon
 }
 
 export const reqEditProduct = ( params: EditProductParams ):Promise<AxiosResponse<ProductResponse>> => {
-  const { data, id } = params
+  const { id, ...data } = params
   return api.put(`/admin/product/${id}`, { data })
 }
 
