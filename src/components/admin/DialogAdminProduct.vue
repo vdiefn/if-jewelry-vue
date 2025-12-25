@@ -45,14 +45,14 @@ interface Props {
 type Open = typeof open;
 
 interface OpenExpose {
-   open: Open;
+  open: Open;
 }
 
 const props = defineProps<{
   categoryList: Props[]
 }>()
 
-const { formatObjectToUrl, formatUrlToObject } = useImageUpload()
+const { formatObjectToUrl, formatUrlToObject, beforeAvatarUpload, handlePreview } = useImageUpload()
 const emit = defineEmits(["product-added"]);
 const fileList = ref<UploadUserFile[]>([]);
 const loading = ref(false);
@@ -93,7 +93,6 @@ const open = (row?:ProductData) => {
 
   } else {
     isEdit.value = false;
-    console.log(form)
   }
   dialogVisible.value = true;
 };
@@ -106,7 +105,7 @@ const confirm = async () => {
     ...form,
     origin_price: Number(form.origin_price),
     price: Number(form.price),
-    is_enabled: form.is_enabled? 0:1,
+    is_enabled: form.is_enabled? 1:0,
     imageUrl: "",
     imagesUrl: formatImagesUrl
   };
@@ -129,20 +128,6 @@ const confirm = async () => {
   }
 };
 
-const beforeAvatarUpload = (file:File) => {
-  const isValidType = ["image/jpeg", "image/png"].includes(file.type);
-  const isValidSize = file.size / 1024 / 1024 <= 3;
-
-  if (!isValidType) {
-    ElMessage({ type: "error", message: "上傳圖片檔案類型應為PNG或JPEG" });
-    return false;
-  }
-  if (!isValidSize) {
-    ElMessage({ type: "error", message: "上傳圖片大小應小於3MB" });
-    return false;
-  }
-};
-
 const customUploadRequest = async (options:UploadRequestOptions):Promise<void> => {
   const { file, onSuccess, onError } = options
   try {
@@ -160,9 +145,6 @@ const customUploadRequest = async (options:UploadRequestOptions):Promise<void> =
     };
     fileList.value.push({ name: uploadFile.name, url: uploadFile.url });
     form.imagesUrl.push(imageUrl);
-
-    console.log(form)
-
     onSuccess?.(res.data)
   } catch (err) {
     onError?.(err as any)
@@ -175,10 +157,6 @@ const handleRemove = (file: UploadFile, _fileList: UploadFile[]) => {
     return item.url !== file.url;
   });
   fileList.value = fileList.value.filter((item: UploadUserFile) => item.url !== file.url);
-};
-
-const handlePreview = (file:UploadUserFile) => {
-  window.open(file.url);
 };
 
 defineExpose<OpenExpose>({ open });
