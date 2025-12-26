@@ -17,9 +17,8 @@ import {
 import { Plus } from "@element-plus/icons-vue";
 import { ref, reactive } from "vue";
 import { reqAddNewProduct, reqEditProduct } from "@/api/admin/product";
-import { uploadImage } from "@/api/admin/upload.js";
 import type { ProductData } from "@/types/admin/product"
-import type { UploadUserFile, UploadRequestOptions, UploadStatus, UploadFile } from 'element-plus'
+import type { UploadUserFile, UploadRequestOptions, UploadFile } from 'element-plus'
 import { useImageUpload } from "@/composables/useImageUpload"
 
 interface TempProductData {
