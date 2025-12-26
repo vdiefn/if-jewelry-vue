@@ -1,10 +1,8 @@
-import { uploadImage } from "@/api/admin/upload.js";
+import { uploadImage } from "@/api/admin/upload"
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import type {
   UploadUserFile,
-  UploadRequestOptions,
-  UploadStatus,
   UploadFile,
 } from "element-plus";
 import type { ProductData } from "@/types/admin/product";
@@ -25,7 +23,6 @@ interface TempProductData {
 }
 
 export function useImageUpload() {
-  const fileList = ref<UploadUserFile[]>([]);
 
   const formatObjectToUrl = (data: TempProductData): string[] => {
     return data.imagesUrl.map((item) => {
@@ -63,11 +60,19 @@ export function useImageUpload() {
     window.open(file.url);
   };
 
+  const handleUploadImage = async(file:File) => {
+    const formData = new FormData()
+    formData.append('file-to-upload', file)
+
+    const res = await uploadImage(formData)
+    return res
+  }
+
   return {
-    fileList,
     formatObjectToUrl,
     formatUrlToObject,
     beforeAvatarUpload,
     handlePreview,
+    handleUploadImage
   };
 }

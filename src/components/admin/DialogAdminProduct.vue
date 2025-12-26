@@ -52,7 +52,7 @@ const props = defineProps<{
   categoryList: Props[]
 }>()
 
-const { formatObjectToUrl, formatUrlToObject, beforeAvatarUpload, handlePreview } = useImageUpload()
+const { formatObjectToUrl, formatUrlToObject, beforeAvatarUpload, handlePreview, handleUploadImage } = useImageUpload()
 const emit = defineEmits(["product-added"]);
 const fileList = ref<UploadUserFile[]>([]);
 const loading = ref(false);
@@ -128,12 +128,12 @@ const confirm = async () => {
   }
 };
 
+
+
 const customUploadRequest = async (options:UploadRequestOptions):Promise<void> => {
   const { file, onSuccess, onError } = options
   try {
-    const formData = new FormData();
-    formData.append('file-to-upload', file);
-    const res = await uploadImage(formData);
+    const res = await handleUploadImage(file)
 
     const { imageUrl } = res.data;
 
@@ -150,6 +150,8 @@ const customUploadRequest = async (options:UploadRequestOptions):Promise<void> =
     onError?.(err as any)
   }
 };
+
+
 
 const handleRemove = (file: UploadFile, _fileList: UploadFile[]) => {
   form.imagesUrl = form.imagesUrl.filter((item: string | UploadFile) => {
