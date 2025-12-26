@@ -1,5 +1,4 @@
 import { uploadImage } from "@/api/admin/upload"
-import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import type {
   UploadUserFile,
