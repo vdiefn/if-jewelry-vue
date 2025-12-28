@@ -1,5 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { useRouter } from "vue-router";
+import type { RouteRecordRaw } from "vue-router"
+
 const router = useRouter();
 
 const props = defineProps({
@@ -8,7 +10,7 @@ const props = defineProps({
     },
 });
 
-const goRoute = (item) => {
+const goRoute = (item:RouteRecordRaw) => {
     router.push(item.path);
 };
 </script>
