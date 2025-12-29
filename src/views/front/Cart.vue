@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useCartStore } from "@/store/modules/cart.ts"
 import { ElCard, ElButton } from "element-plus";
 import { onMounted } from "vue"

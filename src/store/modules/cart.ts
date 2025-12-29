@@ -14,7 +14,11 @@ import type { CouponParams } from "@/types/front/coupon"
 export const useCartStore = defineStore("cart", () => {
   const cartList = ref<FullCartData[]>([]);
   const loading = ref(false);
-  const cartData = ref<ResponseCartData>();
+  const cartData = ref<ResponseCartData>({
+    carts: [],
+    total: 0,
+    final_total: 0,
+  });
   const couponCode = ref("");
 
   const clearCart = () => {
