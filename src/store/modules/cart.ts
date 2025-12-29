@@ -4,7 +4,7 @@ import {
   reqDeleteCart,
   reqGetCart,
   reqEditCart,
-} from "@/api/front/cart.js";
+} from "@/api/front/cart.ts";
 import { reqCoupon } from "@/api/front/coupon";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";

@@ -3,7 +3,7 @@ import { ref, computed, useTemplateRef } from "vue";
 import { ElBadge, ElPopover } from "element-plus";
 import { DrawerProductCategory, DrawerCartList } from "@/components/front";
 import { useRoute, useRouter } from "vue-router";
-import { useCartStore } from "@/store/modules/cart.js";
+import { useCartStore } from "@/store/modules/cart.ts";
 import { useIsMobile } from "@/composables/useIsMobile";
 
 const route = useRoute();

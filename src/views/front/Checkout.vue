@@ -4,7 +4,7 @@ import {ElSteps, ElStep, ElMessage} from "element-plus"
 import { useRouter } from "vue-router"
 import { reqAddOrder } from "@/api/front/order.js";
 import { reqAddPayment } from "@/api/front/pay.js";
-import { useCartStore } from "@/store/modules/cart.js";
+import { useCartStore } from "@/store/modules/cart.ts";
 
 const cartStore = useCartStore();
 const router = useRouter()

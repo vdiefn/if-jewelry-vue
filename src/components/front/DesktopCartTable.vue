@@ -2,7 +2,7 @@
 import {ElButton, ElCard, ElInput, ElInputNumber} from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import {ref, watch} from "vue";
-import {useCartStore} from "@/store/modules/cart.js";
+import {useCartStore} from "@/store/modules/cart.ts";
 import {useRouter} from "vue-router";
 
 const props = defineProps({

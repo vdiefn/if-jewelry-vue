@@ -2,7 +2,7 @@
 import { ElFooter, ElHeader, ElContainer, ElMain } from 'element-plus';
 import { Header, Footer } from "@/components/front"
 
-import { useCartStore } from '@/store/modules/cart.js'
+import { useCartStore } from '@/store/modules/cart.ts'
 import { onMounted } from 'vue'
 
 const cartStore = useCartStore()

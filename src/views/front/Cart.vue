@@ -1,5 +1,5 @@
 <script setup>
-import { useCartStore } from "@/store/modules/cart.js"
+import { useCartStore } from "@/store/modules/cart.ts"
 import { ElCard, ElButton } from "element-plus";
 import { onMounted } from "vue"
 import { useRouter } from "vue-router"
