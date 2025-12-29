@@ -1,28 +1,31 @@
-import axios from "axios"
-import { useUserStore } from "@/store/modules/user"
+import axios from "axios";
+import { useUserStore } from "@/store/modules/user";
 
-const BASE_URL =`${import.meta.env.VITE_BASE_URL}/v2/api/${import.meta.env.VITE_API_PATH}`;
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}/v2/api/${import.meta.env.VITE_API_PATH}`;
 
 const api = axios.create({
-    baseURL: BASE_URL,
-  })
+  baseURL: BASE_URL,
+});
 
-api.interceptors.request.use((config) => {
-    const userStore = useUserStore()
-    const token = userStore.token
-    if(token){
-        config.headers.Authorization = token
+api.interceptors.request.use(
+  (config) => {
+    const userStore = useUserStore();
+    const token = userStore.token;
+    if (token) {
+      config.headers.Authorization = token;
     }
-    return config
-},(error) =>{
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
-})
+  }
+);
 
 api.interceptors.response.use(
-    response => response,
-    error => {
-        return Promise.reject(error)
-    }
-)
+  (response) => response,
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-export default api
+export default api;

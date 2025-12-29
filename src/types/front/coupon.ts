@@ -7,7 +7,5 @@ export interface CreateCouponResponse {
 }
 
 export interface CouponParams {
-  data: {
-    code: string
-  }
+  code: string
 }
