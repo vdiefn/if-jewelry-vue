@@ -6,26 +6,26 @@ import type { AxiosResponse } from "axios"
 const baseURL = `${import.meta.env.VITE_BASE_URL}`
 
 const request = axios.create({
-    baseURL,
-    timeout: 5000
+  baseURL,
+  timeout: 5000
 })
 
 request.interceptors.request.use((config) => {
-    const userStore = useUserStore()
-    const token = userStore.token
-    if(token){
-        config.headers.Authorization = token
-    }
-    return config
+  const userStore = useUserStore()
+  const token = userStore.token
+  if(token){
+      config.headers.Authorization = token
+  }
+  return config
 },(error) =>{
-    return Promise.reject(error);
+  return Promise.reject(error);
 })
 
 request.interceptors.response.use(
-    response => response,
-    error => {
-        return Promise.reject(error)
-    }
+  response => response,
+  error => {
+      return Promise.reject(error)
+  }
 )
 
 export const reqLogin = (data: LoginForm):Promise<AxiosResponse<UserLoginResponse>> => {

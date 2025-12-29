@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { ElDialog, ElButton, ElForm, ElFormItem, ElInput, ElDatePicker, ElRow, ElCol, ElMessage } from "element-plus"
 import { reqAddNewCoupon, reqEditCoupon } from "@/api/admin/coupon.js"
+import type { CouponData } from "@/types/admin/coupon"
 
 const dialogVisible = ref(false)
 const loading = ref(false)
@@ -48,7 +49,7 @@ const shortcuts = [
     },
 ]
 
-const open = (row) => {
+const open = (row?:CouponData) => {
     isEdit.value = false
     Object.assign(form, initialForm)
     if(row) {
@@ -72,23 +73,22 @@ const confirm = async() => {
 
     try{
         const res = isEdit.value ? await reqEditCoupon(payload) :await reqAddNewCoupon(payload)
-        if(res.success) {
-            ElMessage({ type: "success", message: res.message })
+        if(res.data.success) {
+            ElMessage({ type: "success", message: res.data.message })
             dialogVisible.value = false
             emit("coupon-added")
         } else {
-            ElMessage({ type: "error", message: res.message })
+            ElMessage({ type: "error", message: res.data.message })
         }
     } catch(error){
         console.error(error)
-        const msg = error?.response?.data?.message || "操作失敗";
-        ElMessage({ type: "error", message: msg });
+        ElMessage({ type: "error", message: "操作失敗" });
     } finally {
         loading.value = false
     }
 }
 
-const disabledDate = (time) => {
+const disabledDate = (time:Date) => {
     return time.getTime() < Date.now()
 }
 

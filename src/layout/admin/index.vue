@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ElContainer, ElAside, ElHeader, ElMain, ElMenu } from "element-plus";
 import { RouterView, useRoute } from "vue-router";
 import { ref, watch, nextTick } from "vue";
@@ -30,7 +30,7 @@ watch(
         <ElContainer>
         <ElAside :width="layoutSetting.isCollapse ? '64px' : '200px'">
             <div class="aside-title">
-                <h2 v-if="!layoutSetting.isCollapse">{{ setting.title }}</h2>
+                <h2 v-if="!layoutSetting.isCollapse">{{ setting.backendTitle }}</h2>
                 <ElIcon v-else></ElIcon>
             </div>
             <ElMenu

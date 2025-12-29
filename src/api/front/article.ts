@@ -4,9 +4,9 @@ import type { GetArticleResponse, GetArticleDetailResponse } from "@/types/front
 
 
 export const reqAllArticles = ():Promise<AxiosResponse<GetArticleResponse>> => {
-    return api.get("/articles")
+  return api.get("/articles")
 }
 
 export const reqArticle = (id:string):Promise<AxiosResponse<GetArticleDetailResponse>> => {
-    return api.get(`/article/${id}`)
+  return api.get(`/article/${id}`)
 }

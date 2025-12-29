@@ -1,40 +1,38 @@
-import router from "@/router"
-import { useUserStore } from "./store/modules/user"
-import setting from "@/setting.ts"
+import router from "@/router";
+import { useUserStore } from "./store/modules/user";
+import setting from "@/setting.ts";
 
+let isUserChecked = false;
 
+router.beforeEach(async (to, _from) => {
+  const userStore = useUserStore();
+  const token = userStore.token;
 
-let isUserChecked = false
+  const isBackendRoute = to.path.startsWith("/admin");
 
-router.beforeEach(async(to, from) => {
-    const userStore = useUserStore()
-    const token = userStore.token
+  if (isBackendRoute) {
+    document.title = `${setting.backendTitle}`;
+  } else {
+    document.title = `${setting.frontendTitle}`;
+  }
 
-    const isBackendRoute = to.path.startsWith("/admin")
+  if (isBackendRoute && !token && to.name !== "login") {
+    return { name: "login" };
+  }
 
-    if(isBackendRoute) {
-        document.title = `${setting.backendTitle}`
-    } else {
-        document.title = `${setting.frontendTitle}`
+  if (token && to.name === "login") {
+    return { name: "dashboard" };
+  }
+
+  if (token && !isUserChecked && isBackendRoute) {
+    try {
+      await userStore.userCheck();
+      isUserChecked = true;
+    } catch (error) {
+      userStore.userLogout();
+      return { name: "login" };
     }
+  }
 
-    if(isBackendRoute && !token && to.name !== "login") {
-        return { name: "login"}
-    }
-
-    if(token && to.name === "login") {
-        return { name: "dashboard"}
-    }
-
-    if(token && !isUserChecked && isBackendRoute) {
-        try {
-            await userStore.userCheck()
-            isUserChecked = true
-        } catch (error) {
-            userStore.userLogout()
-            return { name: "login" }
-        }
-    }
-
-    return true
-})
+  return true;
+});
