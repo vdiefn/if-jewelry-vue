@@ -1,6 +1,6 @@
-<script setup>
-import { faqs } from "@/data/faqs.js"
-import { QuestionAndAnswerForm } from "@/components/front/index.js";
+<script setup lang="ts">
+import { faqs } from "@/data/faqs.ts"
+import { QuestionAndAnswerForm } from "@/components/front/index.ts";
 
 </script>
 

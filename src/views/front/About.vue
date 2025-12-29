@@ -1,5 +1,5 @@
-<script setup>
-import { DefaultContainer } from "@/components/front/index.js"
+<script setup lang="ts">
+import { DefaultContainer } from "@/components/front/index.ts"
 
 </script>
 

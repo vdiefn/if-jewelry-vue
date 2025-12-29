@@ -1,6 +1,6 @@
-<script setup>
-import { QuestionAndAnswerForm } from "@/components/front/index.js";
-import { shippingAndPayment } from "@/data/shippingAndPayment.js";
+<script setup lang="ts">
+import { QuestionAndAnswerForm } from "@/components/front/index.ts";
+import { shippingAndPayment } from "@/data/shippingAndPayment.ts";
 
 </script>
 
