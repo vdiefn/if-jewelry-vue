@@ -15,45 +15,45 @@ const layoutSetting = useLayoutSettingStore();
 const refresh = ref(true);
 
 watch(
-    () => layoutSetting.refresh,
-    () => {
-        refresh.value = false;
-        nextTick(() => {
-        refresh.value = true;
-        });
-    }
+  () => layoutSetting.refresh,
+  () => {
+    refresh.value = false;
+    nextTick(() => {
+      refresh.value = true;
+    });
+  }
 );
 </script>
 
 <template>
-    <div class="layout-container">
-        <ElContainer>
-        <ElAside :width="layoutSetting.isCollapse ? '64px' : '200px'">
-            <div class="aside-title">
-                <h2 v-if="!layoutSetting.isCollapse">{{ setting.backendTitle }}</h2>
-                <ElIcon v-else></ElIcon>
-            </div>
-            <ElMenu
-                :default-active="route.path"
-                class="el-menu-vertical"
-                :collapse="layoutSetting.isCollapse ? true : false"
-            >
-                <MenuList :menuList="userStore.menuRoutes"></MenuList>
-            </ElMenu>
-        </ElAside>
+  <div class="layout-container">
+    <ElContainer>
+      <ElAside :width="layoutSetting.isCollapse ? '64px' : '200px'">
+        <div class="aside-title">
+          <h2 v-if="!layoutSetting.isCollapse">{{ setting.backendTitle }}</h2>
+          <ElIcon v-else></ElIcon>
+        </div>
+        <ElMenu
+          :default-active="route.path"
+          class="el-menu-vertical"
+          :collapse="layoutSetting.isCollapse ? true : false"
+        >
+          <MenuList :menuList="userStore.menuRoutes"></MenuList>
+        </ElMenu>
+      </ElAside>
 
-        <ElContainer>
-            <ElHeader>
-                <Header></Header>
-            </ElHeader>
-            <ElMain>
-            <RouterView v-slot="{ Component }">
-                <component :is="Component" v-if="refresh" />
-            </RouterView>
-            </ElMain>
-        </ElContainer>
-        </ElContainer>
-    </div>
+      <ElContainer>
+        <ElHeader>
+          <Header></Header>
+        </ElHeader>
+        <ElMain>
+          <RouterView v-slot="{ Component }">
+            <component :is="Component" v-if="refresh" />
+          </RouterView>
+        </ElMain>
+      </ElContainer>
+    </ElContainer>
+  </div>
 </template>
 <style scoped lang="scss">
 .layout-container {

@@ -18,7 +18,7 @@
       "@/*": ["./src/*"]
     },
     // 允許導入 JavaScript 文件
-    "allowJs": true,
+    // "allowJs": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
