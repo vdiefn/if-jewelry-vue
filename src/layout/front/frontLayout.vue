@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ElFooter, ElHeader, ElContainer, ElMain } from 'element-plus';
 import { Header, Footer } from "@/components/front"
 

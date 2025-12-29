@@ -34,21 +34,21 @@ export interface FullCartData {
   total: number,
 }
 
+export interface ResponseCartData {
+  carts: FullCartData[],
+  final_total: number,
+  total: number,
+}
+
 export interface GetCartResponse {
   success: boolean,
-  data: {
-    carts: FullCartData[],
-    final_total: number,
-    total: number,
-  }
+  data:ResponseCartData
   messages: string[],
 }
 
 export interface CartParams {
-  data: {
-      product_id: string,
-      qty: number,
-  }
+  product_id: string,
+  qty: number,
 }
 
 export interface EditCartResponse {
