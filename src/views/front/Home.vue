@@ -12,7 +12,6 @@ const getAllProducts = async () => {
   try {
     const res = await reqAllProducts();
     data.value = res.data.products;
-    console.log(data.value);
   } catch (error) {
     console.error(error);
   }
