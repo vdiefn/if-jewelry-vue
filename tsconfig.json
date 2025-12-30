@@ -8,6 +8,7 @@
     // Environment Settings
     "module": "ESNext",
     "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["element-plus/global"],
     // For nodejs:
     // "lib": ["esnext"],
