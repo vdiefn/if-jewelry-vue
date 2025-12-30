@@ -1,1 +1,0 @@
-import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as o,o as a,aC as n}from"./index-DTjOUT29.js";const r={class:"container"},s={__name:"DefaultContainer",setup(c){return(e,_)=>(a(),o("div",r,[n(e.$slots,"default",{},void 0,!0)]))}},l=t(s,[["__scopeId","data-v-429317f8"]]);export{l as D};

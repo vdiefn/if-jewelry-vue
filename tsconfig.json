@@ -1,23 +1,15 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
     // Environment Settings
-    "module": "ESNext",
-    "target": "ES2022",
+    "module": "esnext",
+    "target": "es2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["element-plus/global"],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    "types": ["vite/client", "node", "element-plus/global"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
+    "skipLibCheck": true,
     // 允許導入 JavaScript 文件
     // "allowJs": true,
 
@@ -34,5 +26,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "noUnusedParameters": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "vite.config.ts"
+  ]
 }
