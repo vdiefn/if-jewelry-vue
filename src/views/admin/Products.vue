@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted, useTemplateRef, watch } from "vue";
+import { ref, onMounted, useTemplateRef } from "vue";
 import {
-  ElCard,
   ElButton,
   ElTable,
   ElTableColumn,
-  ElPagination,
   ElIcon,
   ElMessage,
+  ElMessageBox
 } from "element-plus";
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { reqProducts, reqDeleteProduct } from "@/api/admin/product";
-import { DialogAdminProduct } from "@/components/admin/index.ts";
+import { DialogAdminProduct, DefaultContainer } from "@/components/admin/index.ts";
+import { fetchPageWithFallback } from "@/utils/pagination";
 import type { ProductData } from "@/types/admin/product"
 
 const loading = ref(false);
@@ -54,10 +54,7 @@ const getAllProducts = async (page = 1, category = "") => {
       data.value = result.data.products;
       currentPage.value = result.data.pagination.current_page;
       totalPages.value = result.data.pagination.total_pages;
-      const pageHasData = result.data.products.length > 0;
-      if (!pageHasData && currentPage.value > 1) {
-        return await getAllProducts(currentPage.value - 1, category);
-      }
+      await fetchPageWithFallback(data.value, currentPage.value, getAllProducts)
     }
   } catch (error) {
     console.error(error);
@@ -104,18 +101,19 @@ const deleteProduct = async (row:ProductData) => {
   });
 };
 
-watch(currentPage, () => {
-  getAllProducts(currentPage.value, selectCategory.value);
-});
-
 onMounted(() => {
   getAllProducts();
 });
 </script>
 
 <template>
-  <ElCard class="card">
-    <div class="top-area">
+  <DefaultContainer
+    showPagination
+    :currentPage="currentPage"
+    :totalPages="totalPages"
+    @page-change="(page)=>getAllProducts(page, selectCategory)"
+  >
+    <template #top>
       <ElSelect
         v-model="selectCategory"
         filterable
@@ -132,8 +130,8 @@ onMounted(() => {
       <ElButton type="primary" class="btn-add-product" @click="addNewProduct">
         新增產品
       </ElButton>
-    </div>
-    <div class="content-area">
+    </template>
+    <template #content>
       <ElTable
         :stripe="true"
         :data="data"
@@ -171,16 +169,8 @@ onMounted(() => {
           </template>
         </ElTableColumn>
       </ElTable>
-    </div>
-    <div class="bottom-area">
-      <ElPagination
-        class="pagination"
-        v-model:current-page="currentPage"
-        layout="prev, pager, next, jumper"
-        :page-count="totalPages"
-      />
-    </div>
-  </ElCard>
+    </template>
+  </DefaultContainer>
   <DialogAdminProduct
     ref="dialogAdminProduct"
     @product-added="getAllProducts"
@@ -189,43 +179,4 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.card {
-  height: 100%;
-
-  .top-area {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-
-    :deep(.el-input),
-    :deep(.el-select) {
-      width: 200px;
-    }
-
-    .top-left {
-      display: flex;
-      gap: 5px;
-    }
-  }
-
-  .content-area {
-    :deep(.cell) {
-      white-space: nowrap;
-    }
-
-    .check-icon {
-      color: green;
-    }
-
-    .x-icon {
-      color: red;
-    }
-  }
-
-  .bottom-area {
-    display: flex;
-    justify-content: center;
-    margin-top: 3rem;
-  }
-}
 </style>

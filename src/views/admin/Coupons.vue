@@ -2,33 +2,32 @@
 import { ref, onMounted, useTemplateRef } from "vue";
 import { reqCoupons, reqDeleteCoupon } from "@/api/admin/coupon.js";
 import {
-  ElPagination,
   ElTable,
   ElTableColumn,
   ElButton,
   ElMessage,
   ElMessageBox,
 } from "element-plus";
-import { DialogAdminCoupon } from "@/components/admin/index.js";
+import { DialogAdminCoupon, DefaultContainer } from "@/components/admin/index.js";
 import { Edit, Delete } from "@element-plus/icons-vue";
+import { fetchPageWithFallback } from "@/utils/pagination";
 import type { CouponData } from "@/types/admin/coupon";
 
 const loading = ref(false);
 const data = ref<CouponData[]>([]);
 const currentPage = ref(1);
-const dialogAdminCouponRef = useTemplateRef<
-  InstanceType<typeof DialogAdminCoupon>
->("dialogAdminCouponRef");
+const dialogAdminCouponRef = useTemplateRef<InstanceType<typeof DialogAdminCoupon>>("dialogAdminCouponRef");
 const totalPages = ref(1);
 
-const getAllCoupons = async () => {
+const getAllCoupons = async (page=1) => {
   loading.value = true;
   try {
-    const res = await reqCoupons({ page: currentPage.value });
+    const res = await reqCoupons({ page: page });
     if (res.data.success) {
       data.value = res.data.coupons;
       totalPages.value = res.data.pagination.total_pages;
       currentPage.value = res.data.pagination.current_page;
+      await fetchPageWithFallback(data.value,currentPage.value, getAllCoupons)
     }
   } catch (error) {
     console.error(error);
@@ -80,12 +79,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <ElCard class="card">
-    <div class="top-area">
+  <DefaultContainer
+    showPagination
+    :currentPage="currentPage"
+    :totalPages="totalPages"
+    @page-change="(page)=>getAllCoupons(page)"
+  >
+    <template #top>
       <h3>優惠券列表</h3>
       <ElButton type="primary" @click="addNewCoupon"> 新增優惠券 </ElButton>
-    </div>
-    <div class="content-area">
+    </template>
+    <template #content>
       <ElTable
         :stripe="true"
         v-loading="loading"
@@ -125,57 +129,10 @@ onMounted(() => {
           </template>
         </ElTableColumn>
       </ElTable>
-    </div>
-    <div class="bottom-area">
-      <ElPagination
-        class="pagination"
-        v-model:current-page="currentPage"
-        layout="prev, pager, next, jumper"
-        :page-count="totalPages"
-      />
-    </div>
-  </ElCard>
+    </template>
+  </DefaultContainer>
   <DialogAdminCoupon ref="dialogAdminCouponRef" @coupon-added="getAllCoupons" />
 </template>
 
 <style scoped lang="scss">
-.card {
-  height: 100%;
-
-  .top-area {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-
-    :deep(.el-input),
-    :deep(.el-select) {
-      width: 200px;
-    }
-
-    .top-left {
-      display: flex;
-      gap: 5px;
-    }
-  }
-
-  .content-area {
-    :deep(.cell) {
-      white-space: nowrap;
-    }
-
-    .check-icon {
-      color: green;
-    }
-
-    .x-icon {
-      color: red;
-    }
-  }
-
-  .bottom-area {
-    display: flex;
-    justify-content: center;
-    margin-top: 3rem;
-  }
-}
 </style>

@@ -70,15 +70,15 @@ const handleChangePage = (page:number) => {
       white-space: nowrap;
     }
 
-    .tag {
+    :deep(.tag) {
       margin-right: 5px;
     }
 
-    .check-icon {
+    :deep(.check-icon) {
       color: green;
     }
 
-    .x-icon {
+    :deep(.x-icon) {
       color: red;
     }
   }
