@@ -10,7 +10,6 @@ import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import type { FullCartData, ResponseCartData, CartParams } from "@/types/front/cart";
 import type { CouponParams } from "@/types/front/coupon"
-import type { AxiosError } from "axios"
 
 export const useCartStore = defineStore("cart", () => {
   const cartList = ref<FullCartData[]>([]);
@@ -118,11 +117,6 @@ export const useCartStore = defineStore("cart", () => {
       }
     } catch (error) {
       console.error(error);
-      const err = error as AxiosError<any>;
-      ElMessage({
-        type: "error",
-        message: err.response?.data?.message || "優惠碼使用失敗",
-      });
     }
   };
 

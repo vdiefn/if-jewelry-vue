@@ -69,7 +69,6 @@ const deleteArticle = async(row:ArticleData) => {
         }
       } catch (error) {
         console.error(error);
-        ElMessage({ type: "error", message: "刪除失敗" });
         done()
       } finally {
         instance.confirmButtonLoading = false;

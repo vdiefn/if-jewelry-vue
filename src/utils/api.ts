@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useUserStore } from "@/store/modules/user";
+import { ElMessage } from "element-plus"
 
 const BASE_URL = `${import.meta.env.VITE_BASE_URL}/v2/api/${import.meta.env.VITE_API_PATH}`;
 
@@ -24,6 +25,26 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    let status = error.response?.status
+    let message = ""
+    const serverMessage = error.response?.data?.message;
+    switch (status){
+      case 401:
+        message = "token過期"
+        break;
+      case 404:
+        message = "請求地址錯誤"
+        break;
+      case 500:
+        message = "伺服器異常"
+        break;
+      default:
+        message = serverMessage||"網路異常"
+    }
+    ElMessage({
+      type:"error",
+      message
+    })
     return Promise.reject(error);
   }
 );
