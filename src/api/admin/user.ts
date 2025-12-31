@@ -2,6 +2,7 @@ import axios from "axios"
 import { useUserStore } from "@/store/modules/user"
 import type { UserLoginResponse, UserCheckResponse, LoginForm } from "@/types/admin/user"
 import type { AxiosResponse } from "axios"
+import { ElMessage } from "element-plus"
 
 const baseURL = `${import.meta.env.VITE_BASE_URL}`
 
@@ -24,7 +25,27 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   response => response,
   error => {
-      return Promise.reject(error)
+    let status = error.response?.status
+    let message = ""
+    const serverMessage = error.response?.data?.message;
+    switch (status){
+      case 401:
+        message = "token過期"
+        break;
+      case 404:
+        message = "請求地址錯誤"
+        break;
+      case 500:
+        message = "伺服器異常"
+        break;
+      default:
+        message = serverMessage||"網路異常"
+    }
+    ElMessage({
+      type:"error",
+      message
+    })
+    return Promise.reject(error)
   }
 )
 

@@ -33,18 +33,16 @@ const login = async (formEl?:FormInstance) => {
     if (valid) {
       loading.value = true;
       try {
-        await userStore.userLogin(loginForm);
-        await router.push("/admin");
-        ElNotification({
-          type: "success",
-          message: `${getTime()}，歡迎登入`,
-        });
+        const res = await userStore.userLogin(loginForm);
+        if(res === "OK"){
+          await router.push("/admin");
+          ElNotification({
+            type: "success",
+            message: `${getTime()}，歡迎登入`,
+          });
+        }
       } catch (error) {
         console.error(error)
-        ElNotification({
-          type: "error",
-          message: (error as Error).message||"登入失敗",
-        });
       } finally {
         loading.value = false;
       }

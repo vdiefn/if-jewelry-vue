@@ -121,7 +121,6 @@ const confirm = async () => {
     }
   } catch (error) {
     console.error(error);
-    ElMessage({ type: "error", message:"操作失敗" });
   } finally {
     loading.value = false;
   }

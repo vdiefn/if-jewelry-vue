@@ -84,7 +84,7 @@ const customUploadRequest = async (options: UploadRequestOptions) => {
     form.image = res.data.imageUrl;
     onSuccess?.(res.data);
   } catch (err) {
-    ElMessage.error({ type: "error", message: "圖片上傳失敗" });
+    console.error(err)
     onError?.(err as any);
   }
 };
