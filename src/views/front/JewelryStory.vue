@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { DefaultContainer } from "@/components/front/index.js";
+import { ContentContainer } from "@/components/front/index.js";
 import { reqAllArticles } from "@/api/front/article.js";
 import { useRouter } from "vue-router";
 import { ElCard, ElTag, ElMessage } from "element-plus";
@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <DefaultContainer>
+  <ContentContainer>
     <div class="outer-container">
       <h3>寶石小教室</h3>
       <ElCard
@@ -75,13 +75,11 @@ onMounted(() => {
         </div>
       </ElCard>
     </div>
-  </DefaultContainer>
+  </ContentContainer>
 </template>
 
 <style scoped lang="scss">
 .outer-container {
-  margin: 0 auto;
-  width: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -132,40 +130,25 @@ onMounted(() => {
 }
 
 @media (min-width: $breakpoint-tablet) {
-  .outer-container {
-    width: 650px;
+  .title-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
 
-    .story-wrapper {
-      .title-wrapper {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        h5 {
-          font-weight: bold;
-        }
-
-        .tag-wrapper {
-          display: flex;
-          gap: 5px;
-        }
-      }
+    .tag-wrapper {
+      display: flex;
+      gap: 5px;
     }
   }
+
 }
 
 @media (min-width: $breakpoint-desktop) {
-  .outer-container {
-    width: 900px;
+  .story-wrapper {
+    display: flex;
 
-    .story-wrapper {
-      display: flex;
-
-      .img-wrapper {
-        width: 450px;
-        aspect-ratio: 1/1;
-      }
+    .img-wrapper {
+      width: 450px;
+      aspect-ratio: 1/1;
     }
   }
 }

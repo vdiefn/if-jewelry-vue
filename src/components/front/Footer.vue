@@ -63,7 +63,7 @@
     gap: 10px;
     justify-content: space-between;
     margin: 0 auto;
-    padding: 1rem 1rem;
+    padding: 0 1rem;
 
     .follow-us {
       .icon {

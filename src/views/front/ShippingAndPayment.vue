@@ -1,30 +1,23 @@
 <script setup lang="ts">
-import { QuestionAndAnswerForm } from "@/components/front/index.ts";
+import { QuestionAndAnswerForm, ContentContainer } from "@/components/front";
 import { shippingAndPayment } from "@/data/shippingAndPayment.ts";
 </script>
 
 <template>
-  <div class="container">
-    <h3>運送及付款方式 FAQ</h3>
-    <QuestionAndAnswerForm :data="shippingAndPayment" />
-  </div>
+  <ContentContainer>
+    <div class="container">
+      <h3>運送及付款方式</h3>
+      <QuestionAndAnswerForm :data="shippingAndPayment" />
+    </div>
+  </ContentContainer>
 </template>
 
 <style scoped lang="scss">
 .container {
-  padding: 2rem 1rem;
-  margin: 40px auto 0 auto;
-}
+  margin: 0 10px;
 
-@media (min-width: $breakpoint-tablet) {
-  .container {
-    max-width: 650px;
-  }
-}
-
-@media (min-width: $breakpoint-desktop) {
-  .container {
-    max-width: 900px;
+  h3 {
+    padding-top:1.5rem;
   }
 }
 </style>

@@ -1,4 +1,5 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 <template>
   <div class="container">
     <div class="checkout-success">
@@ -8,7 +9,6 @@
         <ElButton type="primary">回到首頁</ElButton>
       </RouterLink>
     </div>
-
     <div class="image-wrapper">
       <img
         src="https://images.unsplash.com/photo-1480399129128-2066acb5009e?auto=format&fit=crop&w=1950&q=80"
@@ -22,7 +22,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 46px;
 
   .checkout-success {
     padding: 2rem;

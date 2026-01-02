@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AdminHeader: typeof import('./src/components/admin/AdminHeader.vue')['default']
     CardProduct: typeof import('./src/components/front/CardProduct.vue')['default']
+    ContentContainer: typeof import('./src/components/front/ContentContainer.vue')['default']
     DefaultContainer: typeof import('./src/components/admin/DefaultContainer.vue')['default']
     DesktopCartTable: typeof import('./src/components/front/DesktopCartTable.vue')['default']
     DialogAdminArticle: typeof import('./src/components/admin/DialogAdminArticle.vue')['default']

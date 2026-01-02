@@ -77,10 +77,9 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .container {
-  margin-top: $base-header-height-tablet;
 
   > h3 {
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
     font-weight: 700;
   }
 

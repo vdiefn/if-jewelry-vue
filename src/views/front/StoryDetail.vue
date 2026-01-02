@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DefaultContainer } from "@/components/front/index.js";
+import { ContentContainer } from "@/components/front/index.js";
 import { useRoute } from "vue-router";
 import { ref, onMounted, watch } from "vue";
 import { reqArticle } from "@/api/front/article.js";
@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <DefaultContainer>
+  <ContentContainer>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem :to="{ path: '/' }"
         ><font-awesome-icon :icon="['fas', 'house']"
@@ -79,7 +79,7 @@ onMounted(() => {
       </div>
     </div>
     <ElBacktop :right="20" :bottom="70" />
-  </DefaultContainer>
+  </ContentContainer>
 </template>
 
 <style scoped lang="scss">
@@ -116,27 +116,13 @@ onMounted(() => {
         gap: 3px;
       }
     }
-
-    h6 {
-      width: 100%;
-    }
   }
 }
 
 @media (min-width: $breakpoint-tablet) {
-  .el-breadcrumb,
-  .story-wrapper {
-    margin: 0 auto;
-  }
-
   .el-breadcrumb {
     width: 100%;
   }
-
-  .story-wrapper {
-    width: 650px;
-    margin: 0 auto;
-
     .title-wrapper {
       h4 {
         flex: 0 1 auto;
@@ -152,16 +138,5 @@ onMounted(() => {
     .img-wrapper {
       padding: 1rem;
     }
-  }
-}
-
-@media (min-width: $breakpoint-desktop) {
-  .el-breadcrumb {
-    width: 900px;
-  }
-
-  .story-wrapper {
-    width: 900px;
-  }
 }
 </style>

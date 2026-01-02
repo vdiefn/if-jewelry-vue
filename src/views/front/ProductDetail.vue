@@ -8,10 +8,10 @@ import {
   ElBreadcrumb,
   ElBreadcrumbItem,
 } from "element-plus";
-import { ref, onMounted, watch, useTemplateRef } from "vue";
+import { ref, watch, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
-import { CardProduct, DrawerCartList } from "@/components/front/index.js";
+import { CardProduct, DrawerCartList } from "@/components/front";
 import { useCartStore } from "@/store/modules/cart.ts";
 import { useIsMobile } from "@/composables/useIsMobile";
 import { paymentAndDeliveryMethod, jewelryCare } from "@/data";
@@ -89,18 +89,9 @@ const goToCheckout = async (id: string, count: number) => {
 };
 
 watch(
-  () => route.params,
-  (val) => {
-    console.log("params changed", val);
-  },
-  { deep: true }
-);
-
-watch(
   () => route.params.id,
   (id) => {
     if (!id) return;
-    console.log("change");
     getProductDetail(id as string);
   },
   { immediate: true }
@@ -214,7 +205,6 @@ watch(
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: $base-header-height;
 
   .el-breadcrumb {
     height: 30px;
@@ -397,13 +387,18 @@ watch(
 
 @media (min-width: $breakpoint-tablet) {
   .container {
+    .el-breadcrumb, .top{
+      max-width: 1000px;
+      width: 100%;
+      padding: 0 1rem;
+    }
+    .el-breadcrumb {
+      margin: 0.5rem auto;
+    }
     .top {
       margin: 0 auto;
       display: grid;
       grid-template-columns: minmax(200px, 1fr) minmax(150px, 1fr);
-      padding: 0 1rem;
-      max-width: 1000px;
-      width: 100%;
 
       .image-section {
         aspect-ratio: 1 / 1;
