@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DefaultContainer, ContentContainer } from "@/components/front/index.js";
+import { ContentContainer } from "@/components/front/index.js";
 import { useRoute } from "vue-router";
 import { ref, onMounted, watch } from "vue";
 import { reqArticle } from "@/api/front/article.js";
@@ -45,43 +45,41 @@ onMounted(() => {
 </script>
 
 <template>
-  <DefaultContainer>
-    <ContentContainer>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem :to="{ path: '/' }"
-          ><font-awesome-icon :icon="['fas', 'house']"
-        /></ElBreadcrumbItem>
-        <ElBreadcrumbItem :to="{ path: '/jewelryStory' }"
-          >寶石小教室</ElBreadcrumbItem
-        >
-        <ElBreadcrumbItem>{{ data?.title }}</ElBreadcrumbItem>
-      </ElBreadcrumb>
-      <div class="story-wrapper" v-loading="loading">
-        <div class="img-wrapper">
-          <img :src="data?.image" alt="story picture" />
-        </div>
-        <div class="text-wrapper">
-          <div class="title-wrapper">
-            <h4>{{ data?.title }}</h4>
-            <div class="tag-wrapper">
-              <ElTag
-                v-for="(item, index) in data?.tag"
-                :key="index"
-                effect="plain"
-                round
-                :type="getType(Number(index))"
-              >
-                {{ item }}
-              </ElTag>
-            </div>
-          </div>
-          <h6>{{ data?.description }}</h6>
-          <p>{{ data?.content }}</p>
-        </div>
+  <ContentContainer>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem :to="{ path: '/' }"
+        ><font-awesome-icon :icon="['fas', 'house']"
+      /></ElBreadcrumbItem>
+      <ElBreadcrumbItem :to="{ path: '/jewelryStory' }"
+        >寶石小教室</ElBreadcrumbItem
+      >
+      <ElBreadcrumbItem>{{ data?.title }}</ElBreadcrumbItem>
+    </ElBreadcrumb>
+    <div class="story-wrapper" v-loading="loading">
+      <div class="img-wrapper">
+        <img :src="data?.image" alt="story picture" />
       </div>
-      <ElBacktop :right="20" :bottom="70" />
-    </ContentContainer>
-  </DefaultContainer>
+      <div class="text-wrapper">
+        <div class="title-wrapper">
+          <h4>{{ data?.title }}</h4>
+          <div class="tag-wrapper">
+            <ElTag
+              v-for="(item, index) in data?.tag"
+              :key="index"
+              effect="plain"
+              round
+              :type="getType(Number(index))"
+            >
+              {{ item }}
+            </ElTag>
+          </div>
+        </div>
+        <h6>{{ data?.description }}</h6>
+        <p>{{ data?.content }}</p>
+      </div>
+    </div>
+    <ElBacktop :right="20" :bottom="70" />
+  </ContentContainer>
 </template>
 
 <style scoped lang="scss">

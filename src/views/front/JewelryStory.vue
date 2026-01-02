@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { DefaultContainer, ContentContainer } from "@/components/front/index.js";
+import { ContentContainer } from "@/components/front/index.js";
 import { reqAllArticles } from "@/api/front/article.js";
 import { useRouter } from "vue-router";
 import { ElCard, ElTag, ElMessage } from "element-plus";
@@ -45,8 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <DefaultContainer>
-    <ContentContainer>
+  <ContentContainer>
     <div class="outer-container">
       <h3>寶石小教室</h3>
       <ElCard
@@ -76,8 +75,7 @@ onMounted(() => {
         </div>
       </ElCard>
     </div>
-    </ContentContainer>
-  </DefaultContainer>
+  </ContentContainer>
 </template>
 
 <style scoped lang="scss">

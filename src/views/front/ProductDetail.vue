@@ -89,14 +89,6 @@ const goToCheckout = async (id: string, count: number) => {
 };
 
 watch(
-  () => route.params,
-  (val) => {
-    console.log("params changed", val);
-  },
-  { deep: true }
-);
-
-watch(
   () => route.params.id,
   (id) => {
     if (!id) return;
@@ -214,7 +206,6 @@ watch(
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: $base-header-height;
 
   .el-breadcrumb {
     height: 30px;

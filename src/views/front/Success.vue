@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { DefaultContainer } from "@/components/front/index.ts";
 </script>
 <template>
-  <DefaultContainer>
+  <div class="container">
     <div class="checkout-success">
       <h2>訂購完成</h2>
       <p>感謝您的購買！您的訂單已成功送出。</p>
@@ -10,21 +9,19 @@
         <ElButton type="primary">回到首頁</ElButton>
       </RouterLink>
     </div>
-
     <div class="image-wrapper">
       <img
         src="https://images.unsplash.com/photo-1480399129128-2066acb5009e?auto=format&fit=crop&w=1950&q=80"
         alt="photo"
       />
     </div>
-  </DefaultContainer>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 46px;
 
   .checkout-success {
     padding: 2rem;
