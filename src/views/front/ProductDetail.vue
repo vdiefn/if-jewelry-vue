@@ -11,7 +11,7 @@ import {
 import { ref, watch, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { reqProductDetail, reqProducts } from "@/api/front/frontProducts.js";
-import { CardProduct, DrawerCartList, ContentContainer } from "@/components/front";
+import { CardProduct, DrawerCartList } from "@/components/front";
 import { useCartStore } from "@/store/modules/cart.ts";
 import { useIsMobile } from "@/composables/useIsMobile";
 import { paymentAndDeliveryMethod, jewelryCare } from "@/data";
@@ -92,7 +92,6 @@ watch(
   () => route.params.id,
   (id) => {
     if (!id) return;
-    console.log("change");
     getProductDetail(id as string);
   },
   { immediate: true }
