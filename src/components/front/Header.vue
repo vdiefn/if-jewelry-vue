@@ -169,7 +169,7 @@ const handleDeleteProduct = async (id: string) => {
 .navbar {
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: sticky;
   width: 100%;
   top: 0;
   z-index: 99;
