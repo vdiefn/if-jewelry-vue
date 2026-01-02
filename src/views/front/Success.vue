@@ -1,6 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { DefaultContainer } from "@/components/front/index.ts";
+</script>
 <template>
-  <div class="container">
+  <DefaultContainer>
     <div class="checkout-success">
       <h2>訂購完成</h2>
       <p>感謝您的購買！您的訂單已成功送出。</p>
@@ -15,7 +17,7 @@
         alt="photo"
       />
     </div>
-  </div>
+  </DefaultContainer>
 </template>
 
 <style lang="scss" scoped>

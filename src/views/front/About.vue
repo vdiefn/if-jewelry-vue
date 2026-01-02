@@ -51,8 +51,8 @@ import { DefaultContainer } from "@/components/front/index.ts";
 
 <style scoped lang="scss">
 .wrapper {
-  margin: 2rem auto;
-  padding: 1rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
 
   .image-wrapper,
   .text-wrapper {

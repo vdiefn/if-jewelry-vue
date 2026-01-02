@@ -1,30 +1,19 @@
 <script setup lang="ts">
 import { faqs } from "@/data/faqs.ts";
-import { QuestionAndAnswerForm } from "@/components/front/index.ts";
+import { QuestionAndAnswerForm, DefaultContainer, ContentContainer } from "@/components/front";
 </script>
 
 <template>
-  <div class="container">
-    <h3>常見問題 FAQ</h3>
-    <QuestionAndAnswerForm :data="faqs" />
-  </div>
+  <DefaultContainer>
+    <ContentContainer>
+      <h3>常見問題</h3>
+      <QuestionAndAnswerForm :data="faqs" />
+    </ContentContainer>
+  </DefaultContainer>
 </template>
 
 <style scoped lang="scss">
-.container {
-  padding: 2rem 1rem;
-  margin: 40px auto 0 auto;
-}
-
-@media (min-width: $breakpoint-tablet) {
-  .container {
-    max-width: 650px;
-  }
-}
-
-@media (min-width: $breakpoint-desktop) {
-  .container {
-    max-width: 900px;
-  }
+h3 {
+  padding-top:1.5rem;
 }
 </style>

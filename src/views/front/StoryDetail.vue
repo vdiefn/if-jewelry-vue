@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DefaultContainer } from "@/components/front/index.js";
+import { DefaultContainer, ContentContainer } from "@/components/front/index.js";
 import { useRoute } from "vue-router";
 import { ref, onMounted, watch } from "vue";
 import { reqArticle } from "@/api/front/article.js";
@@ -46,39 +46,41 @@ onMounted(() => {
 
 <template>
   <DefaultContainer>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem :to="{ path: '/' }"
-        ><font-awesome-icon :icon="['fas', 'house']"
-      /></ElBreadcrumbItem>
-      <ElBreadcrumbItem :to="{ path: '/jewelryStory' }"
-        >寶石小教室</ElBreadcrumbItem
-      >
-      <ElBreadcrumbItem>{{ data?.title }}</ElBreadcrumbItem>
-    </ElBreadcrumb>
-    <div class="story-wrapper" v-loading="loading">
-      <div class="img-wrapper">
-        <img :src="data?.image" alt="story picture" />
-      </div>
-      <div class="text-wrapper">
-        <div class="title-wrapper">
-          <h4>{{ data?.title }}</h4>
-          <div class="tag-wrapper">
-            <ElTag
-              v-for="(item, index) in data?.tag"
-              :key="index"
-              effect="plain"
-              round
-              :type="getType(Number(index))"
-            >
-              {{ item }}
-            </ElTag>
-          </div>
+    <ContentContainer>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem :to="{ path: '/' }"
+          ><font-awesome-icon :icon="['fas', 'house']"
+        /></ElBreadcrumbItem>
+        <ElBreadcrumbItem :to="{ path: '/jewelryStory' }"
+          >寶石小教室</ElBreadcrumbItem
+        >
+        <ElBreadcrumbItem>{{ data?.title }}</ElBreadcrumbItem>
+      </ElBreadcrumb>
+      <div class="story-wrapper" v-loading="loading">
+        <div class="img-wrapper">
+          <img :src="data?.image" alt="story picture" />
         </div>
-        <h6>{{ data?.description }}</h6>
-        <p>{{ data?.content }}</p>
+        <div class="text-wrapper">
+          <div class="title-wrapper">
+            <h4>{{ data?.title }}</h4>
+            <div class="tag-wrapper">
+              <ElTag
+                v-for="(item, index) in data?.tag"
+                :key="index"
+                effect="plain"
+                round
+                :type="getType(Number(index))"
+              >
+                {{ item }}
+              </ElTag>
+            </div>
+          </div>
+          <h6>{{ data?.description }}</h6>
+          <p>{{ data?.content }}</p>
+        </div>
       </div>
-    </div>
-    <ElBacktop :right="20" :bottom="70" />
+      <ElBacktop :right="20" :bottom="70" />
+    </ContentContainer>
   </DefaultContainer>
 </template>
 
@@ -116,27 +118,13 @@ onMounted(() => {
         gap: 3px;
       }
     }
-
-    h6 {
-      width: 100%;
-    }
   }
 }
 
 @media (min-width: $breakpoint-tablet) {
-  .el-breadcrumb,
-  .story-wrapper {
-    margin: 0 auto;
-  }
-
   .el-breadcrumb {
     width: 100%;
   }
-
-  .story-wrapper {
-    width: 650px;
-    margin: 0 auto;
-
     .title-wrapper {
       h4 {
         flex: 0 1 auto;
@@ -152,16 +140,5 @@ onMounted(() => {
     .img-wrapper {
       padding: 1rem;
     }
-  }
-}
-
-@media (min-width: $breakpoint-desktop) {
-  .el-breadcrumb {
-    width: 900px;
-  }
-
-  .story-wrapper {
-    width: 900px;
-  }
 }
 </style>
