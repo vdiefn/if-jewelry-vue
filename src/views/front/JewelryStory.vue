@@ -136,10 +136,6 @@ onMounted(() => {
     flex-direction: row;
     justify-content: space-between;
 
-    h5 {
-      font-weight: bold;
-    }
-
     .tag-wrapper {
       display: flex;
       gap: 5px;
