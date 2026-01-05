@@ -125,6 +125,7 @@ watch(
             class="image-wrapper"
             @click="handleClickImage(index)"
             :class="{ active: index === activeImage }"
+            loading="lazy"
           >
             <img :src="image" alt="product picture" />
           </div>

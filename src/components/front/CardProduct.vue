@@ -14,6 +14,7 @@ const props = defineProps<{
         :src="props.data.imagesUrl[0]"
         alt="product photo"
         class="product-image"
+        loading="lazy"
       />
       <div class="card-text">
         <h5 class="card-title">{{ props.data.title }}</h5>
