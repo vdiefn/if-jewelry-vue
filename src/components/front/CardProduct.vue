@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { ProductData } from "@/types/front/product";
-const props = defineProps<{
-  data: ProductData;
-}>();
+  import type { ProductData } from "@/types/front/product";
+  const props = defineProps<{
+    data: ProductData;
+  }>();
+
 </script>
 
 <template>
@@ -45,10 +46,6 @@ const props = defineProps<{
     flex-direction: column;
     align-items: center;
 
-    h5 {
-      font-size: 0.8rem;
-    }
-
     .price-wrapper {
       display: flex;
       flex-direction: row;
@@ -79,6 +76,7 @@ const props = defineProps<{
       height: auto;
       min-height: 100px;
       max-height: 250px;
+      object-fit: cover;
     }
 
     .card-text {
