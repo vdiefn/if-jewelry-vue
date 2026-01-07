@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { ElPagination } from "element-plus";
-import { CardProduct } from "@/components/front/index.js";
+import { CardProduct, SkeletonCardProduct } from "@/components/front";
 import { reqProducts } from "@/api/front/frontProducts.js";
 import { useRoute } from "vue-router";
 import type { ProductData } from "@/types/front/product";
@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container" v-loading="loading">
+  <div class="container">
     <template v-if="route.query.category">
       <h3>{{ route.query.category }}</h3>
     </template>
@@ -58,11 +58,21 @@ onMounted(() => {
       <h3>全部商品</h3>
     </template>
     <div class="card-wrapper">
-      <CardProduct
-        :data="product"
-        v-for="product in productsData"
-        :key="product.id"
-      />
+      <template v-if="loading">
+        <template
+          v-for="n in 8"
+          :key="n"
+        >
+          <SkeletonCardProduct />
+        </template>
+      </template>
+      <template v-else>
+        <CardProduct
+          :data="product"
+          v-for="product in productsData"
+          :key="product.id"
+        />
+      </template>
     </div>
 
     <div class="pagination-block">
@@ -85,7 +95,7 @@ onMounted(() => {
 
   .card-wrapper {
     display: grid;
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
     grid-gap: 1rem;
     padding: 1rem 1rem;
     width: 100%;

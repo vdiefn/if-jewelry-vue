@@ -111,7 +111,24 @@ watch(
       </ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="top">
-      <div class="image-section">
+      <el-skeleton class="image-section" loading v-if="loading">
+        <template #template>
+          <div class="big-image">
+            <el-skeleton-item variant="image"/>
+          </div>
+          <div class="small-image">
+            <div
+              v-for="(_item, index) in 3"
+              :key="index"
+              class="image-wrapper"
+            >
+              <el-skeleton-item variant="image"/>
+            </div>
+          </div>
+        </template>
+      </el-skeleton>
+
+      <div class="image-section" v-else>
         <div class="big-image">
           <img
             :src="imageList[activeImage] || ''"
@@ -125,11 +142,13 @@ watch(
             class="image-wrapper"
             @click="handleClickImage(index)"
             :class="{ active: index === activeImage }"
+            loading="lazy"
           >
             <img :src="image" alt="product picture" />
           </div>
         </div>
       </div>
+
       <div class="purchase-section">
         <h5>{{ productData.title }}</h5>
         <div class="price-info">
@@ -229,32 +248,44 @@ watch(
         width: 100%;
         height: 100%;
 
+        .el-skeleton__image {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
         }
+      }
 
-        .small-image {
-          flex-direction: column;
-          display: flex;
-          gap: 0.5rem;
+      .small-image {
+        flex-direction: column;
+        display: flex;
+        gap: 2px;
 
-          .image-wrapper {
-            padding: 5px;
-            cursor: pointer;
+        .image-wrapper {
+          padding: 3px;
+          cursor: pointer;
+          aspect-ratio: 1 / 1;
 
-            &.active img {
-              border: 2px solid $base-primary-color;
-            }
+          &.active img {
+            border: 2px solid $base-primary-color;
+          }
 
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-              display: block;
-            }
+          img,
+          .el-skeleton__image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
       }

@@ -11,6 +11,7 @@ declare module 'vue' {
     AdminHeader: typeof import('./src/components/admin/AdminHeader.vue')['default']
     CardProduct: typeof import('./src/components/front/CardProduct.vue')['default']
     ContentContainer: typeof import('./src/components/front/ContentContainer.vue')['default']
+    CouponCard: typeof import('./src/components/front/CouponCard.vue')['default']
     DefaultContainer: typeof import('./src/components/admin/DefaultContainer.vue')['default']
     DesktopCartTable: typeof import('./src/components/front/DesktopCartTable.vue')['default']
     DialogAdminArticle: typeof import('./src/components/admin/DialogAdminArticle.vue')['default']
@@ -34,6 +35,8 @@ declare module 'vue' {
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
+    ElSkeletonItem: typeof import('element-plus/es')['ElSkeletonItem']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
@@ -45,6 +48,7 @@ declare module 'vue' {
     QuestionAndAnswerForm: typeof import('./src/components/front/QuestionAndAnswerForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SkeletonCardProduct: typeof import('./src/components/front/SkeletonCardProduct.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

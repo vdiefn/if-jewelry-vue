@@ -28,7 +28,7 @@ defineExpose<CloseExpose>({ close });
         <h5>生日快樂!</h5>
       </div>
       <div class="coupon-info">
-        <p>HBD2025</p>
+        <p>HBD2026</p>
       </div>
     </section>
     <div class="dialog-footer">

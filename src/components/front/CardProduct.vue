@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { ProductData } from "@/types/front/product";
-const props = defineProps<{
-  data: ProductData;
-}>();
+  import type { ProductData } from "@/types/front/product";
+  const props = defineProps<{
+    data: ProductData;
+  }>();
+
 </script>
 
 <template>
@@ -14,6 +15,7 @@ const props = defineProps<{
         :src="props.data.imagesUrl[0]"
         alt="product photo"
         class="product-image"
+        loading="lazy"
       />
       <div class="card-text">
         <h5 class="card-title">{{ props.data.title }}</h5>
@@ -43,10 +45,6 @@ const props = defineProps<{
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    h5 {
-      font-size: 0.8rem;
-    }
 
     .price-wrapper {
       display: flex;
@@ -78,6 +76,7 @@ const props = defineProps<{
       height: auto;
       min-height: 100px;
       max-height: 250px;
+      object-fit: cover;
     }
 
     .card-text {

@@ -1,5 +1,5 @@
 import api from "@/utils/api.ts";
-import type { CartParams, CreateCartResponse, GetCartResponse, EditCartResponse, DeleteCartResponse } from "@/types/front/cart";
+import type { CartParams, CreateCartResponse, GetCartResponse, EditCartResponse, DeleteCartResponse, CartData } from "@/types/front/cart";
 import type { AxiosResponse } from "axios"
 
 export const reqAddCart = (data:CartParams):Promise<AxiosResponse<CreateCartResponse>> => {
@@ -10,9 +10,13 @@ export const reqGetCart = ():Promise<AxiosResponse<GetCartResponse>> => {
   return api.get("/cart")
 }
 
-export const reqEditCart = (payload:CartParams):Promise<AxiosResponse<EditCartResponse>> => {
-  const { product_id } = payload
-  return api.put(`/cart/${product_id}`, payload)
+export const reqEditCart = (data:CartData):Promise<AxiosResponse<EditCartResponse>> => {
+  const payload:CartParams = {
+    product_id: data.product_id,
+    qty: data.qty
+  }
+  const id = data.id
+  return api.put(`/cart/${id}`, { data: payload})
 }
 
 export const reqDeleteCart = (id:string):Promise<AxiosResponse<DeleteCartResponse>> => {

@@ -4,8 +4,8 @@ import { watch, ref } from "vue";
 import { useCartStore } from "@/store/modules/cart.ts";
 import { useRouter } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
-import type { FullCartData, CartParams } from "@/types/front/cart";
-import type { CouponParams } from "@/types/front/coupon";
+import { useCartItem } from "@/composables/useCartItem"
+import type { FullCartData } from "@/types/front/cart";
 
 interface Emits {
   (e: "update-cart"): void;
@@ -18,31 +18,13 @@ const props = defineProps<{
 const emit = defineEmits<Emits>();
 const cartStore = useCartStore();
 const router = useRouter();
-const loading = ref(false);
 const perCoupon = ref("");
 
-const handleQtyChange = async (row: CartParams) => {
-  await cartStore.editCartProduct(row);
-};
-
-const handleDeleteProduct = async (id: string) => {
-  loading.value = true;
-  try {
-    await cartStore.deleteCartProduct(id);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleGetCoupon = async (perInput: string) => {
-  const payload: CouponParams = { code: perInput };
-  try {
-    await cartStore.getCoupon(payload);
-    emit("update-cart");
-  } catch (error) {
-    console.error(error);
-  }
-};
+const {
+  handleQtyChange,
+  handleDeleteProduct,
+  handleGetCoupon,
+} = useCartItem(emit)
 
 watch(
   () => cartStore.couponCode,
@@ -73,6 +55,7 @@ watch(
           <ElInputNumber
             v-model="item.qty"
             :min="1"
+            :max="99"
             size="small"
             @change="handleQtyChange(item)"
           />
@@ -86,12 +69,14 @@ watch(
       </div>
     </div>
   </ElCard>
+  <CouponCard :perCoupon="perCoupon" :handleGetCoupon="handleGetCoupon"/>
   <ElCard class="cart-coupon">
     <h5>您是否有優惠碼？</h5>
     <ElInput
-      v-model="perCoupon"
+      v-model.trim="perCoupon"
       placeholder="請輸入優惠碼"
       class="input-with-search"
+      @keyup.enter="handleGetCoupon(perCoupon)"
     >
       <template #append>
         <ElButton
@@ -214,7 +199,7 @@ watch(
     }
   }
 }
-
+/*
 .cart-coupon {
   .input-with-search {
     margin-top: 0.5rem;
@@ -229,6 +214,7 @@ watch(
     }
   }
 }
+*/
 
 .cart-price-card {
   h5 {

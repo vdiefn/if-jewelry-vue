@@ -27,13 +27,13 @@ api.interceptors.response.use(
   (error) => {
     let status = error.response?.status
     let message = ""
-    const serverMessage = error.response?.data?.message;
+    const serverMessage = error.response.data.message;
     switch (status){
       case 401:
         message = "token過期"
         break;
       case 404:
-        message = "請求地址錯誤"
+        message = serverMessage||"請求地址錯誤"
         break;
       case 500:
         message = "伺服器異常"
