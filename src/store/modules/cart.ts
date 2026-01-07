@@ -90,14 +90,13 @@ export const useCartStore = defineStore("cart", () => {
     loading.value = true;
     try {
       const res = await reqEditCart(data);
-      if (res.data.success) {
-        await getCartProducts();
-      } else {
-        ElMessage({
-          type: "error",
-          message: res.data.message,
-        });
+      if(!res.data.success) {
+        ElMessage({ type: "error",message: res.data.message });
+        return
       }
+      await getCartProducts();
+      ElMessage({ type: "success",message: res.data.message })
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -108,13 +107,14 @@ export const useCartStore = defineStore("cart", () => {
   const getCoupon = async (perInput:CouponParams) => {
     try {
       const res = await reqCoupon(perInput);
-      if (res.data.success) {
-        ElMessage({
-          type: "success",
-          message: "已成功使用折價券",
-        });
-        await getCartProducts();
+      if(!res.data.success){
+        ElMessage({ type: "error",message: res.data.message });
+        return
       }
+
+      ElMessage({ type: "success",message: "已成功使用折價券",});
+      await getCartProducts();
+
     } catch (error) {
       console.error(error);
     }
