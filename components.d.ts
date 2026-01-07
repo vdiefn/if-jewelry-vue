@@ -11,6 +11,7 @@ declare module 'vue' {
     AdminHeader: typeof import('./src/components/admin/AdminHeader.vue')['default']
     CardProduct: typeof import('./src/components/front/CardProduct.vue')['default']
     ContentContainer: typeof import('./src/components/front/ContentContainer.vue')['default']
+    CouponCard: typeof import('./src/components/front/CouponCard.vue')['default']
     DefaultContainer: typeof import('./src/components/admin/DefaultContainer.vue')['default']
     DesktopCartTable: typeof import('./src/components/front/DesktopCartTable.vue')['default']
     DialogAdminArticle: typeof import('./src/components/admin/DialogAdminArticle.vue')['default']
