@@ -33,18 +33,14 @@ export const useCartStore = defineStore("cart", () => {
 
   const addToCart = async (data: { product_id: string; qty: number }) => {
     loading.value = true;
-
     try {
       const res = await reqAddCart(data);
-
-      if (res.data.success) {
-        await getCartProducts();
-      } else {
-        ElMessage({
-          type: "error",
-          message: res.data.message,
-        });
+      if(!res.data.success) {
+        ElMessage({ type: "error",message: res.data.message });
+        return
       }
+      await getCartProducts();
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -71,14 +67,12 @@ export const useCartStore = defineStore("cart", () => {
     loading.value = true;
     try {
       const res = await reqDeleteCart(id);
-      if (res.data.success) {
-        await getCartProducts();
-      } else {
-        ElMessage({
-          type: "error",
-          message: res.data.message,
-        });
+      if(!res.data.success) {
+        ElMessage({ type: "error",message: res.data.message });
+        return
       }
+      await getCartProducts();
+
     } catch (error) {
       console.error(error);
     } finally {
