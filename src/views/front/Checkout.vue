@@ -36,6 +36,7 @@ const orderId = ref("");
 const activeStep = ref(0);
 const formRef = ref<FormInstance>();
 const creditCardFormRef = ref<FormInstance>();
+const loading = ref(false)
 const form = reactive<RuleForm>({
   name: "",
   address: "",
@@ -164,6 +165,7 @@ const nextStep = async (formEl: FormInstance | undefined) => {
 };
 
 const createOrder = async () => {
+  loading.value = true
   try {
     const res = await reqAddOrder({
       data: {
@@ -176,20 +178,19 @@ const createOrder = async () => {
         message: form.message,
       },
     });
-    if (res.data.success) {
-      orderId.value = res.data.orderId;
-      ElMessage({
-        type: "success",
-        message: res.data.message,
-      });
-    } else {
-      ElMessage({
-        type: "error",
-        message: res.data.message,
-      });
+    if(!res.data.success){
+      ElMessage({ type:"error", message: res.data.message })
+      return
     }
+    orderId.value = res.data.orderId;
+    ElMessage({
+      type: "success",
+      message: res.data.message,
+    });
   } catch (error) {
     console.error(error);
+  } finally {
+    loading.value = false
   }
 };
 
@@ -226,26 +227,23 @@ const prevStep = () => {
 };
 
 const submitPayment = async () => {
+  loading.value = true
   try {
     const res = await reqAddPayment(orderId.value);
-    if (res.data.success) {
-      ElMessage({
-        type: "success",
-        message: res.data.message,
-      });
-      cartStore.clearCart();
-      await router.push({
-        path: "/success",
-        query: { orderId: orderId.value },
-      });
-    } else {
-      ElMessage({
-        type: "error",
-        message: res.data.message,
-      });
+    if(!res.data.success){
+      ElMessage({ type:"error", message: res.data.message })
+      return
     }
+    ElMessage({ type: "success", message: res.data.message });
+    cartStore.clearCart();
+    await router.push({
+      path: "/success",
+      query: { orderId: orderId.value },
+    });
   } catch (error) {
     console.error(error);
+  } finally {
+    loading.value = false
   }
 };
 </script>
@@ -415,10 +413,10 @@ const submitPayment = async () => {
         {{ activeStep > 0 ? "上一步" : "返回購物車" }}
       </ElButton>
       <template v-if="activeStep === 0">
-        <ElButton type="primary" @click="handleStepAction"> 建立訂單 </ElButton>
+        <ElButton type="primary" @click="handleStepAction" :disabled="loading"> 建立訂單 </ElButton>
       </template>
       <template v-else>
-        <ElButton type="primary" @click="handleStepAction">
+        <ElButton type="primary" @click="handleStepAction" :disabled="loading">
           {{ activeStep === 2 ? "送出訂單" : "下一步" }}
         </ElButton>
       </template>
