@@ -8,7 +8,7 @@ import {
 import { reqCoupon } from "@/api/front/coupon";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import type { FullCartData, ResponseCartData, CartParams } from "@/types/front/cart";
+import type { FullCartData, ResponseCartData, CartData } from "@/types/front/cart";
 import type { CouponParams } from "@/types/front/coupon"
 
 export const useCartStore = defineStore("cart", () => {
@@ -86,7 +86,7 @@ export const useCartStore = defineStore("cart", () => {
     }
   };
 
-  const editCartProduct = async (data:CartParams) => {
+  const editCartProduct = async (data:CartData) => {
     loading.value = true;
     try {
       const res = await reqEditCart(data);

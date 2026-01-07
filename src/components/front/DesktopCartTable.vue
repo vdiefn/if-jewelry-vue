@@ -4,7 +4,7 @@ import { Search } from "@element-plus/icons-vue";
 import { ref, watch } from "vue";
 import { useCartStore } from "@/store/modules/cart.ts";
 import { useRouter } from "vue-router";
-import type { FullCartData, CartParams } from "@/types/front/cart";
+import type { FullCartData, CartData } from "@/types/front/cart";
 import type { CouponParams } from "@/types/front/coupon"
 
 interface Emits {
@@ -21,7 +21,7 @@ const router = useRouter();
 const loading = ref(false);
 const perCoupon = ref("");
 
-const handleQtyChange = async (row:CartParams) => {
+const handleQtyChange = async (row:CartData) => {
   await cartStore.editCartProduct(row);
 };
 
