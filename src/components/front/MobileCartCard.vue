@@ -199,7 +199,7 @@ watch(
     }
   }
 }
-/*
+
 .cart-coupon {
   .input-with-search {
     margin-top: 0.5rem;
@@ -214,7 +214,6 @@ watch(
     }
   }
 }
-*/
 
 .cart-price-card {
   h5 {

@@ -2,12 +2,9 @@ import router from "@/router";
 import { useUserStore } from "./store/modules/user";
 import setting from "@/setting.ts";
 
-let isUserChecked = false;
-
 router.beforeEach(async (to, _from) => {
   const userStore = useUserStore();
   const token = userStore.token;
-
   const isBackendRoute = to.path.startsWith("/admin");
 
   if (isBackendRoute) {
@@ -24,13 +21,11 @@ router.beforeEach(async (to, _from) => {
     return { name: "dashboard" };
   }
 
-  if (token && !isUserChecked && isBackendRoute) {
-    try {
-      await userStore.userCheck();
-      isUserChecked = true;
-    } catch (error) {
+  if (isBackendRoute && token) {
+    const isSuccess = await userStore.userCheck();
+    if (!isSuccess) {
       userStore.userLogout();
-      return { name: "login" };
+      return { path: "/admin/login" };
     }
   }
 

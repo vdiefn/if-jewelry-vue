@@ -6,12 +6,14 @@ const BASE_URL = `${import.meta.env.VITE_BASE_URL}/v2/api/${import.meta.env.VITE
 
 const api = axios.create({
   baseURL: BASE_URL,
+  timeout: 5000
 });
 
 api.interceptors.request.use(
   (config) => {
     const userStore = useUserStore();
     const token = userStore.token;
+
     if (token) {
       config.headers.Authorization = token;
     }
