@@ -21,9 +21,9 @@ router.beforeEach(async (to, _from) => {
     return { name: "dashboard" };
   }
 
-  if (isBackendRoute && token) {
-    const isSuccess = await userStore.userCheck();
-    if (!isSuccess) {
+  if (isBackendRoute && token && !userStore.hasVerified) {
+    await userStore.userCheck();
+    if (!userStore.hasVerified) {
       userStore.userLogout();
       return { path: "/admin/login" };
     }

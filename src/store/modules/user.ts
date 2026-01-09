@@ -8,6 +8,7 @@ import type { LoginForm } from "@/types/admin/user";
 export const useUserStore = defineStore("User", () => {
   const token = ref<string | null>(GET_COOKIES('hexToken'));
   const menuRoutes = ref(constantRouter);
+  const hasVerified = ref(false)
 
 
 
@@ -29,18 +30,19 @@ export const useUserStore = defineStore("User", () => {
 
   const userLogout = () => {
     token.value = null;
+    hasVerified.value = false;
     DELETE_COOKIES()
   }
 
-  const userCheck = async () => {
+  const userCheck = async (): Promise<void> => {
     try {
       const res = await reqUserCheck();
-      return res.data.success;
-    } catch(err){
-      console.error(err)
-      return false;
+      hasVerified.value = res.data.success;
+    } catch (err) {
+      console.error(err);
+      hasVerified.value = false;
     }
   };
 
-  return { token, userLogin, menuRoutes, userLogout, userCheck };
+  return { token, hasVerified, userLogin, menuRoutes, userLogout, userCheck };
 });
