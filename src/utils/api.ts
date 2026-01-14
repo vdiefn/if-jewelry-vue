@@ -3,7 +3,6 @@ import { useUserStore } from "@/store/modules/user";
 import { ElMessage } from "element-plus"
 import { useRouter } from "vue-router";
 
-const userStore = useUserStore();
 const router = useRouter();
 
 const BASE_URL = `${import.meta.env.VITE_BASE_URL}/v2/api/${import.meta.env.VITE_API_PATH}`;
@@ -15,6 +14,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    const userStore = useUserStore();
     const token = userStore.token;
 
     if (token) {
@@ -33,6 +33,7 @@ api.interceptors.response.use(
     let status = error.response?.status
     let message = ""
     const serverMessage = error.response.data.message;
+    const userStore = useUserStore();
     switch (status){
       case 401:
         message = "token過期"
