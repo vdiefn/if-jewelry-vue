@@ -32,6 +32,7 @@
 ## 功能實作說明
 
 ### 前台（使用者端）
+
 - 商品列表與分類瀏覽
 - 商品詳細頁
 - 購物車新增 / 刪除 / 數量調整
@@ -40,6 +41,7 @@
 - 響應式版型（桌機 / 平板 / 手機）
 
 ### 後台（管理者端）
+
 - 管理者登入驗證
 - 商品管理（CRUD）
 - 訂單管理
@@ -55,6 +57,7 @@
 src/
 ├── api/            # API 請求封裝（axios）
 ├── assets/         # 靜態資源
+│   └── style/      # SCSS 與共用樣式
 ├── components/     # 共用元件
 ├── composables/    # Composition API 邏輯抽離
 ├── data/           # 靜態資料
@@ -62,12 +65,16 @@ src/
 ├── router/         # 路由與權限控管
 ├── store/          # Pinia 狀態管理
 ├── types/          # TypeScript 型別定義
-├── styles/         # SCSS 與共用樣式
 ├── views/
 │   ├── front/      # 前台頁面
 │   └── admin/      # 後台頁面
-└── utils/          # 共用工具函式
+├── utils/          # 共用工具函式
+├── permission.ts   # 路由權限控管
+├── setting.ts      # 全域設定
+├── main.ts         
+└── App.vue         
 ```
+
 ---
 
 ## 專案啟動方式
