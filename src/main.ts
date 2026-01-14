@@ -3,7 +3,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 /* Element Plus */
-import ElementPlus from 'element-plus'
 import '@/assets/style/element/index.scss'
 
 /* fontawesome */
@@ -25,6 +24,5 @@ const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.use(pinia)
-app.use(ElementPlus)
 import "./permission.ts"
 app.mount('#app')

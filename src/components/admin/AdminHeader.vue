@@ -43,7 +43,7 @@ const fullScreen = () => {
 
 const logout = () => {
     userStore.userLogout();
-    router.push("/login");
+    router.push("/admin/login");
 };
 </script>
 
