@@ -9,10 +9,11 @@ import {
   ElMessageBox
 } from "element-plus";
 import { Edit, Delete } from "@element-plus/icons-vue";
-import { reqProducts, reqDeleteProduct } from "@/api/admin/product";
+import { reqProducts, reqDeleteProduct, reqAllProducts } from "@/api/admin/product";
 import { DialogAdminProduct, DefaultContainer } from "@/components/admin/index.ts";
 import { fetchPageWithFallback } from "@/utils/pagination";
-import type { ProductData } from "@/types/admin/product"
+import { exportToExcel } from "@/utils/exportToExcel";
+import type { ProductData, AllProductData } from "@/types/admin/product"
 
 const loading = ref(false);
 const currentPage = ref(1);
@@ -20,6 +21,8 @@ const dialogAdminProduct = useTemplateRef<InstanceType<typeof DialogAdminProduct
 const data = ref<ProductData[]>([]);
 const totalPages = ref();
 const selectCategory = ref("");
+const allProductData = ref<AllProductData>();
+const formatedAllProductData = ref<ProductData[]>([]);
 
 const categoryList = [
   {
@@ -44,7 +47,7 @@ const categoryList = [
   },
 ];
 
-const getAllProducts = async (page = 1, category = "") => {
+const getProducts = async (page = 1, category = "") => {
   currentPage.value = page;
   selectCategory.value = category;
   loading.value = true;
@@ -54,7 +57,22 @@ const getAllProducts = async (page = 1, category = "") => {
       data.value = result.data.products;
       currentPage.value = result.data.pagination.current_page;
       totalPages.value = result.data.pagination.total_pages;
-      await fetchPageWithFallback(data.value, currentPage.value, getAllProducts)
+      await fetchPageWithFallback(data.value, currentPage.value, getProducts)
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getAllProducts = async () => {
+  loading.value = true;
+  try {
+    const result = await reqAllProducts();
+    if (result.data.success) {
+      allProductData.value = result.data.products;
+      formatedAllProductData.value = Object.values(allProductData.value)
     }
   } catch (error) {
     console.error(error);
@@ -88,7 +106,7 @@ const deleteProduct = async (row:ProductData) => {
               message: result.data.message,
             });
             done();
-            await getAllProducts(currentPage.value, selectCategory.value);
+            await getProducts(currentPage.value, selectCategory.value);
           }
         } catch (error) {
           console.error(error);
@@ -101,8 +119,38 @@ const deleteProduct = async (row:ProductData) => {
   });
 };
 
+const downloadExcel = async () => {
+  await getAllProducts()
+  
+  const columns = [
+    { header: "Category", key:"category" },
+    { header: "Content", key:"content" },
+    { header: "Description", key:"description" },
+    { header: "Id", key:"id" },
+    { header: "IsEnabled", key:"is_enabled" },
+    { header: "OriginPrice", key:"origin_price" },
+    { header: "Price", key:"price" },
+    { header: "Title", key:"title" },
+    { header: "Unit", key:"unit" },
+  ]
+
+  const excelData = formatedAllProductData.value.map((item) => ({
+    category: item.category,
+    content: item.content,
+    description: item.description,
+    id: item.id,
+    is_enabled: item.is_enabled? "啟用中":"未啟用",
+    origin_price: item.origin_price,
+    price: item.price,
+    title: item.title,
+    unit: item.unit,
+  }))
+
+  await exportToExcel(excelData, columns, "product_list", "product_list")
+}
+
 onMounted(() => {
-  getAllProducts();
+  getProducts();
 });
 </script>
 
@@ -111,22 +159,27 @@ onMounted(() => {
     showPagination
     :currentPage="currentPage"
     :totalPages="totalPages"
-    @page-change="(page)=>getAllProducts(page, selectCategory)"
+    @page-change="(page)=>getProducts(page, selectCategory)"
   >
     <template #top>
-      <ElSelect
-        v-model="selectCategory"
-        filterable
-        placeholder="請選擇查詢類別"
-        @change="getAllProducts(1, selectCategory)"
-      >
-        <ElOption
-          v-for="(item, index) in categoryList"
-          :key="index"
-          :label="item.label"
-          :value="item.value"
-        />
-      </ElSelect>
+      <div>
+        <ElSelect
+          v-model="selectCategory"
+          filterable
+          placeholder="請選擇查詢類別"
+          @change="getProducts(1, selectCategory)"
+        >
+          <ElOption
+            v-for="(item, index) in categoryList"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+        <ElButton circle class="download-btn" @click="downloadExcel" :disabled="loading">
+          <font-awesome-icon :icon="['fas', 'arrow-down']" class="download-icon" />
+        </ElButton>
+      </div>
       <ElButton type="primary" class="btn-add-product" @click="addNewProduct">
         新增產品
       </ElButton>
@@ -173,10 +226,18 @@ onMounted(() => {
   </DefaultContainer>
   <DialogAdminProduct
     ref="dialogAdminProduct"
-    @product-added="getAllProducts"
+    @product-added="getProducts"
     :categoryList="categoryList"
   />
 </template>
 
 <style scoped lang="scss">
+  .download-btn {
+    margin-left: 5px;
+
+    .download-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
 </style>

@@ -1,9 +1,13 @@
 import api from "@/utils/api"
 import type { AxiosResponse } from "axios"
-import type { GetProductsResponse, CreateProductParams, ProductResponse, EditProductParams } from "@/types/admin/product"
+import type { GetProductsResponse, CreateProductParams, ProductResponse, EditProductParams, AllProductsResponse } from "@/types/admin/product"
 
 export const reqProducts = (params: { page:number, category:string}):Promise<AxiosResponse<GetProductsResponse>> => {
   return api.get(`/admin/products`, { params })
+}
+
+export const reqAllProducts = ():Promise<AxiosResponse<AllProductsResponse>> => {
+  return api.get("/admin/products/all")
 }
 
 export const reqAddNewProduct = (params:CreateProductParams):Promise<AxiosResponse<ProductResponse>> => {
