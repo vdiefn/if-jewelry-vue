@@ -61,3 +61,10 @@ export interface EditProductParams {
   imagesUrl: string[]
   num:number
 }
+
+export type AllProductData = Record<string, ProductData>
+
+export interface AllProductsResponse {
+  success: boolean,
+  products: AllProductData
+}

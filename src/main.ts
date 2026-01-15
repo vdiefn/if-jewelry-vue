@@ -9,11 +9,21 @@ import '@/assets/style/element/index.scss'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import { faCheck, faXmark, faCartShopping, faBars, faMagnifyingGlass, faHouse, faPhone, faCakeCandles} from '@fortawesome/free-solid-svg-icons'
+import { 
+    faCheck, 
+    faXmark, 
+    faCartShopping, 
+    faBars, 
+    faMagnifyingGlass, 
+    faHouse, 
+    faPhone, 
+    faCakeCandles,
+    faArrowDown
+} from '@fortawesome/free-solid-svg-icons'
 import { faTrashCan, faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faFacebook, faInstagram, faLine} from "@fortawesome/free-brands-svg-icons";
 
-library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping, faBars, faTrashCan, faMagnifyingGlass, faHouse, faEnvelope, faPhone, faCakeCandles)
+library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping, faBars, faTrashCan, faMagnifyingGlass, faHouse, faEnvelope, faPhone, faCakeCandles, faArrowDown)
 
 import router from "./router/index.ts"
 
