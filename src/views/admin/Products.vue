@@ -12,7 +12,7 @@ import { Edit, Delete } from "@element-plus/icons-vue";
 import { reqProducts, reqDeleteProduct, reqAllProducts } from "@/api/admin/product";
 import { DialogAdminProduct, DefaultContainer } from "@/components/admin/index.ts";
 import { fetchPageWithFallback } from "@/utils/pagination";
-import ExcelJs from "exceljs";
+import { exportToExcel } from "@/utils/exportToExcel";
 import type { ProductData, AllProductData } from "@/types/admin/product"
 
 const loading = ref(false);
@@ -120,11 +120,9 @@ const deleteProduct = async (row:ProductData) => {
 };
 
 const downloadExcel = async () => {
-  const workbook = new ExcelJs.Workbook();
-  const worksheet =  workbook.addWorksheet("product_list");
   await getAllProducts()
   
-  worksheet.columns = [
+  const columns = [
     { header: "Category", key:"category" },
     { header: "Content", key:"content" },
     { header: "Description", key:"description" },
@@ -134,34 +132,21 @@ const downloadExcel = async () => {
     { header: "Price", key:"price" },
     { header: "Title", key:"title" },
     { header: "Unit", key:"unit" },
-    { header: "Num", key:"num" },
   ]
 
-  for(let i = 0; i < formatedAllProductData.value.length; i++) {
-    const item = formatedAllProductData.value[i]
+  const excelData = formatedAllProductData.value.map((item) => ({
+    category: item.category,
+    content: item.content,
+    description: item.description,
+    id: item.id,
+    is_enabled: item.is_enabled? "啟用中":"未啟用",
+    origin_price: item.origin_price,
+    price: item.price,
+    title: item.title,
+    unit: item.unit,
+  }))
 
-    worksheet.addRow({
-      category: item.category,
-      content: item.content,
-      description: item.description,
-      id: item.id,
-      is_enabled: item.is_enabled? "啟用中":"未啟用",
-      origin_price: item.origin_price,
-      price: item.price,
-      title: item.title,
-      unit: item.unit,
-      num: item.num,
-    })
-  }
-
-  const content = await workbook.xlsx.writeBuffer()
-  const blobData = new Blob([content], {
-    type: "application/vnd.ms-excel;charset=utf-8;"
-  })
-  const link = document.createElement("a")
-  link.download = "product_list.xlsx"
-  link.href = URL.createObjectURL(blobData)
-  link.click()
+  await exportToExcel(excelData, columns, "product_list", "product_list")
 }
 
 onMounted(() => {
