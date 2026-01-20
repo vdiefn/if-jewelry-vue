@@ -468,10 +468,6 @@ watch(
             height: 20%;
             cursor: pointer;
 
-            &.active {
-              border: 2px solid $base-primary-color;
-            }
-
             img {
               width: 100%;
               height: 100%;
