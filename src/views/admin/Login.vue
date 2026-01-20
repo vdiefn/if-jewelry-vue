@@ -16,8 +16,8 @@ const loading = ref(false);
 const ruleFormRef = ref<FormInstance>()
 
 const loginForm = reactive({
-  username: "admin@if-jewelry.com",
-  password: "test1234",
+  username: "",
+  password: "",
 });
 const userStore = useUserStore();
 
