@@ -18,12 +18,13 @@ import {
     faHouse, 
     faPhone, 
     faCakeCandles,
-    faArrowDown
+    faArrowDown,
+    faBullhorn
 } from '@fortawesome/free-solid-svg-icons'
 import { faTrashCan, faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { faFacebook, faInstagram, faLine} from "@fortawesome/free-brands-svg-icons";
 
-library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping, faBars, faTrashCan, faMagnifyingGlass, faHouse, faEnvelope, faPhone, faCakeCandles, faArrowDown)
+library.add(faCheck, faXmark, faFacebook, faInstagram, faLine, faCartShopping, faBars, faTrashCan, faMagnifyingGlass, faHouse, faEnvelope, faPhone, faCakeCandles, faArrowDown, faBullhorn)
 
 import router from "./router/index.ts"
 
