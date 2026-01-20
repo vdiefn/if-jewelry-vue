@@ -49,9 +49,7 @@ const pieChart = ref<HTMLElement | null>(null);
 const barChart = ref<HTMLElement | null>(null);
 const donutChart = ref<HTMLElement | null>(null);
 const allProductData = ref<AllProductData>({});
-const pieData = ref<ProductData[]>([]);
-const barData = ref<ProductData[]>([]);
-const donutData = ref<ProductData[]>([]);
+const formatedData = ref<ProductData[]>([]);
 const loading = ref(false);
 
 const getAllProducts = async () => {
@@ -60,6 +58,7 @@ const getAllProducts = async () => {
     const result = await reqAllProducts();
     if (result.data.success) {
       allProductData.value = result.data.products;
+      formatedData.value = Object.values(allProductData.value)
     }
   } catch (error) {
     console.error(error);
@@ -69,8 +68,7 @@ const getAllProducts = async () => {
 }; 
 
 const processPieData = () => {
-  pieData.value = Object.values(allProductData.value)
-  const pieStatus = pieData.value.reduce((acc, cur) => {
+  const pieStatus = formatedData.value.reduce((acc, cur) => {
     const category = cur.category
     if(acc[category]) {
       acc[category]++
@@ -119,10 +117,9 @@ const renderPieChart = () => {
 }
 
 const processBarData = () => {
-    barData.value = Object.values(allProductData.value)
-    const title = barData.value.map(item => item.title)
-    const originPrice = barData.value.map(item => item.origin_price)
-    const price = barData.value.map(item => item.price)
+    const title = formatedData.value.map(item => item.title)
+    const originPrice = formatedData.value.map(item => item.origin_price)
+    const price = formatedData.value.map(item => item.price)
     return { title, originPrice, price }
 }
 
@@ -166,26 +163,24 @@ const renderBarChart = () => {
 }
 
 const processDonutData = () => {
-    donutData.value = Object.values(allProductData.value)
-    const donutStatus = donutData.value.reduce((acc, cur) => {
-      const isEnabled = cur.is_enabled? "已上架" : "未上架"
-      if(acc[isEnabled]) {
-        acc[isEnabled]++
-      } else {
-        acc[isEnabled] = 1
-      }
-      return acc
-    }, {} as Record<string, number>)
+  const donutStatus = formatedData.value.reduce((acc, cur) => {
+    const isEnabled = cur.is_enabled? "已上架" : "未上架"
+    if(acc[isEnabled]) {
+      acc[isEnabled]++
+    } else {
+      acc[isEnabled] = 1
+    }
+    return acc
+  }, {} as Record<string, number>)
 
-    return Object.keys(donutStatus).map(key => ({
-      name: key,
-      value: donutStatus[key]
-    }));
+  return Object.keys(donutStatus).map(key => ({
+    name: key,
+    value: donutStatus[key]
+  }));
 }
-
 const renderDountData = () => {
   const myChart = echarts.init(donutChart.value);
-  const totalProducts = donutData.value.length;
+  const totalProducts = formatedData.value.length;   
 
   const option: ECOption = {
     title: {
@@ -198,7 +193,6 @@ const renderDountData = () => {
     },
     tooltip: {
       trigger: 'item',
-      formatter: '{b}: {c} 件 ({d}%)'
     },
     legend: { data: ['已上架', '未上架'] },
     series: [
@@ -312,6 +306,7 @@ h3 {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-gap: 1rem;
+    padding-right: 10px;
 
     div {
       min-height: 350px;
