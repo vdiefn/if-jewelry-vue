@@ -4,6 +4,24 @@
 
 ---
 
+## 畫面預覽
+
+### 前台介面
+
+<p align="center">
+  <img src="./src/assets/screenshots/front-home.png" width="80%" alt="前台首頁">
+  <img src="./src/assets/screenshots/front-detail.png" width="80%" alt="前台首頁">
+</p>
+
+### 後台管理系統
+
+<p align="center">
+  <img src="./src/assets/screenshots/admin-dashboard.png" width="48%" alt="後台儀表板">
+  <img src="./src/assets/screenshots/admin-products.png" width="48%" alt="商品管理">
+</p>
+
+---
+
 ## 專案背景與目的
 
 本專案為一個模擬電商平台，分為前台（使用者端）與後台（管理者端）：
@@ -25,6 +43,8 @@
 - Vue Router
 - Element Plus
 - SCSS
+- ECharts（資料視覺化）
+- ExcelJS（報表匯出）
 - RWD 響應式設計
 
 ---
@@ -43,7 +63,8 @@
 ### 後台（管理者端）
 
 - 管理者登入驗證
-- 商品管理（CRUD）
+- 儀表板數據視覺化（ECharts 圖表 + 公告欄）
+- 商品管理（CRUD + Excel 匯出）
 - 訂單管理
 - 優惠券管理
 - 圖片上傳與顯示
@@ -102,6 +123,11 @@ src/
 
 - 路由守衛： 在 permission.ts 中實作嚴謹的權限控管，確保未經授權用戶無法進入管理後台。
 - Git Commit 規範： 遵循 feat, fix 等規範化提交訊息，展現良好的團隊協作意識。
+
+### 功能擴充
+
+- 數據視覺化： 整合 ECharts 打造管理者儀表板，提供直觀的營運數據分析（圓餅圖、長條圖）。
+- 報表匯出： 實作前端 Excel 匯出功能，讓管理者能將商品資料轉換為 Excel 檔案進行備份或分析。
 
 ---
 

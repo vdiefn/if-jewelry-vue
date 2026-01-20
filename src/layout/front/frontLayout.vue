@@ -42,6 +42,9 @@ onMounted(() => {
     width: 100%;
     height: auto;
     background-color: $base-header-color;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
 
   :deep(.el-main) {

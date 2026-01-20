@@ -169,10 +169,7 @@ const handleDeleteProduct = async (id: string) => {
 .navbar {
   display: flex;
   flex-direction: column;
-  position: sticky;
   width: 100%;
-  top: 0;
-  z-index: 99;
   background-color: $base-header-color;
   box-shadow: 0 1px 4px rgba(42, 42, 42, 0.8);
 

@@ -1,5 +1,9 @@
 export const announcement = [
   {
+    title:"UI修復",
+    content:"2026/1/20 修復Header顯示異常以及產品詳細資訊畫面小圖示框線顯示錯誤" 
+  },
+  {
     title:"新增功能",
     content:"2026/1/20 後台dashboard新增圖表顯示以及公告欄功能" 
   }, 

@@ -68,12 +68,13 @@ defineExpose({ open });
       </div>
     </div>
     <template #footer>
-      <ElButton type="primary" class="check-btn" @click="goToCart"
-        >購物車結帳</ElButton
-      >
-      <ElButton class="check-btn continue-shopping" @click="drawer = false"
-        >繼續購物</ElButton
-      >
+      <template v-if="cartStore.cartList.length === 0">
+        <ElButton type="primary" @click="drawer = false">前往購物</ElButton>
+      </template>
+      <template v-else>
+        <ElButton type="primary" class="check-btn" @click="goToCart">購物車結帳</ElButton>
+        <ElButton class="check-btn continue-shopping" @click="drawer = false">繼續購物</ElButton>
+      </template>
     </template>
   </ElDrawer>
 </template>
