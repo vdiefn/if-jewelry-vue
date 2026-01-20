@@ -4,6 +4,24 @@
 
 ---
 
+## 畫面預覽
+
+### 前台介面
+
+<p align="center">
+  <img src="./src/assets/screenshots/front-home.png" width="80%" alt="前台首頁">
+  <img src="./src/assets/screenshots/front-detail.png" width="80%" alt="前台首頁">
+</p>
+
+### 後台管理系統
+
+<p align="center">
+  <img src="./src/assets/screenshots/admin-dashboard.png" width="48%" alt="後台儀表板">
+  <img src="./src/assets/screenshots/admin-products.png" width="48%" alt="商品管理">
+</p>
+
+---
+
 ## 專案背景與目的
 
 本專案為一個模擬電商平台，分為前台（使用者端）與後台（管理者端）：
@@ -111,21 +129,6 @@ src/
 - 數據視覺化： 整合 ECharts 打造管理者儀表板，提供直觀的營運數據分析（圓餅圖、長條圖）。
 - 報表匯出： 實作前端 Excel 匯出功能，讓管理者能將商品資料轉換為 Excel 檔案進行備份或分析。
 
-## 畫面預覽
-
-### 前台介面
-
-<p align="center">
-  <img src="./src/assets/screenshots/front-home.png" width="80%" alt="前台首頁">
-  <img src="./src/assets/screenshots/front-detail.png" width="80%" alt="前台首頁">
-</p>
-
-### 後台管理系統
-
-<p align="center">
-  <img src="./src/assets/screenshots/admin-dashboard.png" width="48%" alt="後台儀表板">
-  <img src="./src/assets/screenshots/admin-products.png" width="48%" alt="商品管理">
-</p>
 ---
 
 ## 專案啟動方式
