@@ -9,8 +9,8 @@
 ### 前台介面
 
 <p align="center">
-  <img src="./src/assets/screenshots/front-home.png" width="80%" alt="前台首頁">
-  <img src="./src/assets/screenshots/front-detail.png" width="80%" alt="前台首頁">
+  <img src="./src/assets/screenshots/front-home.png" width="48%" alt="前台首頁">
+  <img src="./src/assets/screenshots/front-detail.png" width="48%" alt="前台首頁">
 </p>
 
 ### 後台管理系統
