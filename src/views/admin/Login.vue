@@ -84,13 +84,13 @@ const rules = reactive<FormRules<typeof ruleForm>>({
       <h1>HELLO</h1>
       <h2>歡迎使用後台管理系統</h2>
       <ElFormItem prop="username">
-          <ElInput :prefix-icon="User" v-model="loginForm.username"></ElInput>
+          <ElInput :prefix-icon="User" v-model.trim="loginForm.username"></ElInput>
       </ElFormItem>
       <ElFormItem prop="password">
         <ElInput
           type="password"
           :prefix-icon="Lock"
-          v-model="loginForm.password"
+          v-model.trim="loginForm.password"
           show-password
         />
       </ElFormItem>
