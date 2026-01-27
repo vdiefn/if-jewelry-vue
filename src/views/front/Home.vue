@@ -155,7 +155,7 @@ onMounted(() => {
     margin: 0 100px;
     .card-wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
     }
   }
 }
@@ -166,10 +166,10 @@ onMounted(() => {
   }
 
   .category-container {
-    margin: 0 200px;
+    margin: 0 150px;
     .card-wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
     }
   }
 }
