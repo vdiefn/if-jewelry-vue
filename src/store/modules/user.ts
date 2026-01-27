@@ -20,6 +20,7 @@ export const useUserStore = defineStore("User", () => {
         const { token: t, expired } = res.data
         SET_COOKIES(t, expired)
         token.value = t
+        hasVerified.value = true
         return "OK";
       }
 
